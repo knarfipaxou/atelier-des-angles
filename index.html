@@ -172,6 +172,36 @@ svg .flash{animation:flash .6s 2}
 .duebox button{margin:4px 6px 4px 0;font-size:15px;padding:8px 12px}
 .spark{position:fixed;width:7px;height:7px;border-radius:50%;background:#ffd34d;box-shadow:0 0 8px #ff9a2a;pointer-events:none;z-index:900}
 .puff{position:fixed;width:40px;height:40px;border-radius:50%;background:rgba(220,220,220,.5);pointer-events:none;z-index:900;filter:blur(3px)}
+/* indices */
+.hintbtn{position:relative;background:linear-gradient(180deg,#fff4a8 0%,#f2c230 50%,#c98f10 100%);color:#2b1906;min-height:48px;font-size:18px;padding:0 14px;white-space:nowrap;flex:none}
+.hintbtn.nudge{animation:hpulse 1.1s ease-in-out infinite}
+.hintbtn.nudge::after{content:"Besoin d'un indice ?";position:absolute;bottom:calc(100% + 8px);right:0;background:#fff4a8;color:#2b1906;font-size:13px;padding:4px 9px;border-radius:9px;border:2px solid #c98f10;white-space:nowrap;pointer-events:none;box-shadow:0 3px 8px rgba(0,0,0,.5)}
+@keyframes hpulse{50%{box-shadow:0 0 0 6px rgba(255,220,80,.5),0 0 24px #ffd34d;transform:scale(1.07)}}
+.hintbox{display:none;flex:1;align-items:center;gap:10px;background:#fff8d6;color:#2b1906;border:3px solid #f2c230;border-radius:14px;padding:8px 10px 8px 12px;position:relative;font-size:16px;line-height:1.35;box-shadow:0 3px 10px rgba(0,0,0,.45)}
+.hintbox.on{display:flex;animation:hin .25s ease-out}
+@keyframes hin{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+#hintBox::before{content:"";position:absolute;left:-12px;top:50%;margin-top:-9px;border:9px solid transparent;border-right:12px solid #f2c230;border-left:0}
+.hintbox .hbm{flex:1;min-width:0}
+.hintbox .hbh{font-weight:bold;font-size:14px;color:#8a5d1c}
+.hintbox .hdots{letter-spacing:2px;color:#d09a10;margin-left:4px}
+.hintbox .hbe{font-size:13px;color:#6b4a10;font-style:italic;margin-top:2px}
+.hintbox .bl{display:inline-block;min-width:38px;border-bottom:2px solid #8a5d1c;color:transparent;margin:0 2px}
+.hintbox .hbb{display:flex;gap:6px;align-items:center;flex:none}
+.hintbox .hbb button{font-size:15px;padding:0 12px;min-height:44px}
+.hintbox .hclose{min-width:44px}
+.mbox .hintbox{margin:8px 0}
+.mbox .row .hintbtn{margin-right:auto}
+.foreman.hinting .msg{display:none}
+#fig .ln.hglow{stroke:#7dffb0;stroke-width:4.5;filter:drop-shadow(0 0 5px #7dffb0)}
+#fig .arc.hglow{stroke:#7dffb0;stroke-width:5;stroke-dasharray:none;filter:drop-shadow(0 0 5px #7dffb0);animation:hglow .9s ease-in-out infinite alternate}
+#fig .wedge.hglow{fill:rgba(125,255,176,.22);animation:hglow .9s ease-in-out infinite alternate}
+@keyframes hglow{from{opacity:1}to{opacity:.45}}
+.frag.hglow{background:#c9ffd9;box-shadow:0 0 0 3px #4fd17f}
+.chip.hglow{box-shadow:0 0 0 3px #7dffb0,0 0 14px #7dffb0}
+.foreman.hinting #btnHint{display:none}
+@media (orientation:portrait){
+ .foreman{padding-left:8px}.foreman .av{font-size:30px}
+}
 @media (orientation:portrait){
  #level main{grid-template-columns:1fr;grid-template-rows:auto auto;overflow:auto;display:grid}
  .left{min-height:auto}
@@ -236,7 +266,7 @@ svg .flash{animation:flash .6s 2}
    </div>
   </div>
  </main>
- <div class="panel foreman" id="foreman"><div class="av">👷</div><div class="msg" id="fmsg"></div></div>
+ <div class="panel foreman" id="foreman"><div class="av">👷</div><div class="msg" id="fmsg"></div><div class="hintbox" id="hintBox" role="status"></div><button class="brass hintbtn" id="btnHint">💡 Indice</button></div>
 </section>
 
 <!-- ATELIER -->
@@ -256,17 +286,19 @@ svg .flash{animation:flash .6s 2}
 <div class="modal" id="mForge"><div class="panel mbox">
  <h2 id="fgTitle">🔥 La forge</h2>
  <p id="fgIntro"></p>
+ <div class="hintbox" id="fgHint" role="status"></div>
  <textarea id="fgText" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Écris la phrase ici…"></textarea>
  <div id="fgOut"></div>
- <div class="row"><button class="brass" id="fgClose">Fermer</button><button class="brass" id="fgGo">🔥 Forger</button></div>
+ <div class="row"><button class="brass hintbtn" id="fgHintBtn">💡 Indice</button><button class="brass" id="fgClose">Fermer</button><button class="brass" id="fgGo">🔥 Forger</button></div>
 </div></div>
 
 <div class="modal" id="mLabel"><div class="panel mbox">
  <h2>🏷️ L'étiqueteuse</h2>
  <p id="lbIntro"></p>
+ <div class="hintbox" id="lbHint" role="status"></div>
  <input type="text" id="lbText" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Leur nom…">
  <p id="lbOut"></p>
- <div class="row"><button class="brass" id="lbClose">Annuler</button><button class="brass" id="lbGo">Étiqueter</button></div>
+ <div class="row"><button class="brass hintbtn" id="lbHintBtn">💡 Indice</button><button class="brass" id="lbClose">Annuler</button><button class="brass" id="lbGo">Étiqueter</button></div>
 </div></div>
 
 <div class="modal" id="mInfo"><div class="panel mbox">
@@ -509,7 +541,7 @@ function cfgOf(text){const n=stripAcc(text.toLowerCase());
 const SKEY="atelierDesAngles_v1";
 let SAVE;
 try{SAVE=JSON.parse(localStorage.getItem(SKEY))||{}}catch(e){SAVE={}}
-SAVE.stars=SAVE.stars||{};SAVE.forged=SAVE.forged||{};SAVE.redo=SAVE.redo||{};SAVE.log=SAVE.log||[];
+SAVE.stars=SAVE.stars||{};SAVE.hints=SAVE.hints||{};SAVE.forged=SAVE.forged||{};SAVE.redo=SAVE.redo||{};SAVE.log=SAVE.log||[];
 if(SAVE.sound===undefined)SAVE.sound=true;
 function save(){try{localStorage.setItem(SKEY,JSON.stringify(SAVE))}catch(e){}}
 function dstr(d){return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")}
@@ -543,13 +575,15 @@ const SND={
  win(){[523,659,784,1046].forEach((f,i)=>tone(f,.3,"triangle",.18,i*.12))},
  forge(){noise(.25,.4,3000);tone(880,.4,"sine",.12,.1);tone(1320,.5,"sine",.1,.25)},
  bad(){tone(220,.18,"square",.1);tone(160,.3,"square",.1,.15)},
- stamp(){noise(.12,.5,400);tone(90,.2,"sine",.3)}
+ stamp(){noise(.12,.5,400);tone(90,.2,"sine",.3)},
+ hint(){tone(1175,.12,"sine",.09);tone(1568,.22,"sine",.07,.09)}
 };
 
 /* ================= OUTILS UI ================= */
 const $=id=>document.getElementById(id);
 function show(id){document.querySelectorAll(".screen").forEach(s=>s.classList.toggle("on",s.id===id));}
-function say(html,mood){const f=$("foreman");f.classList.remove("bad","good");if(mood)f.classList.add(mood);$("fmsg").innerHTML=html;}
+function say(html,mood){const f=$("foreman");f.classList.remove("bad","good");if(mood)f.classList.add(mood);$("fmsg").innerHTML=html;
+ if(typeof HOPEN!=="undefined"&&HOPEN){const c=hintCtx();if(mood==="bad"||!c||c.key!==HOPEN.key)closeHint();}}
 function sparks(el,n,col){const r=el.getBoundingClientRect();for(let i=0;i<(n||14);i++){const s=document.createElement("div");s.className="spark";if(col)s.style.background=col;
  const x=r.left+r.width/2,y=r.top+r.height/2;s.style.left=x+"px";s.style.top=y+"px";document.body.appendChild(s);
  const a=Math.random()*Math.PI*2,v=60+Math.random()*110;s.animate([{transform:"translate(0,0)",opacity:1},{transform:`translate(${Math.cos(a)*v}px,${Math.sin(a)*v+40}px)`,opacity:0}],{duration:700+Math.random()*400,easing:"cubic-bezier(.2,.7,.4,1)"}).onfinish=()=>s.remove();}}
@@ -576,20 +610,21 @@ function mach(){return L.machines[G.mi];}
 
 function startLevel(id){
  L=LEVELS.find(l=>l.id===id);FIG=L.fig();
- G={mi:0,known:new Set(),hopper:[],gear:null,errors:0,products:[],busy:false,solvedCopy:[],firstFail:new Set(),pairsDone:{}};
+ G={mi:0,known:new Set(),hopper:[],gear:null,errors:0,products:[],busy:false,solvedCopy:[],firstFail:new Set(),pairsDone:{},hl:{},hc:{},h3:0,forgeH3:new Set(),lastErr:0};
+ if(typeof closeHint==="function"){closeHint();stopNudge();}
  for(const k in L.facts)if(L.facts[k].given)G.known.add(k);
  $("lvlTitle").innerHTML=`Usine ${L.id} : ${esc(L.name)}<small>${esc(L.src)}</small>`;
  renderEnonce();renderFig();renderTray();setupMachine();updStars();show("level");
  if(L.tuto)say("Bienvenue à l'usine, apprenti ! <b>1.</b> Glisse avec le doigt les indices de l'énoncé (mots soulignés) ou de la figure jusqu'à l'<b>ENTRÉE</b>.");
  else say(`Usine ${L.id}. Lis l'énoncé. Quelle question traite la machine ? Mets dans l'ENTRÉE seulement ce que tu <b>sais</b>.`);
 }
-function curStars(){return G.errors===0?3:G.errors<=2?2:1;}
-function updStars(){$("lvlStars").innerHTML=starsHTML(curStars());}
+function curStars(){const p=G.errors+(G.h3>=2?1:0);return p===0?3:p<=2?2:1;} // indices 1 et 2 gratuits, un grand indice gratuit, ensuite une étoile en moins au maximum
+function updStars(){$("lvlStars").innerHTML=starsHTML(curStars());if(G.errors>G.lastErr){G.lastErr=G.errors;if(typeof errNudge==="function")errNudge();}}
 
 function renderEnonce(){
  const parts=L.enonce.map(s=>typeof s==="string"?esc(s):`<span class="frag" data-src="${s.f}">${esc(s.t)}</span>`).join("");
  const qs=L.questions.map((q,i)=>`<span class="q ${i<G.mi?"done":i===G.mi?"cur":""}"><span class="frag" data-src="${q.f}" data-q="1">${esc(q.t)}</span></span>`).join("");
- $("enonce").innerHTML=parts+qs;
+ $("enonce").innerHTML=parts+qs;if(typeof applyGlow==="function")applyGlow();
 }
 function arcGeom(a){
  const [name,vn,p1n,p2n,r]=a;const V=FIG.pts[vn],d1=dirDeg(V,FIG.pts[p1n]),d2=dirDeg(V,FIG.pts[p2n]);
@@ -602,22 +637,22 @@ function renderFig(){
  if(FIG.poly){const f=L.lineFacts[FIG.lines[0].id]||"tri";h+=`<polygon class="poly" data-src="${FIG.poly.id}" points="${FIG.poly.p.map(p=>p.map(v=>v.toFixed(1)).join(",")).join(" ")}"/>`;}
  for(const ln of FIG.lines){const e=ext(ln.a,ln.b,ln.k||0);const f=L.lineFacts[ln.id];
   const xy=`x1="${e[0][0].toFixed(1)}" y1="${e[0][1].toFixed(1)}" x2="${e[1][0].toFixed(1)}" y2="${e[1][1].toFixed(1)}"`;
-  h+=`<line class="hitln" ${f?`data-src="${f}"`:""} ${xy}/><line class="ln" ${xy} pointer-events="none"/>`;
+  h+=`<line class="hitln" ${f?`data-src="${f}"`:""} ${xy}/><line class="ln" data-l="${ln.id}" ${xy} pointer-events="none"/>`;
   if(ln.lab)h+=`<text class="llbl" x="${ln.lp[0]}" y="${ln.lp[1]}" pointer-events="none">${ln.lab}</text>`;}
  const curSought=mach()?mach().sought:null;
  for(const a of FIG.arcs){const g=arcGeom(a),id="ang:"+g.name;const known=G.known.has(id),ask=id===curSought;
-  h+=`<path class="arc ${known?"known":ask?"ask":""}" d="${arcPath(g.V,g.s,g.span,g.r)}" pointer-events="none"/>`;
+  h+=`<path class="arc ${known?"known":ask?"ask":""}" data-a="${g.name}" d="${arcPath(g.V,g.s,g.span,g.r)}" pointer-events="none"/>`;
   const R=Math.max(g.r+14,48),pa=P(g.V,g.s,R),pb=P(g.V,g.s+g.span,R);
   h+=`<path class="wedge" data-src="${id}" data-arc="${g.name}" d="M${g.V[0]},${g.V[1]} L${pa[0].toFixed(1)},${pa[1].toFixed(1)} A${R},${R} 0 0 0 ${pb[0].toFixed(1)},${pb[1].toFixed(1)} Z"/>`;
   if(known||ask){const lp=P(g.V,g.s+g.span/2,g.r+17);h+=`<text class="alab ${ask&&!known?"ask":""}" x="${lp[0].toFixed(1)}" y="${(lp[1]+6).toFixed(1)}" text-anchor="middle" pointer-events="none">${known?L.facts[id].v+"°":"?"}</text>`;}
  }
  for(const n in FIG.pts){const p=FIG.pts[n],o=FIG.lab[n]||[6,-8];h+=`<circle class="pt" cx="${p[0].toFixed(1)}" cy="${p[1].toFixed(1)}" r="3.6" pointer-events="none"/><text class="lbl" x="${(p[0]+o[0]).toFixed(1)}" y="${(p[1]+o[1]).toFixed(1)}" pointer-events="none">${n}</text>`;}
- $("fig").innerHTML=h;
+ $("fig").innerHTML=h;if(typeof applyGlow==="function")applyGlow();
 }
 function renderTray(){
  const t=$("trayItems");
  if(!G.products.length){t.innerHTML="aucun pour l'instant";t.style.opacity=.6;return}
- t.style.opacity=1;t.innerHTML=G.products.map(f=>`<span class="chip prod" data-src="${f}">${esc(factChip(f))}</span>`).join(" ");
+ t.style.opacity=1;t.innerHTML=G.products.map(f=>`<span class="chip prod" data-src="${f}">${esc(factChip(f))}</span>`).join(" ");if(typeof applyGlow==="function")applyGlow();
 }
 function setupMachine(){
  const m=mach();
@@ -626,7 +661,7 @@ function setupMachine(){
  $("mTitle").textContent=(L.machines.length>1?`Machine ${letters[G.mi]} sur ${L.machines.length} · `:"Machine · ")+"on cherche : "+tgt;
  $("doorTarget").textContent=tgt;$("doorTarget").style.fontSize=tgt.length>9?"16px":"21px";
  $("door").classList.remove("open","win");$("doorInside").innerHTML="";
- G.hopper=[];G.gear=null;renderHopper();renderGears();$("launch").disabled=false;
+ G.hopper=[];G.gear=null;renderHopper();renderGears();$("launch").disabled=false;if(typeof closeHint==="function")closeHint();
 }
 function renderHopper(){
  const h=$("hopper");h.querySelectorAll(".chip,.empty").forEach(e=>e.remove());
@@ -719,7 +754,7 @@ function pairAttempt(a,b){
  const key="pair:"+pairKey(a,b);
  if(G.hopper.includes(key)){say("Cette étiquette est déjà dans l'entrée.");return}
  if(G.pairsDone[key]){G.hopper.push(key);renderHopper();SND.drop();say("Étiquette remise dans l'entrée.");return}
- LB={a:p[0],b:p[1],c:p[2],key};
+ LB={a:p[0],b:p[1],c:p[2],key};closeHint();
  $("lbIntro").innerHTML=`Les angles <b>${p[0]}</b> et <b>${p[1]}</b> sont… <br><small>Écris le nom de leur configuration.</small>`;
  $("lbText").value="";$("lbOut").textContent="";$("mLabel").classList.add("on");setTimeout(()=>$("lbText").focus(),60);
 }
@@ -733,18 +768,18 @@ function labelGo(){
  else if(c==="plat")m="Un angle plat, c'est un seul angle. Ici, il y a deux angles. Comment s'appelle leur position ?";
  else if(c)m=`Non, ils ne sont pas ${CFG[c]||"alternes-externes"}. `+hintCfg(LB.c);
  else m="Je ne reconnais pas ce nom. Utilise un mot du cours. "+hintCfg(LB.c);
- $("lbOut").innerHTML="❌ "+m;
+ $("lbOut").innerHTML="❌ "+m;errNudge();
 }
 function hintCfg(c){
  if(c==="alt"||c==="cor")return "Regarde : quels sont leurs sommets ? Sont-ils entre les deux droites ou dehors ? Du même côté de la sécante ?";
  return "Regarde : ont-ils le même sommet ? Un côté commun ? Leurs côtés se prolongent-ils ?";
 }
 $("lbGo").onclick=labelGo;$("lbText").addEventListener("keydown",e=>{if(e.key==="Enter")labelGo()});
-$("lbClose").onclick=()=>$("mLabel").classList.remove("on");
+$("lbClose").onclick=()=>{$("mLabel").classList.remove("on");closeHint();};
 /* ================= FORGE ================= */
 let FG=null;
 function openForge(mode,fiche){
- FG={mode,fiche,fails:new Set(),done:false};
+ FG={mode,fiche,fails:new Set(),done:false,hl:FG&&FG.mode===mode&&FG.fiche===fiche?FG.hl:{},h3:FG&&FG.mode===mode&&FG.fiche===fiche?FG.h3:false};closeHint();
  if(mode==="level"){$("fgTitle").textContent="🔥 La forge";
   $("fgIntro").innerHTML="Quelle loi fait tourner cette machine ? Écris-la <b>de mémoire</b>, mot à mot, comme dans ton cahier.<br><small>La forge reconnaît toute seule la fiche que tu as écrite.</small>";}
  else{const F=FICHES[fiche];$("fgTitle").textContent=`🔁 Refabrique la fiche ${fiche}`;
@@ -758,15 +793,15 @@ function forgeGo(){
  else{d=diff(REF[FG.fiche],tokenize(txt,false));d.f=FG.fiche;if(d.score<.2)d=null;}
  if(!d){SND.bad();$("fgOut").innerHTML=`<p>❌ Je ne reconnais aucune phrase de ton cahier. Écris une phrase complète.</p>`;return}
  const F=FICHES[d.f];
- if(!d.exact){FG.fails.add(d.f);SND.bad();
+ if(!d.exact){FG.fails.add(d.f);SND.bad();errNudge();
   $("fgOut").innerHTML=`<p>Le métal se fend : il y a des erreurs. ${FG.mode==="level"?`Tu as écrit la fiche <b>${d.f}</b>, « ${esc(F.title)} ».`:""} Corrige et forge à nouveau.</p>
    <div class="diff">${diffHTML(d)}</div><div class="legend"><span class="ex">rouge barré</span> : mot faux ou en trop · <span class="mi" style="color:#1b7b22">vert</span> : mot oublié · <span class="ne" style="color:#333;background:#fff0a0">jaune</span> : petite faute acceptée</div>`;
   return}
- FG.done=true;const firstOk=!FG.fails.has(d.f);recordForge(d.f,firstOk);SND.forge();
+ FG.done=true;const usedH3=FG.mode==="level"?G.forgeH3.has(d.f):FG.h3;const firstOk=!FG.fails.has(d.f)&&!usedH3;closeHint();recordForge(d.f,firstOk);SND.forge();
  const col=F.t==="P"?"#d8584a":"#5fae55";
  $("fgOut").innerHTML=`<div class="forgeanim"><svg viewBox="-70 -70 140 140"><g>${gearSVG(16,62,col,16)}</g></svg></div>
   <p style="text-align:center"><b>Engrenage forgé !</b> Fiche ${d.f} : « ${esc(F.title)} ». ${d.ops.some(o=>o.k==="ne")?"<br><small>(petite faute d'orthographe acceptée)</small>":""}
-  ${firstOk?"":"<br><small>Tu as dû corriger : cette fiche reviendra demain dans ton atelier.</small>"}</p>`;
+  ${firstOk?"":`<br><small>${FG.fails.has(d.f)?"Tu as dû corriger":"Tu as utilisé le grand indice"} : cette fiche reviendra demain dans ton atelier.</small>`}</p>`;
  setTimeout(()=>{$("mForge").classList.remove("on");
   if(FG.mode==="level")placeGear(d.f);else renderAtelier();},firstOk?1300:2200);
 }
@@ -789,7 +824,7 @@ function wrongMsg(got,need){
   return `Cette loi parle d'angles <b>${got===10||got===15?"alternes-internes":"correspondants"}</b>. Mais tes angles sont <b>${CFG[pc]}</b> : regarde ton étiquette.`;
  return `Cette loi parle de <b>${TOPIC[got]||FICHES[got].title.toLowerCase()}</b>. Est-ce que tes indices parlent de ça ? Regarde ce qu'il y a dans l'ENTRÉE.`;
 }
-$("fgGo").onclick=forgeGo;$("fgClose").onclick=()=>{$("mForge").classList.remove("on");if(FG&&FG.mode!=="level")renderAtelier();};
+$("fgGo").onclick=forgeGo;$("fgClose").onclick=()=>{$("mForge").classList.remove("on");closeHint();if(FG&&FG.mode!=="level")renderAtelier();};
 
 /* ================= LANCEMENT ================= */
 async function launch(){
@@ -866,9 +901,11 @@ function copyHTML(){
 function orText(f){let s=FICHES[f].txt.replace(/\{[^}]*\}/g,"").replace(/\s+/g," ").replace(/\s+([.,])/g,"$1").trim();s=s.replace(/^Soit deux droites coupées par une sécante\. /,"");return lowerFirst(s);}
 function lowerFirst(s){return /^(Si|Deux|Dans|Soit|Un|Une|La)\b/.test(s)?s[0].toLowerCase()+s.slice(1):s}
 function finishLevel(){
- const st=curStars();SAVE.stars[L.id]=Math.max(SAVE.stars[L.id]||0,st);save();
+ const st=curStars();SAVE.stars[L.id]=Math.max(SAVE.stars[L.id]||0,st);closeHint();
+ const nh=Object.values(G.hc).reduce((a,b)=>a+b,0);const hs=SAVE.hints[L.id]=SAVE.hints[L.id]||{tot:{},last:{}};hs.last=Object.assign({},G.hc);hs.lastDay=today();save();
  const next=LEVELS.find(l=>l.id===L.id+1);
  info(`<h2>🏭 Usine ${L.id} terminée !</h2><div class="stars big" style="text-align:center;font-size:40px">${starsHTML(st)}</div>
+  ${nh?`<p style="text-align:center">💡 Indices utilisés : <b>${nh}</b>. ${G.h3?"Les grands indices t'ont aidé. La prochaine fois, essaie avec moins !":"Bien joué, tu as su chercher."}</p>`:""}
   <p>Ta machine se traduit en copie. C'est <b>exactement</b> ce que tu écris en classe :</p>${copyHTML()}
   <p class="legend">Ce que tu cherches n'est jamais dans « Je sais que ». Après « Or », une phrase de fiche Propriété. « Donc » répond à la question.</p>`,
   [["🔁 Rejouer",()=>startLevel(L.id)],["🏠 Usines",goHome]].concat(next?[["➡ Usine suivante",()=>startLevel(next.id)]]:[]));
@@ -905,10 +942,19 @@ function parent(){
  const ok=SAVE.log.filter(l=>l.ok).length,ko=SAVE.log.length-ok;
  const byDay={};SAVE.log.forEach(l=>{(byDay[l.d]=byDay[l.d]||{ok:[],ko:[]})[l.ok?"ok":"ko"].push(l.f)});
  const rows=Object.keys(byDay).sort().reverse().slice(0,10).map(d=>`<tr><td>${d.split("-").reverse().join("/")}</td><td>${[...new Set(byDay[d].ok)].join(", ")||"·"}</td><td>${[...new Set(byDay[d].ko)].join(", ")||"·"}</td></tr>`).join("");
- info(`<h2>👨 Espace parent</h2><p>Forges justes du premier coup : <b>${ok}</b> · avec corrections : <b>${ko}</b>.</p>
+ info(`<h2>👨 Espace parent</h2><p>Forges justes du premier coup : <b>${ok}</b> · avec corrections ou grand indice : <b>${ko}</b>.</p>
   <p>Étoiles : ${LEVELS.map(l=>`U${l.id} ${SAVE.stars[l.id]||0}★`).join(" · ")}</p>
+  ${hintTable()}
   <table style="width:100%;border-collapse:collapse;font-size:14px" border="1" cellpadding="4"><tr><th>Date</th><th>Fiches justes</th><th>Fiches à refaire</th></tr>${rows||"<tr><td colspan=3>Aucune forge pour l'instant.</td></tr>"}</table>`,
   [["Ouvrir toutes les usines",()=>{SAVE.all=true;save()}],["Tout effacer",()=>{if(confirm("Effacer toute la progression ?")){localStorage.removeItem(SKEY);location.reload()}}],["Fermer"]]);
+}
+function hintTable(){
+ const st=["entree","etiq","forge","donc"],sum=o=>st.reduce((a,k)=>a+((o||{})[k]||0),0);
+ const rows=LEVELS.map(l=>{const h=SAVE.hints[l.id];if(!h)return `<tr><td>U${l.id} ${esc(l.name)}</td>${st.map(()=>"<td>·</td>").join("")}<td>0</td><td>·</td></tr>`;
+  return `<tr><td>U${l.id} ${esc(l.name)}</td>${st.map(k=>`<td>${h.tot[k]||0}</td>`).join("")}<td><b>${sum(h.tot)}</b></td><td>${sum(h.last)}${h.lastDay?" ("+h.lastDay.split("-").reverse().slice(0,2).join("/")+")":""}</td></tr>`;}).join("");
+ return `<p style="margin-top:12px"><b>💡 Indices demandés par usine</b> <small>(cumul, par étape)</small></p>
+ <table style="width:100%;border-collapse:collapse;font-size:13px;margin-bottom:10px" border="1" cellpadding="4"><tr><th>Usine</th><th>Je sais que</th><th>Étiqueteuse</th><th>Forge (Or)</th><th>Donc</th><th>Total</th><th>Dernière partie</th></tr>${rows}</table>
+ <p class="legend">Indices dans Mon atelier : ${SAVE.hintsRedo||0}. Un indice 3 (le plus fort) à la forge renvoie la fiche en révision le lendemain.</p>`;
 }
 function howto(){
  info(`<h2>❓ Comment jouer</h2>
@@ -918,15 +964,234 @@ function howto(){
  <p><b>3. ENGRENAGE · Or.</b> Touche l'engrenage vide et écris la loi <b>de mémoire</b>. Une définition (cadre vert) ne s'emboîte pas : il faut une propriété (cadre rouge).</p>
  <p><b>4. Le levier.</b> Si la chaîne est juste, la machine tourne. Sinon, elle casse là où est l'erreur.</p>
  <p><b>5. SORTIE · Donc.</b> Écris le résultat avec le calcul. Ta machine devient une copie.</p>
+ <p><b>💡 Tu bloques ?</b> Touche le bouton <b>Indice</b>. Le premier indice te montre où regarder. Tu peux en demander jusqu'à 3. Ils ne donnent jamais la réponse.</p>
  <p>Les fiches avec des erreurs reviennent le lendemain dans <b>Mon atelier</b>.</p>`,[["C'est parti !"]]);
 }
 function toggleSound(){SAVE.sound=!SAVE.sound;save();soundBtns();if(SAVE.sound)SND.drop();}
+
+/* ================= INDICES PROGRESSIFS ================= */
+/* 3 niveaux par étape : 1 = une question qui montre où regarder, 2 = plus précis (la famille de la loi, la figure brille), 3 = un début à compléter. Jamais la réponse. */
+const BL='<span class="bl">……</span>';
+const SCAF={
+ 2:`Si AOB et BOC sont ${BL} alors : AOC = ${BL} + ${BL}.`,
+ 6:`Deux angles ${BL} par le sommet ont la ${BL} ${BL}.`,
+ 10:`Si deux droites ${BL} sont coupées par une ${BL} alors les angles ${BL} formés ont ${BL} ${BL}.`,
+ 11:`Si deux droites ${BL} sont coupées par une ${BL} alors les angles ${BL} formés ont ${BL} ${BL}.`,
+ 15:`Si les angles ${BL} formés sont de ${BL} ${BL}, alors les deux droites sont ${BL}.`,
+ 16:`Si les angles ${BL} formés sont de ${BL} ${BL}, alors les deux droites sont ${BL}.`,
+ 17:`Dans tout ${BL}, la ${BL} des mesures des angles vaut ${BL}.`
+};
+function autoScaf(f){ // garde les petits mots, cache un mot important sur deux
+ let k=0;return plainFiche(f).split(" ").map((w,i)=>{if(i>0&&w.replace(/[^A-Za-zÀ-ÿ0-9]/g,"").length>=5&&(k++%2===0))return BL+(/[.,:;]$/.test(w)?w.slice(-1):"");return esc(w);}).join(" ");
+}
+const scafOf=f=>"Complète dans ta tête : « "+(SCAF[f]||autoScaf(f))+" »";
+const FAM={
+ 2:"Cherche la <b>propriété</b> (cadre rouge) sur <b>l'addition de deux angles adjacents</b>.",
+ 6:"Cherche la <b>propriété</b> (cadre rouge) sur <b>les angles opposés par le sommet</b>. Pas la définition !",
+ 10:"Cherche la <b>propriété</b> (cadre rouge) sur <b>les droites parallèles et les angles alternes-internes</b>.",
+ 15:"Il faut une <b>réciproque</b> : la propriété (cadre rouge) sur <b>les angles alternes-internes de même mesure et le parallélisme</b>. Pas celle qui commence par « Si deux droites parallèles ».",
+ 16:"Il faut une <b>réciproque</b> : la propriété (cadre rouge) sur <b>les angles correspondants de même mesure et le parallélisme</b>. Pas celle qui commence par « Si deux droites parallèles ».",
+ 17:"Cherche la <b>propriété</b> (cadre rouge) sur <b>la somme des angles d'un triangle</b>."
+};
+const fg=(q,f)=>({t:[q,FAM[f],scafOf(f)],g:[]});
+const ADJ3=(a,b)=>`Glisse ${a} sur ${b}. Leur nom commence par « adj${BL} ».`;
+const ALT3=(a,b)=>`Glisse ${a} sur ${b}. Leur nom : « alternes-${BL} ».`;
+const HINTS={
+"1-0":{
+ entree:{t:["Lis l'énoncé. Que font les droites (AC) et (BD) ? Quelle mesure est donnée ?",
+  "Il te faut une phrase sur les droites et une mesure d'angle. Regarde ce qui brille dans l'énoncé et sur la figure.",
+  "Ton ENTRÉE a besoin de 3 indices : une phrase sur les droites, une mesure connue, et le nom de la position de deux angles. COD n'y va pas : c'est ce que tu cherches."],
+  g:["f:inter","f:ang:AOB","l:AC","l:BD","a:AOB"]},
+ etiq:{t:["Regarde où se croisent les deux droites. Quel angle connu est face à COD ?",
+  "Regarde les deux angles qui brillent. Ils ont le même sommet O et leurs côtés se prolongent.",
+  `Glisse AOB sur COD. Leur nom : « opposés par le ${BL} ».`],g:["a:AOB","a:COD"]},
+ forge:fg("Tes deux angles sont opposés par le sommet. Que sais-tu de leurs mesures ?",6),
+ donc:{t:["La loi dit que les deux angles ont la même mesure. Lequel connais-tu déjà ?",
+  "Regarde l'angle qui brille : sa mesure est écrite sur la figure.",
+  `COD a la même mesure que AOB. Écris : ${BL} °`],g:["a:AOB","a:COD"]}},
+"2-0":{
+ entree:{t:["Lis bien l'énoncé. Que dit-on des points A, O et C ? Quelle mesure est donnée ?",
+  "Trois points alignés forment un <b>angle plat</b>. Les indices utiles brillent.",
+  "Il faut 3 indices : l'angle plat AOC, une mesure connue, et le nom de la position de AOB et BOC. BOC n'y va pas : c'est ce que tu cherches."],
+  g:["f:plat","f:ang:AOB","l:AC","a:AOB"]},
+ etiq:{t:["BOC touche un angle que tu connais. Lequel ?",
+  "AOB et BOC brillent. Ils ont le même sommet O et un côté commun [OB).",ADJ3("AOB","BOC")],g:["a:AOB","a:BOC"]},
+ forge:fg("Deux angles adjacents forment ensemble un grand angle. Quelle loi relie leurs mesures ?",2),
+ donc:{t:["Combien mesure AOC, puisque A, O et C sont alignés ? Et AOB ?",
+  "AOB + BOC = AOC. Tu connais AOC et AOB. Il faut donc une <b>soustraction</b>.",
+  `Écris le calcul ainsi : 180 − ${BL} = ${BL}`],g:["a:AOB","a:BOC","l:AC"]}},
+"3-0":{
+ entree:{t:["Que dit l'énoncé sur (d₁) et (d₂) ? Et sur la droite (s) ? Quelle mesure est donnée ?",
+  "Il y a une phrase sur les droites, une sur la sécante et une mesure. Elles brillent.",
+  "Il faut 4 indices : deux phrases (les droites, la sécante), une mesure, et le nom de la position de deux angles. ABD n'y va pas : c'est ce que tu cherches."],
+  g:["f:par","f:sec","f:ang:CAB","l:d1","l:d2","l:s","a:CAB"]},
+ etiq:{t:["Tu cherches ABD. Quel angle connu est de l'autre côté de la sécante, entre les deux droites ?",
+  "Les deux angles qui brillent sont entre (d₁) et (d₂), de part et d'autre de (s).",ALT3("CAB","ABD")],g:["a:CAB","a:ABD"]},
+ forge:fg("Tu sais que les droites sont parallèles. Tu cherches un angle. Quelle loi part des droites parallèles ?",10),
+ donc:{t:["La loi dit que les angles alternes-internes ont la même mesure. Lequel connais-tu ?",
+  "Regarde l'angle qui brille : sa mesure est sur la figure.",`ABD a la même mesure que CAB. Écris : ${BL} °`],g:["a:CAB","a:ABD"]}},
+"4-0":{
+ entree:{t:["Ici, tu dois prouver que les droites sont parallèles. Que donne vraiment l'énoncé ?",
+  "L'énoncé donne une phrase sur la sécante et deux mesures. Elles brillent. Les droites ont l'air parallèles, mais ce n'est pas un indice !",
+  "Il faut 4 indices : la sécante, deux mesures, et le nom de la position de TAR et ABU. « (d₁) // (d₂) » n'y va pas : c'est ce que tu cherches."],
+  g:["f:sec","f:ang:TAR","f:ang:ABU","l:s","a:TAR","a:ABU"]},
+ etiq:{t:["Les deux angles de 112° : où sont-ils par rapport à la sécante ? Et par rapport aux deux droites ?",
+  "Ils brillent. Ils sont du même côté de (s). L'un est à l'intérieur, l'autre à l'extérieur.",
+  `Glisse TAR sur ABU. Leur nom commence par « corr${BL} ».`],g:["a:TAR","a:ABU"]},
+ forge:fg("Tu pars de deux angles de même mesure. Tu veux arriver aux droites parallèles. Quelle loi va dans ce sens ?",16),
+ donc:{t:["Relis la question. Qu'est-ce que tu devais démontrer ?",
+  "Ta conclusion parle des droites (d₁) et (d₂). Elles brillent.",
+  `Écris : (d₁) ${BL} (d₂), avec le symbole qui convient.`],g:["l:d1","l:d2"]}},
+"5-0":{
+ entree:{t:["De quelle figure parle l'énoncé ? Quelles mesures sont données ?",
+  "Une phrase dit ce qu'est DEF. Il y a deux mesures. Elles brillent.",
+  "Il faut 3 indices : la figure et deux mesures. Pas besoin d'étiquette ici. FDE n'y va pas : c'est ce que tu cherches."],
+  g:["f:tri","f:ang:DEF","f:ang:EFD","a:DEF","a:EFD"]},
+ forge:fg("Tu as un triangle et deux de ses angles. Que sais-tu des trois angles d'un triangle ?",17),
+ donc:{t:["Les trois angles ensemble font combien ? Tu en connais deux.",
+  "Enlève les deux angles qui brillent du total.",`Écris le calcul ainsi : 180 − ${BL} − ${BL} = ${BL}`],g:["a:DEF","a:EFD","a:FDE"]}},
+"6-0":{
+ entree:{t:["Question a. Que dit l'énoncé sur (d₁) et (d₂) ? Et sur (s) ? Quelle mesure est donnée ?",
+  "Il y a une phrase sur les droites, une sur la sécante et une mesure. Elles brillent. Les points E, B, D serviront plus tard.",
+  "Il faut 4 indices : deux phrases (les droites, la sécante), une mesure, et le nom de la position de deux angles. ABD n'y va pas : c'est ce que tu cherches."],
+  g:["f:par","f:sec","f:ang:CAB","l:d1","l:d2","l:s","a:CAB"]},
+ etiq:{t:["Tu cherches ABD. Quel angle connu est de l'autre côté de la sécante, entre les deux droites ?",
+  "Les deux angles qui brillent sont entre (d₁) et (d₂), de part et d'autre de (s).",ALT3("CAB","ABD")],g:["a:CAB","a:ABD"]},
+ forge:fg("Tu sais que les droites sont parallèles. Tu cherches un angle. Quelle loi part des droites parallèles ?",10),
+ donc:{t:["La loi dit que les angles alternes-internes ont la même mesure. Lequel connais-tu ?",
+  "Regarde l'angle qui brille : sa mesure est sur la figure.",`ABD a la même mesure que CAB. Écris : ${BL} °`],g:["a:CAB","a:ABD"]}},
+"6-1":{
+ entree:{t:["Question b. Regarde aussi tes Produits, en haut. Que sais-tu des points E, B et D ?",
+  "Il te faut l'<b>angle plat</b> et la mesure fabriquée par la machine a. Ils brillent.",
+  "Il faut 3 indices : l'angle plat EBD, la mesure de ABD (dans tes Produits), et le nom de la position de ABE et ABD. ABE n'y va pas."],
+  g:["f:plat","tray","l:d2","a:ABD"]},
+ etiq:{t:["ABE touche un angle que tu connais, au point B. Lequel ?",
+  "ABE et ABD brillent. Ils ont le même sommet B et un côté commun [BA).",ADJ3("ABD","ABE")],g:["a:ABD","a:ABE"]},
+ forge:fg("ABE et ABD forment ensemble l'angle plat EBD. Quelle loi relie leurs mesures ?",2),
+ donc:{t:["Combien mesure EBD, puisque E, B et D sont alignés ? Et ABD ?",
+  "ABE + ABD = EBD. Tu connais EBD et ABD. Il faut donc une <b>soustraction</b>.",`Écris le calcul ainsi : 180 − ${BL} = ${BL}`],g:["a:ABD","a:ABE","l:d2"]}},
+"7-0":{
+ entree:{t:["Question a : tu dois prouver que les droites sont parallèles. Quelle sécante passe par A et B ? Quelles mesures sont autour ?",
+  "La sécante (AB) et deux mesures brillent. QAC servira plus tard.",
+  "Il faut 4 indices : la sécante (AB), deux mesures de 58°, et le nom de la position de PAB et ABC. « (d₁) // (d₂) » n'y va pas : c'est ce que tu cherches."],
+  g:["f:secAB","f:ang:PAB","f:ang:ABC","l:AB","a:PAB","a:ABC"]},
+ etiq:{t:["PAB et ABC mesurent tous les deux 58°. Où sont-ils par rapport à la sécante (AB) ?",
+  "Ils brillent. Ils sont entre (d₁) et (d₂), de part et d'autre de (AB).",ALT3("PAB","ABC")],g:["a:PAB","a:ABC"]},
+ forge:fg("Tu pars de deux angles égaux pour arriver aux droites parallèles. Quelle loi va dans ce sens ?",15),
+ donc:{t:["Relis la question a. Qu'est-ce que tu devais démontrer ?",
+  "Ta conclusion parle des droites (d₁) et (d₂). Elles brillent.",`Écris : (d₁) ${BL} (d₂), avec le symbole qui convient.`],g:["l:d1","l:d2"]}},
+"7-1":{
+ entree:{t:["Question b. Regarde tes Produits : ce que tu as prouvé en a peut servir. Quelle sécante passe par C ?",
+  "Le produit de la machine a, la sécante (AC) et une mesure brillent.",
+  "Il faut 4 indices : les droites parallèles (dans tes Produits), la sécante (AC), une mesure, et le nom de la position de QAC et ACB. ACB n'y va pas."],
+  g:["tray","f:secAC","f:ang:QAC","l:AC","a:QAC"]},
+ etiq:{t:["Tu cherches ACB. Quel angle connu est de l'autre côté de (AC), entre les deux droites ?",
+  "Les deux angles qui brillent sont entre (d₁) et (d₂), de part et d'autre de (AC).",ALT3("QAC","ACB")],g:["a:QAC","a:ACB"]},
+ forge:fg("Maintenant tu sais que les droites sont parallèles. Tu cherches un angle. Quelle loi part des droites parallèles ?",10),
+ donc:{t:["La loi dit que les angles alternes-internes ont la même mesure. Lequel connais-tu ?",
+  "Regarde l'angle qui brille : sa mesure est sur la figure.",`ACB a la même mesure que QAC. Écris : ${BL} °`],g:["a:QAC","a:ACB"]}},
+"7-2":{
+ entree:{t:["Question c. De quelle figure parle-t-on ? Quels angles de cette figure connais-tu ?",
+  "La phrase sur le triangle, l'angle ABC et ton produit ACB brillent.",
+  "Il faut 3 indices : le triangle, la mesure de ABC, et celle de ACB (dans tes Produits). Pas d'étiquette ici. BAC n'y va pas."],
+  g:["f:tri","f:ang:ABC","tray","a:ABC","a:ACB"]},
+ forge:fg("Tu as un triangle et deux de ses angles. Que sais-tu des trois angles d'un triangle ?",17),
+ donc:{t:["Les trois angles du triangle ensemble font combien ? Tu en connais deux.",
+  "Enlève les deux angles qui brillent du total.",`Écris le calcul ainsi : 180 − ${BL} − ${BL} = ${BL}`],g:["a:ABC","a:ACB","a:BAC"]}}
+};
+const CHINT={ // dans l'étiqueteuse, selon la vraie position des deux angles choisis
+ opp:["Ont-ils le même sommet ? Leurs côtés se prolongent-ils en lignes droites ?",
+  "Ils sont face à face, de chaque côté du sommet. Leurs côtés sont dans le prolongement l'un de l'autre.",`Leur nom : « opposés par le ${BL} ».`],
+ adj:["Ont-ils le même sommet ? Un côté commun ?",
+  "Ils ont le même sommet et un côté commun. Ils sont de chaque côté de ce côté commun.",`Leur nom commence par « adj${BL} ».`],
+ alt:["Sont-ils entre les deux droites ou dehors ? Du même côté de la sécante ou pas ?",
+  "Les deux sont à l'intérieur, entre les deux droites. Ils sont de part et d'autre de la sécante.",`Leur nom : « alternes-${BL} ».`],
+ cor:["Sont-ils entre les deux droites ou dehors ? Du même côté de la sécante ou pas ?",
+  "L'un est à l'intérieur, l'autre à l'extérieur. Ils sont du même côté de la sécante.",`Leur nom commence par « corr${BL} ».`]
+};
+const STEPNAME={entree:"Je sais que",etiq:"Étiqueteuse",forge:"Forge · Or",donc:"Donc",levier:"Levier"};
+function redoHints(f){
+ const F=FICHES[f],w=plainFiche(f).split(" ");
+ const kw=[...new Set(plainFiche(f).replace(/[«»().,:;•]/g," ").split(/\s+/).filter(x=>x.length>=7))].slice(0,3);
+ return [`Pense au titre : « ${esc(F.title)} ». Ta fiche commence par « ${esc(w.slice(0,2).join(" "))}… ».`,
+  `C'est une ${F.t==="P"?"<b>propriété</b> (cadre rouge)":"<b>définition</b> (cadre vert)"}. Les mots importants : ${kw.map(x=>"<b>"+esc(x)+"</b>").join(", ")}.`,
+  scafOf(f)];
+}
+function hintCtx(){
+ if($("mLabel").classList.contains("on")&&LB)return {where:"lb",step:"etiq",key:"lb:"+LB.key,t:CHINT[LB.c]||CHINT.adj,g:["a:"+LB.a,"a:"+LB.b]};
+ if($("mForge").classList.contains("on")&&FG){
+  if(FG.mode!=="level")return {where:"fg",step:"forge",key:"redo:"+FG.fiche,t:redoHints(FG.fiche),g:[],redo:true};
+  const h=HINTS[L.id+"-"+G.mi];return {where:"fg",step:"forge",key:L.id+"-"+G.mi+":forge",t:h.forge.t,g:[]};}
+ if(!$("level").classList.contains("on")||!L||!G)return null;
+ const m=mach(),h=HINTS[L.id+"-"+G.mi],base=L.id+"-"+G.mi+":";
+ if($("door").classList.contains("win"))return null;
+ if($("door").classList.contains("open"))return {where:"main",step:"donc",key:base+"donc",...h.donc};
+ const missing=m.needs.filter(n=>!G.hopper.includes(n));
+ if(missing.some(n=>!n.startsWith("pair:"))){const n=missing.filter(n=>!n.startsWith("pair:")).length;
+  return {where:"main",step:"entree",key:base+"entree",t:h.entree.t,g:h.entree.g,tail:`Il t'en manque encore ${n} (sans compter l'étiquette).`};}
+ if(missing.length&&h.etiq)return {where:"main",step:"etiq",key:base+"etiq",...h.etiq};
+ if(!G.gear||G.gear.t==="D"||G.gear.f!==m.fiche)return {where:"main",step:"forge",key:base+"forge",t:[G.gear?"Cet engrenage ne fait pas tourner la machine. Touche-le pour en forger un autre. "+h.forge.t[0]:"Touche l'engrenage vide pour ouvrir la forge. "+h.forge.t[0],h.forge.t[1],h.forge.t[2]],g:[]};
+ return {where:"main",step:"levier",key:base+"levier",single:true,t:["Ta machine a l'air prête. Tire le levier ! Si ça casse, elle te montre où est l'erreur."],g:[]};
+}
+let HOPEN=null; // {where,key}
+const HBOX={main:"hintBox",fg:"fgHint",lb:"lbHint"};
+function hintPress(next){
+ const c=hintCtx();if(!c)return;stopNudge();ac();
+ const HL=c.redo?(FG.hl=FG.hl||{}):G.hl;let lv=HL[c.key]||0;
+ const max=c.single?1:3;
+ if(lv===0||(next&&lv<max)){lv++;HL[c.key]=lv;if(!c.single)countHint(c,lv);}
+ SND.hint();renderHint(c,lv);
+}
+function countHint(c,lv){
+ if(c.redo){SAVE.hintsRedo=(SAVE.hintsRedo||0)+1;if(lv===3)FG.h3=true;save();return}
+ G.hc[c.step]=(G.hc[c.step]||0)+1;if(lv===3){G.h3++;if(c.step==="forge")G.forgeH3.add(mach().fiche);}
+ const s=SAVE.hints[L.id]=SAVE.hints[L.id]||{tot:{},last:{}};
+ s.tot[c.step]=(s.tot[c.step]||0)+1;s.last=Object.assign({},G.hc);s.lastDay=today();save();updStars();
+}
+function renderHint(c,lv){
+ closeHint(true);
+ const box=$(HBOX[c.where]);const max=c.single?1:3;
+ let txt=c.t[lv-1];if(lv===3&&c.tail)txt+=` <small>${c.tail}</small>`;
+ const dots=c.single?"":`<span class="hdots">${[1,2,3].map(i=>i<=lv?"●":"○").join("")}</span>`;
+ box.innerHTML=`<div class="hbm"><div class="hbh">💡 Indice ${c.single?"":lv+" sur 3"} ${dots}</div><div class="hbt">${txt}</div>${lv===3?`<div class="hbe">C'est le dernier indice. Tu peux y arriver !</div>`:""}</div>
+  <div class="hbb">${lv<max?`<button class="brass hnext">Encore un indice</button>`:""}<button class="brass hclose" aria-label="Fermer l'indice">✕</button></div>`;
+ box.classList.add("on");box.dataset.lv=lv;
+ if(c.where==="main")$("foreman").classList.add("hinting");
+ const nb=box.querySelector(".hnext");if(nb)nb.onclick=()=>hintPress(true);
+ box.querySelector(".hclose").onclick=()=>closeHint();
+ HOPEN={where:c.where,key:c.key,glow:lv>=2?c.g:[]};applyGlow();
+}
+function closeHint(silent){
+ for(const w in HBOX){const b=$(HBOX[w]);b.classList.remove("on");b.innerHTML="";}
+ $("foreman").classList.remove("hinting");HOPEN=null;applyGlow();
+}
+function glowSel(k){
+ if(k==="tray")return "#trayItems .chip";
+ const [t,...r]=k.split(":");const v=r.join(":");
+ if(t==="f")return `#enonce .frag[data-src="${v}"]`;
+ if(t==="a")return `#fig [data-a="${v}"],#fig .wedge[data-arc="${v}"]`;
+ if(t==="l")return `#fig .ln[data-l="${v}"]`;return null;
+}
+function applyGlow(){
+ document.querySelectorAll(".hglow").forEach(e=>e.classList.remove("hglow"));
+ if(!HOPEN)return;for(const k of HOPEN.glow){const s=glowSel(k);if(s)document.querySelectorAll(s).forEach(e=>e.classList.add("hglow"));}
+}
+/* propositions automatiques : après une erreur, ou après 60 s sans rien faire */
+let LASTACT=Date.now(),NUDGED=false;const HINT_IDLE={ms:60000};
+function nudge(){document.querySelectorAll(".hintbtn").forEach(b=>b.classList.add("nudge"));NUDGED=true;}
+function stopNudge(){document.querySelectorAll(".hintbtn").forEach(b=>b.classList.remove("nudge"));}
+["pointerdown","keydown","input"].forEach(ev=>document.addEventListener(ev,e=>{LASTACT=Date.now();NUDGED=false;
+ if(ev==="pointerdown"&&!(e.target.closest&&e.target.closest(".hintbtn")))stopNudge();},true));
+setInterval(()=>{const onLvl=$("level").classList.contains("on")||($("mForge").classList.contains("on"));
+ if(onLvl&&!NUDGED&&!HOPEN&&!(G&&G.busy)&&Date.now()-LASTACT>HINT_IDLE.ms)nudge();},1000);
+function errNudge(){if(!HOPEN){nudge();}}
+$("btnHint").onclick=()=>hintPress(false);$("fgHintBtn").onclick=()=>hintPress(false);$("lbHintBtn").onclick=()=>hintPress(false);
 
 $("launch").onclick=launch;$("btnBack").onclick=goHome;$("btnBack2").onclick=goHome;$("btnHelp").onclick=howto;$("btnHowto").onclick=howto;
 $("btnAtelier").onclick=renderAtelier;$("btnParent").onclick=parent;$("btnSound1").onclick=toggleSound;$("btnSound2").onclick=toggleSound;
 document.querySelector("#logoGear").setAttribute("d",gearPath(12,46,36));
 soundBtns();goHome();
-window.__game={LEVELS,FICHES,recognise,tokenize,diff,get G(){return G},get L(){return L},startLevel,dropHopper,pairAttempt,placeGear,SAVE};
+window.__game={LEVELS,FICHES,recognise,tokenize,diff,get G(){return G},get L(){return L},startLevel,dropHopper,pairAttempt,placeGear,SAVE,hintPress,hintCtx,HINTS,HINT_IDLE,closeHint,openForge};
 </script>
 </body>
 </html>
