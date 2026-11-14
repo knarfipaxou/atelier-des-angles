@@ -1,0 +1,932 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#2a1b10">
+<title>L'Atelier des angles</title>
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%;overscroll-behavior:none;}
+body{font-family:"Trebuchet MS","Segoe UI",Roboto,Arial,sans-serif;color:#f6e7c8;
+ background:#24170d radial-gradient(ellipse at 30% 10%,#4a3019 0%,#24170d 60%,#160d06 100%);
+ overflow:hidden;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none}
+button{font-family:inherit;cursor:pointer}
+.screen{position:absolute;inset:0;display:none;flex-direction:column}
+.screen.on{display:flex}
+/* brass */
+.brass{background:linear-gradient(180deg,#e2b35a 0%,#b07d2c 45%,#8a5d1c 100%);color:#2b1906;border:2px solid #5c3c10;
+ box-shadow:inset 0 2px 0 rgba(255,255,255,.45),inset 0 -3px 0 rgba(0,0,0,.25),0 3px 6px rgba(0,0,0,.5);border-radius:12px;font-weight:bold}
+.brass:active{transform:translateY(2px)}
+.panel{background:linear-gradient(180deg,#5a3b20,#3d2713);border:3px solid #8a5d1c;border-radius:14px;
+ box-shadow:inset 0 0 0 2px #2a190b,0 6px 14px rgba(0,0,0,.55);position:relative}
+.panel::before,.panel::after{content:"";position:absolute;width:9px;height:9px;border-radius:50%;top:6px;
+ background:radial-gradient(circle at 35% 35%,#ffe7a8,#a8741f 60%,#5c3c10);}
+.panel::before{left:6px}.panel::after{right:6px}
+/* header */
+header{display:flex;align-items:center;gap:10px;padding:8px 12px;background:linear-gradient(#3b2614,#2a1a0c);border-bottom:3px solid #8a5d1c;min-height:56px}
+header .t{flex:1;font-size:20px;font-weight:bold;letter-spacing:.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+header .t small{display:block;font-size:12px;font-weight:normal;opacity:.75}
+.hbtn{min-width:46px;height:42px;font-size:18px;padding:0 12px}
+.stars{font-size:24px;letter-spacing:2px;color:#ffd34d;text-shadow:0 0 6px rgba(255,200,0,.5)}
+.stars .off{color:#5b4630;text-shadow:none}
+/* home */
+#home .hero{text-align:center;padding:22px 10px 6px}
+#home h1{margin:0;font-size:44px;color:#ffd77a;text-shadow:0 3px 0 #5c3c10,0 0 18px rgba(255,180,60,.35);font-family:Georgia,"Times New Roman",serif}
+#home .sub{opacity:.85;margin-top:4px;font-size:16px}
+.logo{display:inline-block;width:70px;height:70px;vertical-align:middle}
+.logo g{transform-origin:center;transform-box:fill-box;animation:spin 9s linear infinite}
+.levels{flex:1;overflow:auto;display:grid;grid-template-columns:repeat(auto-fill,minmax(225px,1fr));gap:14px;padding:16px 22px 8px;align-content:start}
+.lvl{padding:16px 14px 12px;min-height:128px;text-align:left;color:#f6e7c8;font-size:15px;display:flex;flex-direction:column;gap:6px}
+.lvl b{font-size:19px;color:#ffd77a}
+.lvl .src{font-size:12px;opacity:.7}
+.lvl.locked{filter:grayscale(1) brightness(.6)}
+.lvl .badge{position:absolute;right:12px;top:12px;font-size:12px;background:#24170d;border:1px solid #8a5d1c;padding:2px 7px;border-radius:9px}
+.homebar{display:flex;gap:12px;justify-content:center;padding:10px 10px 16px;flex-wrap:wrap}
+.homebar button{font-size:18px;padding:12px 20px}
+/* level layout */
+#level main{flex:1;display:grid;grid-template-columns:1.06fr 1fr;gap:10px;padding:10px;min-height:0}
+.left{display:flex;flex-direction:column;gap:8px;min-height:0}
+.enonce{background:#f7f0dc;color:#222;border-radius:10px;padding:10px 12px;font-size:16.5px;line-height:1.55;box-shadow:0 3px 8px rgba(0,0,0,.5);
+ font-family:Georgia,"Times New Roman",serif;position:relative}
+.enonce .q{display:block;margin-top:4px;font-weight:bold}
+.enonce .q.done{opacity:.45;text-decoration:line-through}
+.enonce .q.cur{background:#fff3a8;border-radius:4px}
+.frag{border-bottom:2px dashed #b07d2c;touch-action:none;cursor:grab;padding:0 2px;border-radius:4px}
+.frag:active{background:#ffe39a}
+.blue{flex:1;min-height:0;border-radius:10px;background:#0f3557;
+ background-image:linear-gradient(rgba(255,255,255,.07) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.07) 1px,transparent 1px);
+ background-size:22px 22px;border:3px solid #6c8fb3;box-shadow:0 3px 10px rgba(0,0,0,.6);position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.blue .tag{position:absolute;left:8px;top:6px;font-size:12px;color:#bcd6f0;letter-spacing:2px}
+.blue svg{width:100%;height:100%;touch-action:none}
+svg .ln{stroke:#e9f3ff;stroke-width:2.6;stroke-linecap:round}
+svg .hitln{stroke:transparent;stroke-width:30;cursor:grab}
+svg .hitln:hover+.ln{stroke:#fff}
+svg .pt{fill:#e9f3ff}
+svg .lbl{fill:#e9f3ff;font:bold 19px Georgia,serif}
+svg .llbl{fill:#9fd0ff;font:italic 17px Georgia,serif}
+svg .arc{fill:none;stroke:rgba(207,227,247,.38);stroke-width:1.6;stroke-dasharray:3 4}
+svg .arc.known{stroke:#ffd34d;stroke-width:3.5;stroke-dasharray:none}
+svg .arc.ask{stroke:#ff8a3d;stroke-width:3.5;stroke-dasharray:5 4}
+svg .alab{font:bold 17px "Trebuchet MS",sans-serif;fill:#ffd34d}
+svg .alab.ask{fill:#ff9a55}
+svg .wedge{fill:rgba(255,255,255,0);cursor:grab}
+svg .wedge.hot{fill:rgba(255,211,77,.28)}
+svg .poly{fill:rgba(160,210,255,.08);stroke:none;cursor:grab}
+svg .flash{animation:flash .6s 2}
+@keyframes flash{50%{opacity:.2}}
+.right{display:flex;flex-direction:column;gap:8px;min-height:0}
+.tray{display:flex;align-items:center;gap:6px;flex-wrap:wrap;padding:6px 10px 6px 26px;min-height:46px;font-size:13px}
+.tray .lab{opacity:.75;margin-right:4px}
+.machine{flex:1;display:flex;flex-direction:column;padding:10px 12px 10px;min-height:0;gap:6px}
+.mtitle{text-align:center;font-weight:bold;font-size:17px;color:#ffd77a;letter-spacing:.5px}
+.plate{font-size:11px;letter-spacing:2px;color:#2b1906;background:linear-gradient(#e9c477,#b9892f);border-radius:4px;padding:1px 6px;display:inline-block;font-weight:bold}
+#hopper{position:relative;min-height:118px;flex:1.2;border-radius:12px 12px 30px 30px;border:3px dashed #c99a45;background:repeating-linear-gradient(45deg,#3a2512 0 10px,#33200f 10px 20px);
+ padding:26px 8px 8px;display:flex;flex-wrap:wrap;gap:6px;align-content:flex-start;transition:background .2s}
+#hopper .plate{position:absolute;left:10px;top:5px}
+#hopper .empty{opacity:.55;font-size:14px;width:100%;text-align:center;margin-top:12px}
+#hopper.over{border-color:#ffd34d;background:#4d3417}
+#hopper.grip{animation:shake .5s;border-color:#ff4b3a;background:#5a1d12}
+.chip{display:inline-flex;align-items:center;gap:6px;background:linear-gradient(#fff1c9,#e7c77c);color:#2b1906;border:2px solid #7a5418;border-radius:8px;
+ padding:5px 9px;font-size:15px;font-weight:bold;box-shadow:0 2px 3px rgba(0,0,0,.5);touch-action:none;cursor:grab;font-family:Georgia,serif}
+.chip.pair{background:linear-gradient(#d9f0ff,#9cc9ec);border-color:#2d5e86}
+.chip.prod{background:linear-gradient(#d6ffd0,#8fd486);border-color:#2f6b28}
+.chip .x{font-family:Arial;font-weight:bold;color:#7a2a10;padding:0 2px 0 4px;font-size:16px}
+.chip.in{animation:pop .35s}
+.ghost{position:fixed;z-index:1000;pointer-events:none;transform:translate(-50%,-120%) rotate(-3deg) scale(1.08);opacity:.95}
+.body{display:flex;gap:8px;align-items:stretch;flex:1;min-height:130px}
+.gears{flex:1;position:relative;min-width:0}
+.gears svg{width:100%;height:100%}
+.gtxt{font:bold 13px "Trebuchet MS",sans-serif;fill:#2b1906;pointer-events:none}
+#lawslot{cursor:pointer}
+.spin{animation:spin 1.2s linear infinite}
+.spinr{animation:spin 1.2s linear infinite reverse}
+.sg{transform-box:fill-box;transform-origin:center}
+@keyframes spin{to{transform:rotate(360deg)}}
+.fall{animation:fall 1s ease-in forwards}
+@keyframes fall{0%{transform:translate(0,0) rotate(0)}20%{transform:translate(4px,-10px) rotate(-12deg)}100%{transform:translate(30px,160px) rotate(80deg);opacity:.2}}
+.wobble{animation:wobble .7s 2}
+@keyframes wobble{25%{transform:translate(8px,-14px) rotate(14deg)}75%{transform:translate(-6px,-8px) rotate(-10deg)}}
+@keyframes shake{20%,60%{transform:translateX(-9px)}40%,80%{transform:translateX(9px)}}
+@keyframes pop{0%{transform:scale(.3)}70%{transform:scale(1.12)}100%{transform:scale(1)}}
+.shake{animation:shake .5s}
+#door{width:158px;border-radius:10px;background:#1e140b;border:3px solid #8a5d1c;position:relative;overflow:hidden;display:flex;flex-direction:column}
+#door .plate{margin:5px auto 0}
+#door .target{font:bold 21px Georgia,serif;white-space:nowrap;text-align:center;color:#ffd77a;margin-top:6px}
+#door .leaves{position:absolute;inset:44px 6px 6px 6px;display:flex;pointer-events:none}
+#door .leaf{flex:1;background:repeating-linear-gradient(90deg,#7a5418 0 6px,#6a4814 6px 12px);border:2px solid #3e2a0c;transition:transform .8s}
+#door.open .leaf:first-child{transform:translateX(-100%)}
+#door.open .leaf:last-child{transform:translateX(100%)}
+#door .inside{flex:1;display:flex;flex-direction:column;gap:6px;padding:8px 8px;justify-content:center}
+#door input{width:100%;font-size:18px;padding:8px;border-radius:8px;border:2px solid #b07d2c;background:#fff8e6;color:#222;font-family:Georgia,serif}
+#door button{font-size:16px;padding:8px}
+#door .dk{font-size:12px;opacity:.8;text-align:center}
+#door.win{border-color:#6fe36a;box-shadow:0 0 18px #6fe36a}
+.lever{display:flex;gap:10px;align-items:center}
+#launch{flex:1;font-size:21px;padding:12px;display:flex;align-items:center;justify-content:center;gap:10px}
+#launch .lv{display:inline-block;width:12px;height:34px;background:#3b2614;border-radius:6px;position:relative;transform-origin:bottom center;transition:transform .3s}
+#launch .lv::after{content:"";position:absolute;top:-8px;left:-6px;width:24px;height:24px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#ff7a6a,#a01d0e)}
+#launch.pull .lv{transform:rotate(55deg)}
+#launch:disabled{opacity:.5}
+.foreman{display:flex;align-items:center;gap:10px;padding:8px 14px 8px 12px;margin:0 10px 10px;min-height:60px}
+.foreman .av{font-size:38px;line-height:1}
+.foreman .msg{flex:1;font-size:16.5px;line-height:1.35}
+.foreman.bad{border-color:#e0533e}.foreman.good{border-color:#6fe36a}
+.foreman.bad .msg{color:#ffc2b5}.foreman.good .msg{color:#d4ffc9}
+/* modal */
+.modal{position:fixed;inset:0;background:rgba(10,5,2,.72);display:none;align-items:center;justify-content:center;z-index:500;padding:14px}
+.modal.on{display:flex}
+.mbox{width:min(720px,100%);max-height:100%;overflow:auto;padding:18px 18px 14px}
+.mbox h2{margin:0 0 6px;color:#ffd77a;font-family:Georgia,serif}
+.mbox p{margin:6px 0;line-height:1.4}
+.mbox textarea,.mbox input[type=text]{width:100%;font-size:19px;padding:10px;border-radius:10px;border:3px solid #b07d2c;background:#fff8e6;color:#1d1d1d;font-family:Georgia,serif;user-select:text;-webkit-user-select:text}
+.mbox textarea{min-height:120px;resize:vertical}
+.row{display:flex;gap:10px;justify-content:flex-end;margin-top:10px;flex-wrap:wrap}
+.row button{font-size:18px;padding:10px 18px}
+.diff{background:#fff8e6;color:#1d1d1d;border-radius:10px;padding:10px;font:19px/1.7 Georgia,serif;margin-top:10px}
+.diff .ex{color:#c0271b;text-decoration:line-through;background:#ffd9d4;border-radius:3px;padding:0 2px}
+.diff .mi{color:#1b7b22;background:#d8f5d3;border-bottom:2px solid #1b7b22;border-radius:3px;padding:0 3px;font-weight:bold}
+.diff .ne{background:#fff0a0;border-bottom:2px dotted #a07800;border-radius:3px}
+.legend{font-size:13px;opacity:.85;margin-top:4px}
+.forgeanim{display:flex;justify-content:center;margin:8px 0}
+.forgeanim svg{width:120px;height:120px}
+.forgeanim g{animation:forge 1.1s ease-out}
+@keyframes forge{0%{transform:scale(0) rotate(-200deg);opacity:0}100%{transform:scale(1) rotate(0)}}
+/* copy */
+.copy{background:#fffdf6;color:#1b2a6b;border-radius:6px;padding:16px 18px 16px 58px;position:relative;font:19px/30px "Comic Sans MS","Segoe Print","Bradley Hand","Chalkboard SE",cursive;
+ background-image:linear-gradient(90deg,transparent 46px,#e8a3a3 46px,#e8a3a3 48px,transparent 48px),repeating-linear-gradient(#fffdf6 0 29px,#a8c4e8 29px 30px);
+ box-shadow:0 4px 12px rgba(0,0,0,.6);text-align:left}
+.copy .qq{font-weight:bold;color:#222}
+.copy .js{color:#1d4fd1}.copy .or{color:#c0271b}.copy .dc{color:#167a2a}
+.copy .k{font-weight:bold;text-decoration:underline}
+.copy .ico{font-family:Arial;font-size:12px;color:#7a5418;margin-left:6px;font-weight:bold}
+.big{font-size:22px}
+.atel{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;padding:14px;overflow:auto}
+.gcell{padding:10px 8px;text-align:center;font-size:13px;min-height:150px}
+.gcell svg{width:70px;height:70px}
+.gcell.no{opacity:.5}
+.gcell .n{font-weight:bold;color:#ffd77a}
+.duebox{margin:10px 14px 0;padding:12px 14px 12px 26px}
+.duebox button{margin:4px 6px 4px 0;font-size:15px;padding:8px 12px}
+.spark{position:fixed;width:7px;height:7px;border-radius:50%;background:#ffd34d;box-shadow:0 0 8px #ff9a2a;pointer-events:none;z-index:900}
+.puff{position:fixed;width:40px;height:40px;border-radius:50%;background:rgba(220,220,220,.5);pointer-events:none;z-index:900;filter:blur(3px)}
+@media (orientation:portrait){
+ #level main{grid-template-columns:1fr;grid-template-rows:auto auto;overflow:auto;display:grid}
+ .left{min-height:auto}
+ .left .blue{height:30vh;flex:none}
+ .right{min-height:auto}
+ .machine{flex:none}
+ #hopper{flex:none;min-height:104px}
+ .body{flex:none;height:150px;min-height:0}
+ #home h1{font-size:36px}
+}
+@media (max-height:700px) and (orientation:landscape){
+ .enonce{font-size:15px;padding:7px 10px}
+ .foreman{min-height:50px}.foreman .msg{font-size:15px}
+}
+</style>
+</head>
+<body>
+<!-- ACCUEIL -->
+<section id="home" class="screen on">
+ <div class="hero">
+  <svg class="logo" viewBox="-50 -50 100 100"><g><path id="logoGear" fill="#e2b35a" stroke="#5c3c10" stroke-width="2"/><circle r="12" fill="#24170d" stroke="#5c3c10" stroke-width="2"/></g></svg>
+  <h1>L'Atelier des angles</h1>
+  <div class="sub">Construis des machines à démontrer. Indices, loi, résultat : <b>Je sais que</b>, <b>Or</b>, <b>Donc</b>.</div>
+ </div>
+ <div class="levels" id="levels"></div>
+ <div class="homebar">
+  <button class="brass" id="btnAtelier">⚙️ Mon atelier <span id="dueCount"></span></button>
+  <button class="brass" id="btnHowto">❓ Comment jouer</button>
+  <button class="brass" id="btnSound1">🔊</button>
+ </div>
+</section>
+
+<!-- NIVEAU -->
+<section id="level" class="screen">
+ <header>
+  <button class="brass hbtn" id="btnBack">⬅</button>
+  <div class="t" id="lvlTitle">Usine</div>
+  <div class="stars" id="lvlStars"></div>
+  <button class="brass hbtn" id="btnHelp">?</button>
+  <button class="brass hbtn" id="btnSound2">🔊</button>
+ </header>
+ <main>
+  <div class="left">
+   <div class="enonce" id="enonce"></div>
+   <div class="blue"><span class="tag">PLAN DE L'USINE</span><svg id="fig" viewBox="0 0 500 380"></svg></div>
+  </div>
+  <div class="right">
+   <div class="panel tray" id="tray"><span class="lab">📦 Produits :</span><span id="trayItems" style="opacity:.6">aucun pour l'instant</span></div>
+   <div class="panel machine" id="machine">
+    <div class="mtitle" id="mTitle">Machine</div>
+    <div id="hopper" data-drop="hopper"><span class="plate">ENTRÉE · JE SAIS QUE</span><div class="empty">Glisse ici les indices de l'énoncé et de la figure</div></div>
+    <div class="body">
+     <div class="gears"><svg id="gearsSvg" viewBox="0 0 290 160"></svg></div>
+     <div id="door">
+      <span class="plate">SORTIE · DONC</span>
+      <div class="target" id="doorTarget">? </div>
+      <div class="inside" id="doorInside"></div>
+      <div class="leaves"><div class="leaf"></div><div class="leaf"></div></div>
+     </div>
+    </div>
+    <div class="lever"><button class="brass" id="launch"><span class="lv"></span>Tirer le levier</button></div>
+   </div>
+  </div>
+ </main>
+ <div class="panel foreman" id="foreman"><div class="av">👷</div><div class="msg" id="fmsg"></div></div>
+</section>
+
+<!-- ATELIER -->
+<section id="atelier" class="screen">
+ <header>
+  <button class="brass hbtn" id="btnBack2">⬅</button>
+  <div class="t">Mon atelier<small>Les engrenages que tu as forgés</small></div>
+  <button class="brass hbtn" id="btnParent">👨 Parent</button>
+ </header>
+ <div style="overflow:auto;flex:1">
+  <div class="panel duebox" id="duebox"></div>
+  <div class="atel" id="atelGrid"></div>
+ </div>
+</section>
+
+<!-- MODALES -->
+<div class="modal" id="mForge"><div class="panel mbox">
+ <h2 id="fgTitle">🔥 La forge</h2>
+ <p id="fgIntro"></p>
+ <textarea id="fgText" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Écris la phrase ici…"></textarea>
+ <div id="fgOut"></div>
+ <div class="row"><button class="brass" id="fgClose">Fermer</button><button class="brass" id="fgGo">🔥 Forger</button></div>
+</div></div>
+
+<div class="modal" id="mLabel"><div class="panel mbox">
+ <h2>🏷️ L'étiqueteuse</h2>
+ <p id="lbIntro"></p>
+ <input type="text" id="lbText" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Leur nom…">
+ <p id="lbOut"></p>
+ <div class="row"><button class="brass" id="lbClose">Annuler</button><button class="brass" id="lbGo">Étiqueter</button></div>
+</div></div>
+
+<div class="modal" id="mInfo"><div class="panel mbox">
+ <div id="infoBody"></div>
+ <div class="row" id="infoRow"></div>
+</div></div>
+<script>
+"use strict";
+/* ================= FICHES DU CAHIER (textes exacts) =================
+   Entre accolades : partie facultative (non exigée à la récitation). */
+const FICHES={
+1:{t:"D",title:"Angles adjacents",txt:"Deux angles sont adjacents s'ils ont le même sommet, un côté commun et qu'ils sont situés de part et d'autre de ce côté commun."},
+2:{t:"P",title:"Addition de deux angles adjacents",txt:"Si AOB et BOC sont adjacents alors : AOC = AOB + BOC {(égalité avec les mesures des angles)}."},
+3:{t:"D",title:"Bissectrice",txt:"La bissectrice d'un angle est la demi-droite qui partage un angle en 2 angles adjacents de même mesure."},
+4:{t:"P",title:"Mesures des angles formés par une bissectrice",txt:"Si [OV) est la bissectrice de UOW, alors : UOV = VOW = UOW ÷ 2 {(égalités de mesures)}."},
+5:{t:"D",title:"Angles opposés par le sommet",txt:"Deux angles ayant même sommet et dont les côtés sont des demi-droites dans le prolongement l'une de l'autre sont opposés par le sommet."},
+6:{t:"P",title:"Mesure des angles opposés par le sommet",txt:"Deux angles opposés par le sommet ont la même mesure."},
+7:{t:"D",title:"Droite sécante à deux autres droites",txt:"Une droite qui coupe deux autres droites en deux points distincts est sécante à ces deux droites."},
+8:{t:"D",title:"Angles alternes-internes",txt:"Deux droites coupées par une sécante définissent des angles alternes-internes : • Ils ont pour sommet les deux points d'intersection. • Les deux angles sont situés à l'intérieur {(entre les deux droites)}. • Ils sont de part et d'autre de la sécante."},
+9:{t:"D",title:"Angles correspondants",txt:"Deux droites coupées par une sécante définissent des angles correspondants : • Ils ont pour sommet les deux points d'intersection. • L'un est à l'intérieur et l'autre à l'extérieur des deux droites. • Ils sont situés du même côté de la sécante."},
+10:{t:"P",title:"Droites parallèles et angles alternes-internes",txt:"Si deux droites parallèles sont coupées par une sécante alors les angles alternes-internes formés ont la même mesure."},
+11:{t:"P",title:"Droites parallèles et angles correspondants",txt:"Si deux droites parallèles sont coupées par une sécante alors les angles correspondants formés ont la même mesure."},
+12:{t:"D",title:"Angles complémentaires",txt:"Deux angles sont complémentaires si la somme de leurs mesures vaut 90°."},
+13:{t:"D",title:"Angles supplémentaires",txt:"Deux angles sont supplémentaires si la somme de leurs mesures vaut 180°."},
+14:{t:"D",title:"Réciproque d'une propriété",txt:"Une propriété s'écrit souvent sous la forme : « si A est vrai alors B est vrai ». La réciproque est la phrase obtenue en échangeant l'hypothèse et la conclusion : « si B est vrai alors A est vrai »."},
+15:{t:"P",title:"Angles alternes-internes égaux et parallélisme",txt:"{Soit deux droites coupées par une sécante.} Si les angles alternes-internes formés sont de même mesure, alors les deux droites sont parallèles."},
+16:{t:"P",title:"Angles correspondants égaux et parallélisme",txt:"{Soit deux droites coupées par une sécante.} Si les angles correspondants formés sont de même mesure, alors les deux droites sont parallèles."},
+17:{t:"P",title:"Somme des angles d'un triangle",txt:"Dans tout triangle {ABC}, la somme des mesures des angles vaut 180°. {CAB + ABC + BCA = 180°}"},
+18:{t:"P",title:"Triangle rectangle",txt:"Un triangle rectangle possède un angle de mesure égale à 90° et la somme des mesures des deux autres angles vaut 90°."},
+19:{t:"P",title:"Triangle isocèle",txt:"Un triangle isocèle a ses angles à la base de même mesure. {BAC = 180° − ABC × 2 et ABC = BCA = (180° − BAC) ÷ 2}"},
+20:{t:"P",title:"Triangle équilatéral",txt:"Un triangle équilatéral a ses angles de même mesure."},
+21:{t:"D",title:"Nombre relatif, signe et valeur absolue",txt:"Un nombre relatif est un nombre défini par : • un signe : « − » pour les nombres négatifs, « + » pour les nombres positifs ; • sa valeur absolue, qui donne sa distance par rapport au nombre 0. Zéro est à la fois positif et négatif."},
+22:{t:"D",title:"Droite graduée, origine, abscisse d'un point",txt:"Une droite graduée est un axe muni : • d'une origine (le point O) ; • d'une unité (pour les graduations) ; • d'un sens (dans lequel les nombres grandissent). L'abscisse d'un point est le nombre relatif qui repère sa position sur la droite graduée : si le point H a pour abscisse −3, on le note H(−3)."}
+};
+const plainFiche=n=>FICHES[n].txt.replace(/[{}]/g,"").replace(/\s+/g," ").trim();
+const TOPIC={2:"l'addition de deux angles adjacents",4:"la bissectrice",6:"les angles opposés par le sommet",10:"les droites parallèles et les angles alternes-internes",
+11:"les droites parallèles et les angles correspondants",15:"les angles alternes-internes de même mesure, pour prouver un parallélisme",
+16:"les angles correspondants de même mesure, pour prouver un parallélisme",17:"la somme des angles d'un triangle",18:"le triangle rectangle",19:"le triangle isocèle",20:"le triangle équilatéral"};
+const CFG={alt:"alternes-internes",cor:"correspondants",adj:"adjacents",opp:"opposés par le sommet"};
+
+/* ================= GÉOMÉTRIE ================= */
+const D2R=Math.PI/180;
+const P=(o,deg,r)=>[o[0]+r*Math.cos(deg*D2R),o[1]-r*Math.sin(deg*D2R)];
+const dirDeg=(a,b)=>((Math.atan2(-(b[1]-a[1]),b[0]-a[0])/D2R)+360)%360;
+function ext(a,b,k1,k2){const dx=b[0]-a[0],dy=b[1]-a[1],L=Math.hypot(dx,dy);return [[a[0]-dx/L*k1,a[1]-dy/L*k1],[b[0]+dx/L*(k2===undefined?k1:k2),b[1]+dy/L*(k2===undefined?k1:k2)]];}
+
+function figCross(){ // Séance 2 : deux droites sécantes en O
+ const O=[250,192];
+ const A=P(O,160,180),B=P(O,92,165),C=P(O,340,180),D=P(O,272,165);
+ return {pts:{O,A,B,C,D},lab:{O:[14,22],A:[-8,-12],B:[12,4],C:[4,24],D:[-24,0]},
+  lines:[{id:"AC",a:A,b:C,k:12},{id:"BD",a:B,b:D,k:12}],
+  arcs:[["AOB","O","A","B",44],["BOC","O","B","C",34],["COD","O","C","D",44],["DOA","O","D","A",34]]};
+}
+function figPar(theta,opt){ // deux parallèles et une sécante
+ const y1=110,y2=270,A=[320,y1],B=[320-160/Math.tan(theta*D2R),y2];
+ const pts={A,B,C:[70,y1],D:[455,y2]};
+ if(opt.E)pts.E=[45,y2]; if(opt.R)pts.R=[455,y1];
+ const s=ext(A,B,60,50);
+ return {pts,lab:{A:[8,-12],B:[-22,24],C:[-6,-12],D:[-6,24],E:[-6,24],R:[-6,26]},
+  lines:[{id:"d1",a:[20,y1],b:[490,y1],k:0,lab:"(d₁)",lp:[458,y1-10]},{id:"d2",a:[20,y2],b:[490,y2],k:0,lab:"(d₂)",lp:[458,y2-10]},{id:"s",a:s[0],b:s[1],k:0,lab:"(s)",lp:[s[0][0]+12,s[0][1]+12]}],
+  arcs:opt.arcs};
+}
+function figReci(){ // séance 7 : angles correspondants 112°
+ const A=[255,118],t=160/Math.sin(68*D2R),B=[A[0]+t*Math.cos(292*D2R),A[1]+160];
+ const T=P(A,112,62),R=[455,118],U=[455,278];
+ const s=ext(T,B,10,45);
+ return {pts:{A,B,T,R,U},lab:{A:[-22,22],B:[10,24],T:[-20,-2],R:[-6,-12],U:[-6,24]},
+  lines:[{id:"d1",a:[25,118],b:[490,118],k:0,lab:"(d₁)",lp:[40,108]},{id:"d2",a:[25,278],b:[490,278],k:0,lab:"(d₂)",lp:[40,268]},{id:"s",a:s[0],b:s[1],k:0,lab:"(s)",lp:[s[1][0]+8,s[1][1]-4]}],
+  arcs:[["TAR","A","T","R",40],["RAB","A","R","B",30],["ABU","B","A","U",40]]};
+}
+function figTri(){ // séance 8 : triangle DEF
+ const E=[95,325],F=[365,325],h=270/(1/Math.tan(52*D2R)+1/Math.tan(73*D2R)),D=[95+h/Math.tan(52*D2R),325-h];
+ return {pts:{D,E,F},lab:{D:[-6,-14],E:[-22,16],F:[8,16]},poly:{id:"tri",p:[D,E,F]},
+  lines:[{id:"DE",a:D,b:E,k:0},{id:"EF",a:E,b:F,k:0},{id:"FD",a:F,b:D,k:0}],
+  arcs:[["DEF","E","D","F",42],["EFD","F","E","D",42],["FDE","D","F","E",42]]};
+}
+function figFinal(){ // d'après l'interro 2 et la séance 9
+ const A=[250,98],B=[250-182/Math.tan(58*D2R),280],C=[250+182/Math.tan(47*D2R),280];
+ const ab=ext(A,B,40,40),ac=ext(A,C,40,40);
+ return {pts:{A,B,C,P:[60,98],Q:[450,98]},lab:{A:[-6,-14],B:[-24,24],C:[6,24],P:[-6,-12],Q:[-6,-12]},poly:{id:"tri",p:[A,B,C]},
+  lines:[{id:"d1",a:[20,98],b:[490,98],k:0,lab:"(d₁)",lp:[455,124]},{id:"d2",a:[20,280],b:[490,280],k:0,lab:"(d₂)",lp:[455,270]},
+   {id:"AB",a:ab[0],b:ab[1],k:0},{id:"AC",a:ac[0],b:ac[1],k:0}],
+  arcs:[["PAB","A","P","B",36],["BAC","A","B","C",28],["QAC","A","Q","C",36],["ABC","B","A","C",40],["ACB","C","A","B",40]]};
+}
+
+/* ================= NIVEAUX ================= */
+const LEVELS=[
+{id:1,name:"Les angles opposés",src:"Séance 2, exercice 1 a",fig:figCross,
+ enonce:[{t:"Les droites (AC) et (BD) se coupent en O.",f:"inter"}," On donne ",{t:"AOB = 68°",f:"ang:AOB"},"."],
+ questions:[{t:"a. Calculer COD. Justifier à l'aide d'une propriété.",f:"ang:COD"}],
+ lineFacts:{AC:"inter",BD:"inter"},
+ facts:{inter:{chip:"(AC) et (BD) se coupent en O",given:1,hint:"Il manque un indice : que font les droites (AC) et (BD) ?"},
+  "ang:AOB":{v:68,given:1},"ang:COD":{v:68},"ang:BOC":{v:112},"ang:DOA":{v:112}},
+ pairs:[["AOB","COD","opp"],["BOC","DOA","opp"],["AOB","BOC","adj"],["BOC","COD","adj"],["COD","DOA","adj"],["DOA","AOB","adj"]],
+ machines:[{q:0,sought:"ang:COD",needs:["inter","ang:AOB","pair:AOB|COD"],fiche:6,type:"num",ans:68,
+  knows:"les droites (AC) et (BD) se coupent en O : les angles AOB et COD sont opposés par le sommet, et AOB = 68°.",donc:"COD = 68°."}],
+ tuto:true},
+{id:2,name:"L'angle plat",src:"Séance 2, exercice 1 b",fig:figCross,
+ enonce:[{t:"Les droites (AC) et (BD) se coupent en O.",f:"inter"}," ",{t:"Les points A, O et C sont alignés.",f:"plat"}," On donne ",{t:"AOB = 68°",f:"ang:AOB"},"."],
+ questions:[{t:"b. Calculer BOC. Justifier et écrire le calcul.",f:"ang:BOC"}],
+ lineFacts:{AC:"plat",BD:"inter"},
+ facts:{inter:{chip:"(AC) et (BD) se coupent en O",given:1},plat:{chip:"A, O, C alignés : AOC = 180° (angle plat)",given:1,hint:"Il manque un indice sur les points A, O et C. Que forment-ils ?"},
+  "ang:AOB":{v:68,given:1},"ang:COD":{v:68},"ang:BOC":{v:112},"ang:DOA":{v:112}},
+ pairs:[["AOB","COD","opp"],["BOC","DOA","opp"],["AOB","BOC","adj"],["BOC","COD","adj"],["COD","DOA","adj"],["DOA","AOB","adj"]],
+ machines:[{q:0,sought:"ang:BOC",needs:["plat","ang:AOB","pair:AOB|BOC"],fiche:2,type:"num",ans:112,calc:"180° − 68°",
+  knows:"A, O et C sont alignés, donc AOC est un angle plat : AOC = 180°. Les angles AOB et BOC sont adjacents, et AOB = 68°.",donc:"BOC = 180° − 68° = 112°."}]},
+{id:3,name:"Les parallèles",src:"Séance 5, exercice 1",fig:()=>figPar(50,{R:1,arcs:[["CAB","A","C","B",42],["RAB","A","R","B",30],["ABD","B","A","D",42]]}),
+ enonce:[{t:"Les droites (d₁) et (d₂) sont parallèles.",f:"par"}," ",{t:"La sécante (s) les coupe en A et B.",f:"sec"}," On donne ",{t:"CAB = 50°",f:"ang:CAB"},"."],
+ questions:[{t:"a. Calculer ABD en justifiant à l'aide d'une propriété.",f:"ang:ABD"}],
+ lineFacts:{d1:"par",d2:"par",s:"sec"},
+ facts:{par:{chip:"(d₁) // (d₂)",given:1,hint:"Il manque un indice sur les droites (d₁) et (d₂)."},sec:{chip:"(s) est sécante en A et B",given:1,hint:"Il manque un indice sur la droite (s)."},
+  "ang:CAB":{v:50,given:1},"ang:ABD":{v:50},"ang:RAB":{v:130}},
+ pairs:[["CAB","ABD","alt"],["CAB","RAB","adj"]],
+ machines:[{q:0,sought:"ang:ABD",needs:["par","sec","ang:CAB","pair:ABD|CAB"],fiche:10,type:"num",ans:50,
+  knows:"(d₁) // (d₂), que (s) est sécante en A et B, et que les angles CAB et ABD sont alternes-internes, avec CAB = 50°.",donc:"ABD = 50°."}]},
+{id:4,name:"La réciproque",src:"Séance 7, exercice 1",fig:figReci,
+ enonce:[{t:"Les droites (d₁) et (d₂) sont coupées par la sécante (s) en A et B.",f:"sec"}," On donne ",{t:"TAR = 112°",f:"ang:TAR"}," et ",{t:"ABU = 112°",f:"ang:ABU"},"."],
+ questions:[{t:"b. Démontrer que (d₁) et (d₂) sont parallèles.",f:"par"}],
+ lineFacts:{d1:"par",d2:"par",s:"sec"},
+ facts:{par:{chip:"(d₁) // (d₂)"},sec:{chip:"(s) est sécante en A et B",given:1,hint:"Il manque un indice sur la droite (s)."},
+  "ang:TAR":{v:112,given:1},"ang:ABU":{v:112,given:1},"ang:RAB":{v:68}},
+ pairs:[["TAR","ABU","cor"],["TAR","RAB","adj"]],
+ machines:[{q:0,sought:"par",needs:["sec","ang:TAR","ang:ABU","pair:ABU|TAR"],fiche:16,type:"par",
+  knows:"(d₁) et (d₂) sont coupées par la sécante (s) et que les angles correspondants TAR et ABU mesurent tous les deux 112°.",donc:"(d₁) // (d₂)."}]},
+{id:5,name:"Le triangle",src:"Séance 8, question 1",fig:figTri,
+ enonce:[{t:"DEF est un triangle.",f:"tri"}," On donne ",{t:"DEF = 52°",f:"ang:DEF"}," et ",{t:"EFD = 73°",f:"ang:EFD"},"."],
+ questions:[{t:"Calculer FDE. Cite la propriété et écris le calcul.",f:"ang:FDE"}],
+ lineFacts:{DE:"tri",EF:"tri",FD:"tri"},
+ facts:{tri:{chip:"DEF est un triangle",given:1,hint:"Il manque un indice : de quelle figure parle-t-on ?"},"ang:DEF":{v:52,given:1},"ang:EFD":{v:73,given:1},"ang:FDE":{v:55}},
+ pairs:[],
+ machines:[{q:0,sought:"ang:FDE",needs:["tri","ang:DEF","ang:EFD"],fiche:17,type:"num",ans:55,calc:"180° − 52° − 73°",
+  knows:"DEF est un triangle, avec DEF = 52° et EFD = 73°.",donc:"FDE = 180° − 52° − 73° = 55°."}]},
+{id:6,name:"Deux machines branchées",src:"Interrogation blanche 1, exercice 3",fig:()=>figPar(47,{E:1,arcs:[["CAB","A","C","B",42],["ABD","B","A","D",42],["ABE","B","E","A",30]]}),
+ enonce:[{t:"Les droites (d₁) et (d₂) sont parallèles.",f:"par"}," ",{t:"La sécante (s) les coupe en A et B.",f:"sec"}," ",{t:"Les points E, B et D sont alignés.",f:"plat"}," On donne ",{t:"CAB = 47°",f:"ang:CAB"},"."],
+ questions:[{t:"a. Calculer la mesure de ABD en justifiant à l'aide d'une propriété.",f:"ang:ABD"},{t:"b. En déduire la mesure de ABE. Justifier et écrire le calcul.",f:"ang:ABE"}],
+ lineFacts:{d1:"par",d2:"par",s:"sec"},
+ facts:{par:{chip:"(d₁) // (d₂)",given:1,hint:"Il manque un indice sur les droites (d₁) et (d₂)."},sec:{chip:"(s) est sécante en A et B",given:1,hint:"Il manque un indice sur la droite (s)."},
+  plat:{chip:"E, B, D alignés : EBD = 180° (angle plat)",given:1,hint:"Il manque un indice sur les points E, B et D."},
+  "ang:CAB":{v:47,given:1},"ang:ABD":{v:47,hint:"Il manque la mesure trouvée par la machine a. Elle est dans tes produits."},"ang:ABE":{v:133}},
+ pairs:[["CAB","ABD","alt"],["ABE","ABD","adj"]],
+ machines:[
+  {q:0,sought:"ang:ABD",needs:["par","sec","ang:CAB","pair:ABD|CAB"],fiche:10,type:"num",ans:47,
+   knows:"(d₁) // (d₂), que (s) est sécante en A et B, et que les angles CAB et ABD sont alternes-internes, avec CAB = 47°.",donc:"ABD = 47°."},
+  {q:1,sought:"ang:ABE",needs:["plat","ang:ABD","pair:ABD|ABE"],fiche:2,type:"num",ans:133,calc:"180° − 47°",or:"si ABE et ABD sont adjacents alors EBD = ABE + ABD.",
+   knows:"E, B et D sont alignés, donc EBD est un angle plat : 180°. Les angles ABE et ABD sont adjacents, et ABD = 47°.",donc:"ABE = 180° − 47° = 133°."}]},
+{id:7,name:"La grande chaîne",src:"D'après l'interrogation 2 et la séance 9",fig:figFinal,
+ enonce:[{t:"Les droites (d₁) et (d₂) sont coupées par la sécante (AB)",f:"secAB"}," ",{t:"et par la sécante (AC).",f:"secAC"}," P, A et Q sont sur (d₁). B et C sont sur (d₂). ",{t:"ABC est un triangle.",f:"tri"}," On donne ",{t:"PAB = 58°",f:"ang:PAB"},", ",{t:"ABC = 58°",f:"ang:ABC"}," et ",{t:"QAC = 47°",f:"ang:QAC"},"."],
+ questions:[{t:"a. Démontrer que (d₁) et (d₂) sont parallèles.",f:"par"},{t:"b. Calculer ACB en justifiant.",f:"ang:ACB"},{t:"c. En déduire BAC.",f:"ang:BAC"}],
+ lineFacts:{d1:"par",d2:"par",AB:"secAB",AC:"secAC"},
+ facts:{par:{chip:"(d₁) // (d₂)",hint:"Il manque le produit de la machine a : les droites sont-elles parallèles ?"},
+  secAB:{chip:"(AB) est sécante à (d₁) et (d₂)",given:1,hint:"Il manque un indice sur la droite (AB)."},secAC:{chip:"(AC) est sécante à (d₁) et (d₂)",given:1,hint:"Il manque un indice sur la droite (AC)."},
+  tri:{chip:"ABC est un triangle",given:1,hint:"Il manque un indice : de quelle figure parle-t-on ?"},
+  "ang:PAB":{v:58,given:1},"ang:ABC":{v:58,given:1},"ang:QAC":{v:47,given:1},"ang:ACB":{v:47,hint:"Il manque la mesure trouvée par la machine b. Elle est dans tes produits."},"ang:BAC":{v:75}},
+ pairs:[["PAB","ABC","alt"],["QAC","ACB","alt"],["PAB","BAC","adj"],["QAC","BAC","adj"]],
+ machines:[
+  {q:0,sought:"par",needs:["secAB","ang:PAB","ang:ABC","pair:ABC|PAB"],fiche:15,type:"par",
+   knows:"(d₁) et (d₂) sont coupées par la sécante (AB) et que les angles alternes-internes PAB et ABC mesurent tous les deux 58°.",donc:"(d₁) // (d₂)."},
+  {q:1,sought:"ang:ACB",needs:["par","secAC","ang:QAC","pair:ACB|QAC"],fiche:10,type:"num",ans:47,
+   knows:"(d₁) // (d₂), que (AC) est sécante, et que les angles QAC et ACB sont alternes-internes, avec QAC = 47°.",donc:"ACB = 47°."},
+  {q:2,sought:"ang:BAC",needs:["tri","ang:ABC","ang:ACB"],fiche:17,type:"num",ans:75,calc:"180° − 58° − 47°",
+   knows:"ABC est un triangle, avec ABC = 58° et ACB = 47°.",donc:"BAC = 180° − 58° − 47° = 75°."}]}
+];
+/* ================= COMPARAISON DE TEXTE ================= */
+const stripAcc=s=>s.normalize("NFD").replace(/[\u0300-\u036f]/g,"");
+function tokenize(str,keepOpt){
+ // retourne [{n:normalisé, d:affichage, o:facultatif}]
+ const out=[];let opt=false;
+ const segs=keepOpt?str.split(/([{}])/):[str.replace(/[{}]/g,"")];
+ for(const seg of segs){
+  if(seg==="{"){opt=true;continue}if(seg==="}"){opt=false;continue}
+  let s=seg.replace(/[’‘`´]/g,"'").replace(/\^/g,"")
+   .replace(/(\d)\s*°/g,"$1 °").replace(/°/g," ° ")
+   .replace(/[=+÷×*\/]/g,m=>" "+m+" ").replace(/\s[-−]\s/g," − ").replace(/−/g," − ")
+   .replace(/([A-Za-zÀ-ÿ])-([A-Za-zÀ-ÿ])/g,"$1 $2").replace(/([A-Za-zÀ-ÿ])-([A-Za-zÀ-ÿ])/g,"$1 $2")
+   .replace(/'/g,"' ");
+  for(let raw of s.split(/\s+/)){
+   let w=raw.replace(/[«»"•…;:!?,.()\[\]]/g,"");
+   if(!w)continue;
+   let disp=w;
+   let n;
+   if(/^[A-Z]{3}$/.test(w))n="§ang";
+   else if(/^[A-Z]{2}$/.test(w))n="§dr";
+   else{
+    n=stripAcc(w.toLowerCase()).replace(/'$/,"");
+    if(n==="")continue;
+    if(/^(degres?|deg)$/.test(n))n="°";
+    else if(n==="x"||n==="*")n="×";
+    else if(n==="/")n="÷";
+    else if(n==="-")n="−";
+    else if(n==="deux")n="2";
+    else if(n==="trois")n="3";
+   }
+   out.push({n,d:disp,o:opt});
+  }
+ }
+ return out;
+}
+function lev(a,b){if(Math.abs(a.length-b.length)>1)return 9;const m=a.length,n=b.length;let p=Array(n+1).fill(0).map((_,j)=>j);
+ for(let i=1;i<=m;i++){const c=[i];for(let j=1;j<=n;j++)c[j]=Math.min(p[j]+1,c[j-1]+1,p[j-1]+(a[i-1]===b[j-1]?0:1));p=c}return p[n];}
+function tokEq(r,u){if(r.n===u.n)return 1;if(r.n[0]==="§"||u.n[0]==="§")return 0;if(r.n.length>=5&&u.n.length>=4&&lev(r.n,u.n)<=1)return .85;return 0;}
+function diff(ref,usr){
+ const m=ref.length,n=usr.length,S=[];for(let i=0;i<=m;i++)S.push(new Float32Array(n+1));
+ for(let i=m-1;i>=0;i--)for(let j=n-1;j>=0;j--){const e=tokEq(ref[i],usr[j]);S[i][j]=Math.max(S[i+1][j],S[i][j+1],e?S[i+1][j+1]+e:0);}
+ const ops=[];let i=0,j=0;
+ while(i<m&&j<n){const e=tokEq(ref[i],usr[j]);
+  if(e&&Math.abs(S[i][j]-(S[i+1][j+1]+e))<1e-4){ops.push({k:e===1?"ok":"ne",r:ref[i],u:usr[j]});i++;j++;}
+  else if(S[i+1][j]>=S[i][j+1]){ops.push({k:"mi",r:ref[i]});i++;}
+  else{ops.push({k:"ex",u:usr[j]});j++;}}
+ while(i<m)ops.push({k:"mi",r:ref[i++]});while(j<n)ops.push({k:"ex",u:usr[j++]});
+ let match=0,missReq=0,extra=0,req=0,optMatched=0;
+ for(const o of ops){if(o.k==="ok"||o.k==="ne"){match+=(o.k==="ok"?1:.85);if(o.r.o)optMatched++;}
+  if(o.k==="mi"&&!o.r.o)missReq++;if(o.k==="ex")extra++;}
+ req=ref.filter(t=>!t.o).length+optMatched;
+ const score=2*match/(req+n||1);
+ return {ops,missReq,extra,score,exact:missReq===0&&extra===0&&n>0};
+}
+const REF={};for(const k in FICHES)REF[k]=tokenize(FICHES[k].txt,true);
+function recognise(text,prefer){
+ const u=tokenize(text,false);if(u.length<3)return null;
+ let best=null;
+ for(const k in REF){const d=diff(REF[k],u);d.f=+k;
+  if(!best||d.score>best.score+1e-6||(Math.abs(d.score-best.score)<1e-6&&+k===prefer))best=d;}
+ if(best.score<0.34)return null;return best;
+}
+function diffHTML(d){
+ return d.ops.map(o=>{
+  if(o.k==="ok")return esc(o.u.d);
+  if(o.k==="ne")return `<span class="ne" title="${esc(o.r.d)}">${esc(o.u.d)}</span>`;
+  if(o.k==="ex")return `<span class="ex">${esc(o.u.d)}</span>`;
+  if(o.r.o)return "";return `<span class="mi">${esc(o.r.d)}</span>`;
+ }).filter(Boolean).join(" ");
+}
+function esc(s){return String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));}
+function cfgOf(text){const n=stripAcc(text.toLowerCase());
+ if(/altern/.test(n)&&/intern/.test(n))return "alt";if(/altern/.test(n)&&/extern/.test(n))return "altext";
+ if(/correspond/.test(n))return "cor";if(/adjac/.test(n))return "adj";if(/oppos/.test(n))return "opp";
+ if(/supplem/.test(n))return "sup";if(/complem/.test(n))return "comp";if(/plat/.test(n))return "plat";return null;}
+
+/* ================= SAUVEGARDE ================= */
+const SKEY="atelierDesAngles_v1";
+let SAVE;
+try{SAVE=JSON.parse(localStorage.getItem(SKEY))||{}}catch(e){SAVE={}}
+SAVE.stars=SAVE.stars||{};SAVE.forged=SAVE.forged||{};SAVE.redo=SAVE.redo||{};SAVE.log=SAVE.log||[];
+if(SAVE.sound===undefined)SAVE.sound=true;
+function save(){try{localStorage.setItem(SKEY,JSON.stringify(SAVE))}catch(e){}}
+function dstr(d){return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")}
+const today=()=>dstr(new Date());
+const tomorrow=()=>{const d=new Date();d.setDate(d.getDate()+1);return dstr(d)};
+function dueList(){const t=today();return Object.keys(SAVE.redo).filter(f=>SAVE.redo[f]<=t).map(Number).sort((a,b)=>a-b);}
+function recordForge(f,firstTryOk){
+ const g=SAVE.forged[f]||{count:0};g.count++;g.last=today();SAVE.forged[f]=g;
+ if(!firstTryOk)SAVE.redo[f]=tomorrow();
+ else if(SAVE.redo[f]&&SAVE.redo[f]<=today())delete SAVE.redo[f];
+ SAVE.log.push({d:today(),f,ok:firstTryOk});if(SAVE.log.length>400)SAVE.log.shift();
+ save();
+}
+function unlocked(id){if(SAVE.all)return true;if(id===1)return true;return !!SAVE.stars[id-1];}
+
+/* ================= SONS (WebAudio) ================= */
+let AC=null;
+function ac(){if(!SAVE.sound)return null;if(!AC){try{AC=new (window.AudioContext||window.webkitAudioContext)()}catch(e){return null}}if(AC.state==="suspended")AC.resume();return AC;}
+function tone(f,dur,type,vol,delay,slide){const a=ac();if(!a)return;const t=a.currentTime+(delay||0);const o=a.createOscillator(),g=a.createGain();
+ o.type=type||"sine";o.frequency.setValueAtTime(f,t);if(slide)o.frequency.exponentialRampToValueAtTime(slide,t+dur);
+ g.gain.setValueAtTime(vol||.2,t);g.gain.exponentialRampToValueAtTime(.001,t+dur);o.connect(g).connect(a.destination);o.start(t);o.stop(t+dur+.05);}
+function noise(dur,vol,freq,delay){const a=ac();if(!a)return;const t=a.currentTime+(delay||0);const b=a.createBuffer(1,a.sampleRate*dur,a.sampleRate),d=b.getChannelData(0);
+ for(let i=0;i<d.length;i++)d[i]=(Math.random()*2-1)*(1-i/d.length);const s=a.createBufferSource();s.buffer=b;const fl=a.createBiquadFilter();fl.type="bandpass";fl.frequency.value=freq||1200;fl.Q.value=1.2;
+ const g=a.createGain();g.gain.value=vol||.3;s.connect(fl).connect(g).connect(a.destination);s.start(t);}
+const SND={
+ drop(){tone(520,.08,"square",.08);tone(780,.1,"square",.06,.05)},
+ clank(){noise(.18,.35,900);tone(140,.25,"triangle",.25)},
+ grip(){tone(90,.6,"sawtooth",.18,0,60);noise(.5,.25,300)},
+ crash(){noise(.7,.5,500);tone(300,.5,"sawtooth",.15,0,60);tone(1800,.15,"square",.05,.15);tone(1500,.15,"square",.05,.3)},
+ spin(){for(let i=0;i<14;i++)noise(.03,.25,2500,i*.11);tone(220,1.5,"triangle",.06,0,330)},
+ win(){[523,659,784,1046].forEach((f,i)=>tone(f,.3,"triangle",.18,i*.12))},
+ forge(){noise(.25,.4,3000);tone(880,.4,"sine",.12,.1);tone(1320,.5,"sine",.1,.25)},
+ bad(){tone(220,.18,"square",.1);tone(160,.3,"square",.1,.15)},
+ stamp(){noise(.12,.5,400);tone(90,.2,"sine",.3)}
+};
+
+/* ================= OUTILS UI ================= */
+const $=id=>document.getElementById(id);
+function show(id){document.querySelectorAll(".screen").forEach(s=>s.classList.toggle("on",s.id===id));}
+function say(html,mood){const f=$("foreman");f.classList.remove("bad","good");if(mood)f.classList.add(mood);$("fmsg").innerHTML=html;}
+function sparks(el,n,col){const r=el.getBoundingClientRect();for(let i=0;i<(n||14);i++){const s=document.createElement("div");s.className="spark";if(col)s.style.background=col;
+ const x=r.left+r.width/2,y=r.top+r.height/2;s.style.left=x+"px";s.style.top=y+"px";document.body.appendChild(s);
+ const a=Math.random()*Math.PI*2,v=60+Math.random()*110;s.animate([{transform:"translate(0,0)",opacity:1},{transform:`translate(${Math.cos(a)*v}px,${Math.sin(a)*v+40}px)`,opacity:0}],{duration:700+Math.random()*400,easing:"cubic-bezier(.2,.7,.4,1)"}).onfinish=()=>s.remove();}}
+function puffs(el,n){const r=el.getBoundingClientRect();for(let i=0;i<(n||6);i++){const s=document.createElement("div");s.className="puff";
+ s.style.left=(r.left+Math.random()*r.width-20)+"px";s.style.top=(r.top+r.height*0.4)+"px";document.body.appendChild(s);
+ s.animate([{transform:"scale(.4)",opacity:.8},{transform:`translate(${(Math.random()-.5)*60}px,-90px) scale(2)`,opacity:0}],{duration:1100+Math.random()*500}).onfinish=()=>s.remove();}}
+function anim(el,cls,ms){el.classList.remove(cls);void el.getBoundingClientRect();el.classList.add(cls);setTimeout(()=>el.classList.remove(cls),ms||700);}
+const wait=ms=>new Promise(r=>setTimeout(r,ms));
+function gearPath(n,R,r){let d="";const st=2*Math.PI/n;for(let i=0;i<n;i++){const a=i*st;[[r,a],[R,a+st*.12],[R,a+st*.42],[r,a+st*.55]].forEach(([q,g],j)=>{d+=(i||j?"L":"M")+(q*Math.cos(g)).toFixed(1)+","+(q*Math.sin(g)).toFixed(1)+" "});}return d+"Z";}
+function gearSVG(n,R,fill,hole){return `<path d="${gearPath(n,R,R*0.8)}" fill="${fill}" stroke="#3e2a0c" stroke-width="2"/><circle r="${hole||R*0.25}" fill="#1e140b" stroke="#3e2a0c" stroke-width="2"/>`;}
+function starsHTML(n){let s="";for(let i=1;i<=3;i++)s+=i<=n?"★":`<span class="off">★</span>`;return s;}
+function soundBtns(){["btnSound1","btnSound2"].forEach(b=>$(b).textContent=SAVE.sound?"🔊":"🔇");}
+/* ================= ÉTAT DU NIVEAU ================= */
+let L=null,G=null,FIG=null;
+const pairKey=(a,b)=>[a,b].sort().join("|");
+function factChip(id){
+ if(id.startsWith("pair:")){const [a,b]=id.slice(5).split("|");const p=findPair(a,b);return `${p[0]} et ${p[1]} sont ${CFG[p[2]]}`;}
+ const f=L.facts[id];
+ if(id.startsWith("ang:")){const nm=id.slice(4);return G.known.has(id)?`${nm} = ${f.v}°`:`${nm} = ?`;}
+ return f.chip;
+}
+function findPair(a,b){return L.pairs.find(p=>(p[0]===a&&p[1]===b)||(p[0]===b&&p[1]===a));}
+function mach(){return L.machines[G.mi];}
+
+function startLevel(id){
+ L=LEVELS.find(l=>l.id===id);FIG=L.fig();
+ G={mi:0,known:new Set(),hopper:[],gear:null,errors:0,products:[],busy:false,solvedCopy:[],firstFail:new Set(),pairsDone:{}};
+ for(const k in L.facts)if(L.facts[k].given)G.known.add(k);
+ $("lvlTitle").innerHTML=`Usine ${L.id} : ${esc(L.name)}<small>${esc(L.src)}</small>`;
+ renderEnonce();renderFig();renderTray();setupMachine();updStars();show("level");
+ if(L.tuto)say("Bienvenue à l'usine, apprenti ! <b>1.</b> Glisse avec le doigt les indices de l'énoncé (mots soulignés) ou de la figure jusqu'à l'<b>ENTRÉE</b>.");
+ else say(`Usine ${L.id}. Lis l'énoncé. Quelle question traite la machine ? Mets dans l'ENTRÉE seulement ce que tu <b>sais</b>.`);
+}
+function curStars(){return G.errors===0?3:G.errors<=2?2:1;}
+function updStars(){$("lvlStars").innerHTML=starsHTML(curStars());}
+
+function renderEnonce(){
+ const parts=L.enonce.map(s=>typeof s==="string"?esc(s):`<span class="frag" data-src="${s.f}">${esc(s.t)}</span>`).join("");
+ const qs=L.questions.map((q,i)=>`<span class="q ${i<G.mi?"done":i===G.mi?"cur":""}"><span class="frag" data-src="${q.f}" data-q="1">${esc(q.t)}</span></span>`).join("");
+ $("enonce").innerHTML=parts+qs;
+}
+function arcGeom(a){
+ const [name,vn,p1n,p2n,r]=a;const V=FIG.pts[vn],d1=dirDeg(V,FIG.pts[p1n]),d2=dirDeg(V,FIG.pts[p2n]);
+ let s=d1,span=(d2-d1+360)%360;if(span>180){s=d2;span=360-span;}
+ return {name,V,s,span,r};
+}
+function arcPath(V,s,span,r){const a=P(V,s,r),b=P(V,s+span,r);return `M${a[0].toFixed(1)},${a[1].toFixed(1)} A${r},${r} 0 ${span>180?1:0} 0 ${b[0].toFixed(1)},${b[1].toFixed(1)}`;}
+function renderFig(){
+ let h="";
+ if(FIG.poly){const f=L.lineFacts[FIG.lines[0].id]||"tri";h+=`<polygon class="poly" data-src="${FIG.poly.id}" points="${FIG.poly.p.map(p=>p.map(v=>v.toFixed(1)).join(",")).join(" ")}"/>`;}
+ for(const ln of FIG.lines){const e=ext(ln.a,ln.b,ln.k||0);const f=L.lineFacts[ln.id];
+  const xy=`x1="${e[0][0].toFixed(1)}" y1="${e[0][1].toFixed(1)}" x2="${e[1][0].toFixed(1)}" y2="${e[1][1].toFixed(1)}"`;
+  h+=`<line class="hitln" ${f?`data-src="${f}"`:""} ${xy}/><line class="ln" ${xy} pointer-events="none"/>`;
+  if(ln.lab)h+=`<text class="llbl" x="${ln.lp[0]}" y="${ln.lp[1]}" pointer-events="none">${ln.lab}</text>`;}
+ const curSought=mach()?mach().sought:null;
+ for(const a of FIG.arcs){const g=arcGeom(a),id="ang:"+g.name;const known=G.known.has(id),ask=id===curSought;
+  h+=`<path class="arc ${known?"known":ask?"ask":""}" d="${arcPath(g.V,g.s,g.span,g.r)}" pointer-events="none"/>`;
+  const R=Math.max(g.r+14,48),pa=P(g.V,g.s,R),pb=P(g.V,g.s+g.span,R);
+  h+=`<path class="wedge" data-src="${id}" data-arc="${g.name}" d="M${g.V[0]},${g.V[1]} L${pa[0].toFixed(1)},${pa[1].toFixed(1)} A${R},${R} 0 0 0 ${pb[0].toFixed(1)},${pb[1].toFixed(1)} Z"/>`;
+  if(known||ask){const lp=P(g.V,g.s+g.span/2,g.r+17);h+=`<text class="alab ${ask&&!known?"ask":""}" x="${lp[0].toFixed(1)}" y="${(lp[1]+6).toFixed(1)}" text-anchor="middle" pointer-events="none">${known?L.facts[id].v+"°":"?"}</text>`;}
+ }
+ for(const n in FIG.pts){const p=FIG.pts[n],o=FIG.lab[n]||[6,-8];h+=`<circle class="pt" cx="${p[0].toFixed(1)}" cy="${p[1].toFixed(1)}" r="3.6" pointer-events="none"/><text class="lbl" x="${(p[0]+o[0]).toFixed(1)}" y="${(p[1]+o[1]).toFixed(1)}" pointer-events="none">${n}</text>`;}
+ $("fig").innerHTML=h;
+}
+function renderTray(){
+ const t=$("trayItems");
+ if(!G.products.length){t.innerHTML="aucun pour l'instant";t.style.opacity=.6;return}
+ t.style.opacity=1;t.innerHTML=G.products.map(f=>`<span class="chip prod" data-src="${f}">${esc(factChip(f))}</span>`).join(" ");
+}
+function setupMachine(){
+ const m=mach();
+ const letters="abc";
+ const tgt=m.type==="par"?"(d₁) // (d₂) ?":m.sought.slice(4)+" = ?";
+ $("mTitle").textContent=(L.machines.length>1?`Machine ${letters[G.mi]} sur ${L.machines.length} · `:"Machine · ")+"on cherche : "+tgt;
+ $("doorTarget").textContent=tgt;$("doorTarget").style.fontSize=tgt.length>9?"16px":"21px";
+ $("door").classList.remove("open","win");$("doorInside").innerHTML="";
+ G.hopper=[];G.gear=null;renderHopper();renderGears();$("launch").disabled=false;
+}
+function renderHopper(){
+ const h=$("hopper");h.querySelectorAll(".chip,.empty").forEach(e=>e.remove());
+ if(!G.hopper.length){const e=document.createElement("div");e.className="empty";e.textContent="Glisse ici les indices de l'énoncé et de la figure";h.appendChild(e);return}
+ for(const f of G.hopper){const c=document.createElement("span");c.className="chip"+(f.startsWith("pair:")?" pair":"")+(G.products.includes(f)?" prod":"");
+  c.dataset.src=f;c.dataset.from="hopper";c.innerHTML=esc(factChip(f))+`<span class="x" data-x="${f}">✕</span>`;h.appendChild(c);}
+}
+function renderGears(state){
+ // state : undefined | "spin" | "fall" | "wobble"
+ const g=G.gear;let law="";
+ if(!g){law=`<g id="lawslot"><circle r="58" fill="rgba(0,0,0,.25)" stroke="#e2b35a" stroke-width="3" stroke-dasharray="8 6"/>
+  <text class="gtxt" y="-6" text-anchor="middle" fill="#ffd77a" style="fill:#ffd77a">LOI · OR</text><text class="gtxt" y="14" text-anchor="middle" style="fill:#f6e7c8;font-weight:normal">Touche pour</text><text class="gtxt" y="30" text-anchor="middle" style="fill:#f6e7c8;font-weight:normal">forger</text></g>`;}
+ else{const col=g.t==="P"?"#d8584a":"#5fae55";
+  law=`<g id="lawslot"><g class="sg ${g.t==="D"?"loose":""}">${gearSVG(16,62,col,16)}<text class="gtxt" y="-24" text-anchor="middle">${g.t==="P"?"PROPRIÉTÉ":"DÉFINITION"}</text><text class="gtxt" y="36" text-anchor="middle" style="font-size:15px">Fiche ${g.f}</text></g></g>`;}
+ const small=(cx,cls)=>`<g transform="translate(${cx},80)"><g class="sg ${cls||""}">${gearSVG(10,38,"#c9973f",9)}</g></g>`;
+ $("gearsSvg").innerHTML=`<rect x="0" y="74" width="290" height="12" fill="#2a190b"/>`+small(44,state==="spin"?"spinr":"")+
+  `<g transform="translate(145,80)" id="lawpos"><g id="lawInner" class="${g&&g.t==="D"?"":""}">${law}</g></g>`+small(246,state==="spin"?"spinr":"");
+ const inner=$("lawInner");
+ if(g&&g.t==="D")inner.setAttribute("transform","translate(10,-12) rotate(14)");
+ const sg=inner.querySelector(".sg");
+ if(state==="spin"&&sg)sg.classList.add("spin");
+ if(state==="fall"&&sg)sg.classList.add("fall");
+ if(state==="wobble"&&sg)sg.classList.add("wobble");
+ $("lawslot").addEventListener("click",()=>{if(!G.busy)openForge("level")});
+}
+
+/* ================= GLISSER-DÉPOSER ================= */
+let DR=null;
+function srcFromEl(el){return el&&el.closest?el.closest("[data-src]"):null;}
+document.addEventListener("pointerdown",e=>{
+ if(!$("level").classList.contains("on")||G.busy)return;
+ if(e.target.closest&&e.target.closest("[data-x]")){const f=e.target.closest("[data-x]").dataset.x;G.hopper=G.hopper.filter(x=>x!==f);renderHopper();SND.drop();e.preventDefault();return}
+ const s=srcFromEl(e.target);if(!s||!s.closest("#level"))return;
+ e.preventDefault();
+ DR={src:s,f:s.dataset.src,arc:s.dataset.arc||null,from:s.dataset.from||null,x0:e.clientX,y0:e.clientY,ghost:null,id:e.pointerId};
+ ac();
+},{passive:false});
+document.addEventListener("pointermove",e=>{
+ if(!DR||e.pointerId!==DR.id)return;e.preventDefault();
+ if(!DR.ghost){if(Math.hypot(e.clientX-DR.x0,e.clientY-DR.y0)<6)return;
+  const g=document.createElement("span");g.className="chip ghost"+(DR.f.startsWith("pair:")?" pair":"");g.textContent=factChip(DR.f);document.body.appendChild(g);DR.ghost=g;
+  if(DR.arc)say("Dépose cet angle dans l'ENTRÉE, ou <b>sur un autre angle</b> pour nommer leur configuration.");}
+ DR.ghost.style.left=e.clientX+"px";DR.ghost.style.top=e.clientY+"px";
+ const t=document.elementFromPoint(e.clientX,e.clientY);
+ $("hopper").classList.toggle("over",!!(t&&t.closest&&t.closest("#hopper")));
+ document.querySelectorAll(".wedge.hot").forEach(w=>w.classList.remove("hot"));
+ if(DR.arc&&t&&t.dataset&&t.dataset.arc&&t.dataset.arc!==DR.arc)t.classList.add("hot");
+},{passive:false});
+function endDrag(e){
+ if(!DR||e.pointerId!==DR.id)return;const d=DR;DR=null;
+ $("hopper").classList.remove("over");document.querySelectorAll(".wedge.hot").forEach(w=>w.classList.remove("hot"));
+ if(!d.ghost){ // simple toucher
+  if(d.arc||d.src.classList.contains("frag")||d.src.classList.contains("hitln")||d.src.classList.contains("poly"))say("Il faut <b>glisser</b> avec le doigt, pas seulement toucher. Fais-le glisser jusqu'à l'ENTRÉE.");
+  return}
+ d.ghost.remove();
+ const t=document.elementFromPoint(e.clientX,e.clientY);
+ if(t&&t.closest&&t.closest("#hopper")){if(d.from!=="hopper")dropHopper(d.f);return}
+ if(d.from==="hopper"){G.hopper=G.hopper.filter(x=>x!==d.f);renderHopper();SND.drop();say("Indice retiré de l'entrée.");return}
+ if(d.arc&&t&&t.dataset&&t.dataset.arc&&t.dataset.arc!==d.arc){pairAttempt(d.arc,t.dataset.arc);return}
+}
+document.addEventListener("pointerup",endDrag);
+document.addEventListener("touchstart",e=>{const s=srcFromEl(e.target);if(s&&s.closest("#level")&&!(e.target.closest&&e.target.closest("[data-x]")))e.preventDefault();},{passive:false});
+document.addEventListener("touchmove",e=>{if(DR)e.preventDefault();},{passive:false});
+document.addEventListener("pointercancel",e=>{if(DR&&DR.ghost)DR.ghost.remove();DR=null;$("hopper").classList.remove("over")});
+
+function soughtLater(f){return L.machines.some((m,i)=>i>G.mi&&m.sought===f);}
+function dropHopper(f){
+ const m=mach();
+ if(G.hopper.includes(f)){say("Cet indice est déjà dans l'entrée.");return}
+ if(f===m.sought){grip("<b>La machine grippe !</b> Tu utilises ce que tu cherches. Ce qu'on cherche n'est <b>jamais</b> dans « Je sais que ».");return}
+ if(!G.known.has(f)){
+  if(soughtLater(f))grip("<b>La machine grippe !</b> Tu ne connais pas encore ça. C'est la question d'une autre machine, plus tard.");
+  else if(f==="par")grip("<b>La machine grippe !</b> L'énoncé ne dit pas que les droites sont parallèles. Elles en ont l'air, mais on ne démontre pas à l'œil.");
+  else grip("<b>La machine grippe !</b> Ce n'est pas un indice : l'énoncé ne donne pas cette mesure. On ne mesure pas à l'œil.");
+  return}
+ G.hopper.push(f);renderHopper();SND.drop();
+ const c=[...$("hopper").querySelectorAll(".chip")].pop();if(c)c.classList.add("in");
+ const left=m.needs.filter(n=>!G.hopper.includes(n)).length;
+ if(L.tuto&&f.startsWith("pair:"))say("Bien étiqueté ! <b>3.</b> Maintenant touche l'<b>engrenage vide</b> pour forger la loi.");
+ else if(L.tuto&&!G.hopper.some(x=>x.startsWith("pair:")))say("Bien ! Continue. <b>2.</b> Puis glisse un angle de la figure <b>sur un autre angle</b> pour nommer leur configuration.");
+ else say("Indice ajouté. "+(G.gear?"Quand tout est prêt, tire le levier.":"N'oublie pas la loi : touche l'engrenage vide."));
+}
+function grip(msg){G.errors++;updStars();SND.grip();const h=$("hopper");h.classList.remove("grip");void h.offsetWidth;h.classList.add("grip");puffs(h,7);setTimeout(()=>h.classList.remove("grip"),600);say(msg,"bad");}
+
+/* ================= ÉTIQUETEUSE ================= */
+let LB=null;
+function pairAttempt(a,b){
+ const p=findPair(a,b);
+ if(!p){SND.bad();say(`Les angles ${a} et ${b} ne forment pas une configuration de ton cours. Essaie une autre paire.`,"bad");return}
+ const key="pair:"+pairKey(a,b);
+ if(G.hopper.includes(key)){say("Cette étiquette est déjà dans l'entrée.");return}
+ if(G.pairsDone[key]){G.hopper.push(key);renderHopper();SND.drop();say("Étiquette remise dans l'entrée.");return}
+ LB={a:p[0],b:p[1],c:p[2],key};
+ $("lbIntro").innerHTML=`Les angles <b>${p[0]}</b> et <b>${p[1]}</b> sont… <br><small>Écris le nom de leur configuration.</small>`;
+ $("lbText").value="";$("lbOut").textContent="";$("mLabel").classList.add("on");setTimeout(()=>$("lbText").focus(),60);
+}
+function labelGo(){
+ const v=$("lbText").value.trim();if(!v)return;const c=cfgOf(v);
+ if(c===LB.c){SND.stamp();G.pairsDone[LB.key]=1;$("mLabel").classList.remove("on");G.hopper.push(LB.key);renderHopper();
+  const ch=[...$("hopper").querySelectorAll(".chip")].pop();if(ch)ch.classList.add("in");
+  say(`Exact : ${LB.a} et ${LB.b} sont ${CFG[LB.c]}. L'étiquette va dans l'ENTRÉE.`+(L.tuto?" <b>3.</b> Touche l'engrenage vide pour forger la loi.":""),"good");return}
+ G.errors++;updStars();SND.bad();let m;
+ if(c==="sup"||c==="comp")m="Ce mot parle de <b>mesures</b> (une somme). Ici on veut leur <b>position</b> sur la figure.";
+ else if(c==="plat")m="Un angle plat, c'est un seul angle. Ici, il y a deux angles. Comment s'appelle leur position ?";
+ else if(c)m=`Non, ils ne sont pas ${CFG[c]||"alternes-externes"}. `+hintCfg(LB.c);
+ else m="Je ne reconnais pas ce nom. Utilise un mot du cours. "+hintCfg(LB.c);
+ $("lbOut").innerHTML="❌ "+m;
+}
+function hintCfg(c){
+ if(c==="alt"||c==="cor")return "Regarde : quels sont leurs sommets ? Sont-ils entre les deux droites ou dehors ? Du même côté de la sécante ?";
+ return "Regarde : ont-ils le même sommet ? Un côté commun ? Leurs côtés se prolongent-ils ?";
+}
+$("lbGo").onclick=labelGo;$("lbText").addEventListener("keydown",e=>{if(e.key==="Enter")labelGo()});
+$("lbClose").onclick=()=>$("mLabel").classList.remove("on");
+/* ================= FORGE ================= */
+let FG=null;
+function openForge(mode,fiche){
+ FG={mode,fiche,fails:new Set(),done:false};
+ if(mode==="level"){$("fgTitle").textContent="🔥 La forge";
+  $("fgIntro").innerHTML="Quelle loi fait tourner cette machine ? Écris-la <b>de mémoire</b>, mot à mot, comme dans ton cahier.<br><small>La forge reconnaît toute seule la fiche que tu as écrite.</small>";}
+ else{const F=FICHES[fiche];$("fgTitle").textContent=`🔁 Refabrique la fiche ${fiche}`;
+  $("fgIntro").innerHTML=`<b>${esc(F.title)}</b> · ${F.t==="P"?"Propriété (cadre rouge)":"Définition (cadre vert)"}<br><small>Écris-la de mémoire, mot à mot.</small>`;}
+ $("fgText").value="";$("fgOut").innerHTML="";$("mForge").classList.add("on");setTimeout(()=>$("fgText").focus(),80);
+}
+function forgeGo(){
+ if(FG.done)return;const txt=$("fgText").value.trim();if(!txt)return;
+ let d;
+ if(FG.mode==="level")d=recognise(txt,mach().fiche);
+ else{d=diff(REF[FG.fiche],tokenize(txt,false));d.f=FG.fiche;if(d.score<.2)d=null;}
+ if(!d){SND.bad();$("fgOut").innerHTML=`<p>❌ Je ne reconnais aucune phrase de ton cahier. Écris une phrase complète.</p>`;return}
+ const F=FICHES[d.f];
+ if(!d.exact){FG.fails.add(d.f);SND.bad();
+  $("fgOut").innerHTML=`<p>Le métal se fend : il y a des erreurs. ${FG.mode==="level"?`Tu as écrit la fiche <b>${d.f}</b>, « ${esc(F.title)} ».`:""} Corrige et forge à nouveau.</p>
+   <div class="diff">${diffHTML(d)}</div><div class="legend"><span class="ex">rouge barré</span> : mot faux ou en trop · <span class="mi" style="color:#1b7b22">vert</span> : mot oublié · <span class="ne" style="color:#333;background:#fff0a0">jaune</span> : petite faute acceptée</div>`;
+  return}
+ FG.done=true;const firstOk=!FG.fails.has(d.f);recordForge(d.f,firstOk);SND.forge();
+ const col=F.t==="P"?"#d8584a":"#5fae55";
+ $("fgOut").innerHTML=`<div class="forgeanim"><svg viewBox="-70 -70 140 140"><g>${gearSVG(16,62,col,16)}</g></svg></div>
+  <p style="text-align:center"><b>Engrenage forgé !</b> Fiche ${d.f} : « ${esc(F.title)} ». ${d.ops.some(o=>o.k==="ne")?"<br><small>(petite faute d'orthographe acceptée)</small>":""}
+  ${firstOk?"":"<br><small>Tu as dû corriger : cette fiche reviendra demain dans ton atelier.</small>"}</p>`;
+ setTimeout(()=>{$("mForge").classList.remove("on");
+  if(FG.mode==="level")placeGear(d.f);else renderAtelier();},firstOk?1300:2200);
+}
+function placeGear(f){
+ const F=FICHES[f];G.gear={f,t:F.t};SND.clank();
+ if(F.t==="D"){renderGears("wobble");G.errors++;updStars();
+  say(defMsg(f),"bad");}
+ else{renderGears();anim($("gearsSvg"),"shake",300);say(`Engrenage de la fiche ${f} en place. ${L.tuto?"<b>4.</b> ":""}Quand l'ENTRÉE est prête, <b>tire le levier</b>.`,"good");}
+}
+function defMsg(f){
+ const F=FICHES[f];
+ if(f===8||f===9)return `Ta fiche ${f} est juste, mais l'engrenage <b>ne s'emboîte pas</b>. C'est une <b>définition</b> (cadre vert) : elle dit <b>où</b> sont les angles ${f===8?"alternes-internes":"correspondants"}. Elle ne dit pas qu'ils ont la même mesure. Une machine tourne avec une <b>propriété</b> (cadre rouge), une phrase en « si… alors… ». Touche l'engrenage pour en forger un autre.`;
+ return `Ta fiche ${f} est juste, mais l'engrenage <b>ne s'emboîte pas</b>. C'est une <b>définition</b> (cadre vert) : elle explique le mot « ${esc(F.title.toLowerCase())} ». Elle ne donne aucun résultat. Une machine tourne avec une <b>propriété</b> (cadre rouge). Touche l'engrenage pour en forger un autre.`;
+}
+function wrongMsg(got,need){
+ const pk=mach().needs.find(n=>n.startsWith("pair:"));const pc=pk?findPair(...pk.slice(5).split("|"))[2]:null;
+ if([15,16].includes(need)&&[10,11].includes(got))return "Cette loi commence par « Si deux droites parallèles… ». Mais le parallélisme, c'est <b>ce que tu cherches</b> ! Il te faut la loi qui part des angles pour arriver aux droites : la <b>réciproque</b>.";
+ if([10,11].includes(need)&&[15,16].includes(got))return "Cette loi sert à <b>prouver</b> que deux droites sont parallèles. Ici, tu cherches un <b>angle</b>. Il te faut la loi qui part des droites parallèles.";
+ if(([10,11].includes(need)&&[10,11].includes(got))||([15,16].includes(need)&&[15,16].includes(got)))
+  return `Cette loi parle d'angles <b>${got===10||got===15?"alternes-internes":"correspondants"}</b>. Mais tes angles sont <b>${CFG[pc]}</b> : regarde ton étiquette.`;
+ return `Cette loi parle de <b>${TOPIC[got]||FICHES[got].title.toLowerCase()}</b>. Est-ce que tes indices parlent de ça ? Regarde ce qu'il y a dans l'ENTRÉE.`;
+}
+$("fgGo").onclick=forgeGo;$("fgClose").onclick=()=>{$("mForge").classList.remove("on");if(FG&&FG.mode!=="level")renderAtelier();};
+
+/* ================= LANCEMENT ================= */
+async function launch(){
+ if(G.busy)return;G.busy=true;const m=mach();const btn=$("launch");btn.disabled=true;btn.classList.add("pull");SND.clank();
+ await wait(450);btn.classList.remove("pull");
+ const missing=m.needs.filter(n=>!G.hopper.includes(n));
+ if(missing.length){const f=missing[0];let h;
+  if(f.startsWith("pair:"))h="Il manque le <b>nom de la configuration</b> des angles. Glisse un angle de la figure sur un autre angle.";
+  else h=(L.facts[f]&&L.facts[f].hint)||(f.startsWith("ang:")?"Il manque une <b>mesure donnée</b> par l'énoncé.":"Il manque un indice.");
+  await breakAt("hopper",`<b>Ça casse à l'ENTRÉE.</b> ${h}`+(missing.length>1?` <small>(il manque ${missing.length} indices)</small>`:""));return}
+ if(!G.gear){await breakAt("gear","<b>Ça casse au milieu :</b> il n'y a pas de loi. Touche l'engrenage vide pour la forger.",true);return}
+ if(G.gear.t==="D"){await breakAt("gear","<b>Ça casse à l'engrenage.</b> "+defMsg(G.gear.f));return}
+ if(G.gear.f!==m.fiche){await breakAt("gear","<b>Ça casse à l'engrenage.</b> "+wrongMsg(G.gear.f,m.fiche));return}
+ // ça tourne
+ renderGears("spin");SND.spin();say("Ça tourne ! Les indices passent par la loi…","good");
+ document.querySelectorAll("#hopper .chip").forEach((c,i)=>c.animate([{transform:"none"},{transform:"translateY(8px) scale(.9)",opacity:.6},{transform:"none"}],{duration:700,delay:i*120}));
+ await wait(1700);
+ $("door").classList.add("open");openDoor();G.busy=false;
+}
+async function breakAt(where,msg,soft){
+ G.errors++;updStars();SND.crash();
+ if(where==="hopper"){const h=$("hopper");h.classList.add("grip");sparks(h,16);puffs(h,6);setTimeout(()=>h.classList.remove("grip"),600);}
+ else{if(G.gear){renderGears();const sg=$("lawInner").querySelector(".sg");if(sg){sg.classList.add("fall");}sparks($("lawpos"),22);}else{anim($("gearsSvg"),"shake",600);sparks($("lawpos"),10);}puffs($("gearsSvg"),5);}
+ say(msg,"bad");await wait(1100);
+ if(where==="gear"&&G.gear&&!soft){G.gear=null;renderGears();}
+ G.busy=false;$("launch").disabled=false;
+}
+function openDoor(){
+ const m=mach(),di=$("doorInside");
+ if(m.type==="par")di.innerHTML=`<div class="dk">Donc…</div><input id="ans" type="text" autocomplete="off" autocorrect="off" autocapitalize="off" placeholder="ta conclusion"><button class="brass" id="ansGo">Valider</button>`;
+ else di.innerHTML=`<div class="dk">Écris le calcul et le résultat</div><input id="ans" type="text" inputmode="text" autocomplete="off" autocorrect="off" autocapitalize="off" placeholder="${m.calc?"ex : 180 − … = …":"… °"}"><button class="brass" id="ansGo">Valider</button>`;
+ say(m.type==="par"?"La machine a tourné. Que peux-tu conclure ? Écris-le dans la SORTIE.":`La machine a tourné. Écris le résultat${m.calc?" avec le calcul":""} dans la SORTIE.`,"good");
+ $("ansGo").onclick=checkAns;$("ans").addEventListener("keydown",e=>{if(e.key==="Enter")checkAns()});
+ setTimeout(()=>{const a=$("ans");if(a)a.focus()},850);
+}
+function evalPart(s){
+ s=s.replace(/°|degr[ée]s?/gi,"").replace(/,/g,".").replace(/[×x]/gi,"*").replace(/÷|:/g,"/").replace(/[\u2212\u2013]/g,"-").trim();
+ if(!s)return null;if(!/^[0-9+\-*/().\s]+$/.test(s))return NaN;
+ try{const v=Function('"use strict";return ('+s+')')();return typeof v==="number"&&isFinite(v)?v:NaN}catch(e){return NaN}
+}
+function checkAns(){
+ const m=mach(),v=$("ans").value.trim();if(!v)return;
+ if(m.type==="par"){const n=stripAcc(v.toLowerCase());
+  if((/\/\/|parall/.test(n))&&!/\bpas\b|\bne\b|\bnon\b/.test(n))return solved();
+  G.errors++;updStars();SND.bad();say("Ta conclusion doit répondre à la question : que peux-tu dire des droites (d₁) et (d₂) ?","bad");return}
+ const parts=v.split("=").map(p=>p.trim()).filter(p=>p&&!/[A-Za-z]{2,}/.test(p.replace(/degr[ée]s?/gi,"")));
+ const vals=parts.map(evalPart).filter(x=>x!==null);
+ if(!vals.length||vals.some(x=>isNaN(x))){SND.bad();say("Je ne comprends pas ton écriture. Exemple : 180 − 47 = 133","bad");return}
+ const last=vals[vals.length-1];
+ if(vals.some(x=>Math.abs(x-vals[0])>1e-9)){G.errors++;updStars();SND.bad();say(`Ton calcul n'est pas juste : ${esc(parts[0])} ne fait pas ${esc(parts[parts.length-1])}. Recalcule.`,"bad");return}
+ if(Math.abs(last-m.ans)>1e-9){G.errors++;updStars();SND.bad();say("La machine a bien tourné, mais ce n'est pas le bon résultat. Refais le calcul avec tes indices.","bad");return}
+ solved(m.calc&&vals.length<2?"Juste ! Sur ta copie, écris aussi le calcul.":"");
+}
+async function solved(extra){
+ const m=mach();SND.win();$("door").classList.add("win");sparks($("door"),26,"#9dff7a");
+ G.known.add(m.sought);G.products.push(m.sought);G.solvedCopy.push({m,gear:G.gear.f});
+ say(`Produit fabriqué : <b>${esc(factChip(m.sought))}</b>. ${extra||""}`,"good");
+ renderFig();renderTray();
+ const p=$("trayItems").lastElementChild;if(p)p.classList.add("in");
+ await wait(1600);
+ if(G.mi<L.machines.length-1){G.mi++;renderEnonce();renderFig();setupMachine();
+  say(`Machine suivante ! Le produit <b>${esc(factChip(m.sought))}</b> est dans tes Produits, en haut. Tu peux t'en servir comme indice.`,"good");}
+ else finishLevel();
+}
+
+/* ================= FIN DE NIVEAU : LA COPIE ================= */
+function copyHTML(){
+ return `<div class="copy">`+G.solvedCopy.map(({m,gear})=>`
+  <div class="qq">${esc(L.questions[m.q].t)}</div>
+  <div class="js"><span class="k">Je sais que</span> ${esc(m.knows)}<span class="ico">⟵ ENTRÉE</span></div>
+  <div class="or"><span class="k">Or</span> ${esc(m.or||orText(gear))}<span class="ico">⟵ ENGRENAGE</span></div>
+  <div class="dc"><span class="k">Donc</span> ${esc(m.donc)}<span class="ico">⟵ SORTIE</span></div>`).join("")+`</div>`;
+}
+function orText(f){let s=FICHES[f].txt.replace(/\{[^}]*\}/g,"").replace(/\s+/g," ").replace(/\s+([.,])/g,"$1").trim();s=s.replace(/^Soit deux droites coupées par une sécante\. /,"");return lowerFirst(s);}
+function lowerFirst(s){return /^(Si|Deux|Dans|Soit|Un|Une|La)\b/.test(s)?s[0].toLowerCase()+s.slice(1):s}
+function finishLevel(){
+ const st=curStars();SAVE.stars[L.id]=Math.max(SAVE.stars[L.id]||0,st);save();
+ const next=LEVELS.find(l=>l.id===L.id+1);
+ info(`<h2>🏭 Usine ${L.id} terminée !</h2><div class="stars big" style="text-align:center;font-size:40px">${starsHTML(st)}</div>
+  <p>Ta machine se traduit en copie. C'est <b>exactement</b> ce que tu écris en classe :</p>${copyHTML()}
+  <p class="legend">Ce que tu cherches n'est jamais dans « Je sais que ». Après « Or », une phrase de fiche Propriété. « Donc » répond à la question.</p>`,
+  [["🔁 Rejouer",()=>startLevel(L.id)],["🏠 Usines",goHome]].concat(next?[["➡ Usine suivante",()=>startLevel(next.id)]]:[]));
+}
+function info(html,btns){
+ $("infoBody").innerHTML=html;const r=$("infoRow");r.innerHTML="";
+ for(const [t,fn] of btns){const b=document.createElement("button");b.className="brass";b.textContent=t;b.onclick=()=>{$("mInfo").classList.remove("on");fn&&fn()};r.appendChild(b);}
+ $("mInfo").classList.add("on");
+}
+
+/* ================= ACCUEIL, ATELIER ================= */
+function goHome(){
+ const box=$("levels");box.innerHTML="";
+ for(const l of LEVELS){const ok=unlocked(l.id),s=SAVE.stars[l.id]||0;const b=document.createElement("button");
+  b.className="panel lvl"+(ok?"":" locked");
+  b.innerHTML=`<span class="badge">${l.machines.length>1?l.machines.length+" machines":"1 machine"}</span><b>Usine ${l.id}</b><span>${esc(l.name)}</span><span class="src">${esc(l.src)}</span><span class="stars">${ok?starsHTML(s):"🔒"}</span>`;
+  b.onclick=()=>{if(ok)startLevel(l.id);else info("<h2>🔒 Usine fermée</h2><p>Termine l'usine précédente pour ouvrir celle-ci.</p>",[["OK"]])};box.appendChild(b);}
+ const n=dueList().length;$("dueCount").textContent=n?`(${n} à refabriquer)`:"";
+ show("home");
+}
+function renderAtelier(){
+ const due=dueList();const db=$("duebox");
+ db.innerHTML=due.length?`<b>🔁 À refabriquer aujourd'hui :</b> ces fiches avaient des erreurs. Refais-les de mémoire.<br>`+due.map(f=>`<button class="brass" data-redo="${f}">Fiche ${f} · ${esc(FICHES[f].title)}</button>`).join("")
+  :(Object.keys(SAVE.redo).length?`✅ Rien à refabriquer aujourd'hui. Prochain rendez-vous : ${Object.values(SAVE.redo).sort()[0].split("-").reverse().join("/")}.`:"✅ Rien à refabriquer. Les fiches ratées reviennent ici le lendemain.");
+ db.querySelectorAll("[data-redo]").forEach(b=>b.onclick=()=>openForge("redo",+b.dataset.redo));
+ const g=$("atelGrid");g.innerHTML="";
+ for(let f=1;f<=20;f++){const F=FICHES[f],s=SAVE.forged[f],col=F.t==="P"?"#d8584a":"#5fae55";const red=SAVE.redo[f];
+  const c=document.createElement("div");c.className="panel gcell"+(s?"":" no");
+  c.innerHTML=`<svg viewBox="-70 -70 140 140">${gearSVG(16,62,s?col:"#555",16)}</svg><div class="n">Fiche ${f}</div><div>${esc(F.title)}</div><div style="opacity:.8">${F.t==="P"?"Propriété":"Définition"}${s?` · forgé ${s.count}×`:""}</div>${red?`<div style="color:#ffb27a">🔁 ${red<=today()?"aujourd'hui":"le "+red.split("-").reverse().join("/")}</div>`:""}`;
+  g.appendChild(c);}
+ show("atelier");
+}
+function parent(){
+ const ok=SAVE.log.filter(l=>l.ok).length,ko=SAVE.log.length-ok;
+ const byDay={};SAVE.log.forEach(l=>{(byDay[l.d]=byDay[l.d]||{ok:[],ko:[]})[l.ok?"ok":"ko"].push(l.f)});
+ const rows=Object.keys(byDay).sort().reverse().slice(0,10).map(d=>`<tr><td>${d.split("-").reverse().join("/")}</td><td>${[...new Set(byDay[d].ok)].join(", ")||"·"}</td><td>${[...new Set(byDay[d].ko)].join(", ")||"·"}</td></tr>`).join("");
+ info(`<h2>👨 Espace parent</h2><p>Forges justes du premier coup : <b>${ok}</b> · avec corrections : <b>${ko}</b>.</p>
+  <p>Étoiles : ${LEVELS.map(l=>`U${l.id} ${SAVE.stars[l.id]||0}★`).join(" · ")}</p>
+  <table style="width:100%;border-collapse:collapse;font-size:14px" border="1" cellpadding="4"><tr><th>Date</th><th>Fiches justes</th><th>Fiches à refaire</th></tr>${rows||"<tr><td colspan=3>Aucune forge pour l'instant.</td></tr>"}</table>`,
+  [["Ouvrir toutes les usines",()=>{SAVE.all=true;save()}],["Tout effacer",()=>{if(confirm("Effacer toute la progression ?")){localStorage.removeItem(SKEY);location.reload()}}],["Fermer"]]);
+}
+function howto(){
+ info(`<h2>❓ Comment jouer</h2>
+ <p>Chaque usine est un exercice de ton cours. Tu construis une <b>machine à démontrer</b>.</p>
+ <p><b>1. ENTRÉE · Je sais que.</b> Glisse avec le doigt les indices de l'énoncé (mots soulignés) ou de la figure (droites, angles). Attention aux pièges : ce que tu cherches fait gripper la machine.</p>
+ <p><b>2. L'étiqueteuse.</b> Glisse un angle de la figure <b>sur un autre angle</b>, puis écris le nom de leur configuration.</p>
+ <p><b>3. ENGRENAGE · Or.</b> Touche l'engrenage vide et écris la loi <b>de mémoire</b>. Une définition (cadre vert) ne s'emboîte pas : il faut une propriété (cadre rouge).</p>
+ <p><b>4. Le levier.</b> Si la chaîne est juste, la machine tourne. Sinon, elle casse là où est l'erreur.</p>
+ <p><b>5. SORTIE · Donc.</b> Écris le résultat avec le calcul. Ta machine devient une copie.</p>
+ <p>Les fiches avec des erreurs reviennent le lendemain dans <b>Mon atelier</b>.</p>`,[["C'est parti !"]]);
+}
+function toggleSound(){SAVE.sound=!SAVE.sound;save();soundBtns();if(SAVE.sound)SND.drop();}
+
+$("launch").onclick=launch;$("btnBack").onclick=goHome;$("btnBack2").onclick=goHome;$("btnHelp").onclick=howto;$("btnHowto").onclick=howto;
+$("btnAtelier").onclick=renderAtelier;$("btnParent").onclick=parent;$("btnSound1").onclick=toggleSound;$("btnSound2").onclick=toggleSound;
+document.querySelector("#logoGear").setAttribute("d",gearPath(12,46,36));
+soundBtns();goHome();
+window.__game={LEVELS,FICHES,recognise,tokenize,diff,get G(){return G},get L(){return L},startLevel,dropHopper,pairAttempt,placeGear,SAVE};
+</script>
+</body>
+</html>
