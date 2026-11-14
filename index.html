@@ -172,6 +172,51 @@ svg .flash{animation:flash .6s 2}
 .duebox button{margin:4px 6px 4px 0;font-size:15px;padding:8px 12px}
 .spark{position:fixed;width:7px;height:7px;border-radius:50%;background:#ffd34d;box-shadow:0 0 8px #ff9a2a;pointer-events:none;z-index:900}
 .puff{position:fixed;width:40px;height:40px;border-radius:50%;background:rgba(220,220,220,.5);pointer-events:none;z-index:900;filter:blur(3px)}
+/* carte des ateliers */
+.right{position:relative}
+.mappanel{display:none;position:absolute;inset:0;z-index:40;flex-direction:column;gap:6px;padding:10px 12px;background:linear-gradient(180deg,#4a3019,#2e1d0e);border:3px solid #e2b35a;border-radius:14px;box-shadow:0 6px 18px rgba(0,0,0,.6)}
+.mappanel.on{display:flex;animation:hin .3s ease-out}
+.mappanel.leaving{opacity:0;transform:scale(.97);transition:all .35s}
+.mph{font:bold 22px Georgia,serif;color:#ffd77a;text-align:center}.mph small{font:14px "Trebuchet MS",sans-serif;opacity:.8}
+.mps{text-align:center;font-size:15px;opacity:.9}
+.floor{flex:1;position:relative;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:40px 56px;padding:14px 8px 6px;min-height:0;border-radius:10px;
+ background:linear-gradient(90deg,transparent calc(50% - 2px),#e2b35a calc(50% - 2px),#e2b35a calc(50% + 2px),transparent calc(50% + 2px)),linear-gradient(180deg,transparent calc(50% - 2px),#e2b35a calc(50% - 2px),#e2b35a calc(50% + 2px),transparent calc(50% + 2px)),#2a1a0c;background-size:100% 100%}
+.bld{position:relative;background:#fffaf0;border:4px solid var(--c);border-radius:4px 4px 10px 10px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;min-height:0;padding:4px 4px 8px;box-shadow:0 4px 0 rgba(0,0,0,.45);transition:transform .15s,filter .3s}
+.bld .roof{position:absolute;left:-4px;right:-4px;top:-14px;height:12px;background:linear-gradient(135deg,var(--c) 50%,transparent 50%) repeat-x;background-size:18px 12px}
+.bn{font:bold 19px "Trebuchet MS",sans-serif;color:var(--c);display:flex;align-items:center;gap:6px}
+.bnum{display:inline-flex;width:24px;height:24px;border-radius:50%;background:var(--c);color:#fff;align-items:center;justify-content:center;font-size:14px}
+.bld .mfig{width:100%;max-width:150px;flex:1;min-height:0}
+.bld .bdoor{position:absolute;bottom:-4px;left:50%;width:30px;margin-left:-15px;height:10px;background:var(--c);border-radius:4px 4px 0 0}
+.bld.over{transform:scale(1.05);box-shadow:0 0 0 4px #ffd34d,0 0 20px #ffd34d}
+.bld.ok{box-shadow:0 0 0 5px #6fe36a,0 0 26px #6fe36a}
+.bld.bad{animation:shake .5s;box-shadow:0 0 0 5px #e0533e}
+.bld.dim{filter:grayscale(1) brightness(.4);cursor:default}
+.token{position:absolute;z-index:5;left:50%;top:50%;margin:-24px 0 0 -66px;display:flex;align-items:center;gap:6px;padding:8px 12px;border-radius:12px;background:linear-gradient(#ffe7a8,#e2b35a 50%,#b07d2c);border:3px solid #5c3c10;color:#2b1906;font-size:16px;touch-action:none;cursor:grab;box-shadow:0 6px 12px rgba(0,0,0,.6);white-space:nowrap;user-select:none}
+.token .tg{font-size:22px;display:inline-block;animation:spin 3s linear infinite}
+.token.anim{transition:left .3s ease,top .3s ease}
+.token.drag{transform:scale(1.1) rotate(-3deg);cursor:grabbing}
+.mpmsg{text-align:center;font-size:15.5px;min-height:46px;padding:5px 8px;border-radius:8px;background:rgba(0,0,0,.28);line-height:1.35}
+.mpmsg.bad{color:#ffc2b5}.mpmsg.good{color:#d4ffc9}
+.attag{display:inline-block;background:var(--c);color:#fff;border-radius:8px;padding:1px 8px;font-size:13px;font-weight:bold;vertical-align:middle;font-family:"Trebuchet MS",sans-serif}
+#mCarte{z-index:530}
+#mCarte .mbox{width:min(900px,100%)}
+.cq{text-align:center;font-size:19px;margin:2px 0}
+.cmn{text-align:center;margin:4px 0 10px}.cmn b{color:#fff;padding:2px 12px;border-radius:999px;font-size:18px}
+.cgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+.cbld{background:#fffaf0;color:#2b1906;border:3px solid var(--c);border-radius:10px;overflow:hidden}
+.cbld.tools{margin-bottom:10px}
+.cbh{background:var(--c);color:#fff;font:bold 18px "Trebuchet MS",sans-serif;padding:4px 10px;display:flex;gap:8px;align-items:center}
+.cbh .bnum{background:#fff;color:var(--c)}
+.cbb{display:flex;gap:8px;align-items:center;padding:6px 10px 0}.cbb .mfig{width:100px;height:75px;flex:none}
+.csee{font-size:14px}
+.cfs{display:flex;flex-wrap:wrap;gap:6px;padding:6px 10px 10px}
+.fchip{min-height:40px;font-size:14px;background:#fff;border:2px solid #d8c6a0;border-radius:8px;padding:3px 8px;text-align:left;color:#2b1906}
+.ft{display:inline-block;color:#fff;font-weight:bold;font-size:12px;border-radius:5px;padding:1px 5px;background:#4f9e48}.ft.P,.fchip.P .ft{background:#cf4a3c}.fchip.D .ft{background:#4f9e48}
+.cmiss{font-size:13px;opacity:.7;align-self:center}
+.cdet{background:#fffdf6;color:#1b2a6b;border-radius:10px;padding:10px 12px;font-size:15px}
+.cdt{font:19px/1.45 Georgia,serif;margin-top:4px}.cdt .kw{color:#c0271b}.cdt .opt{color:#6a7aa8}
+.rchead .attag{margin-left:6px}
+@media (orientation:portrait){.cgrid{grid-template-columns:1fr}.floor{gap:32px 44px}.right:has(.mappanel.on){min-height:420px}.mps,.mpmsg{display:none}}
 /* fiche à retenir */
 #mRecite{z-index:520}
 .rbox{width:min(760px,100%)}
@@ -271,6 +316,7 @@ svg .flash{animation:flash .6s 2}
  <div class="levels" id="levels"></div>
  <div class="homebar">
   <button class="brass" id="btnAtelier">⚙️ Mon atelier <span id="dueCount"></span></button>
+  <button class="brass" id="btnCarte2">🗺️ Carte</button>
   <button class="brass" id="btnHowto">❓ Comment jouer</button>
   <button class="brass" id="btnSound1">🔊</button>
  </div>
@@ -282,6 +328,7 @@ svg .flash{animation:flash .6s 2}
   <button class="brass hbtn" id="btnBack">⬅</button>
   <div class="t" id="lvlTitle">Usine</div>
   <div class="stars" id="lvlStars"></div>
+  <button class="brass hbtn" id="btnCarte" aria-label="Carte">🗺️</button>
   <button class="brass hbtn" id="btnHelp">?</button>
   <button class="brass hbtn" id="btnSound2">🔊</button>
  </header>
@@ -291,6 +338,7 @@ svg .flash{animation:flash .6s 2}
    <div class="blue"><span class="tag">PLAN DE L'USINE</span><svg id="fig" viewBox="0 0 500 380"></svg></div>
   </div>
   <div class="right">
+   <div class="mappanel" id="mapPanel"></div>
    <div class="panel tray" id="tray"><span class="lab">📦 Produits :</span><span id="trayItems" style="opacity:.6">aucun pour l'instant</span></div>
    <div class="panel machine" id="machine">
     <div class="mtitle" id="mTitle">Machine</div>
@@ -316,6 +364,7 @@ svg .flash{animation:flash .6s 2}
  <header>
   <button class="brass hbtn" id="btnBack2">⬅</button>
   <div class="t">Mon atelier<small>Les engrenages que tu as forgés</small></div>
+  <button class="brass hbtn" id="btnCarte3">🗺️ Carte</button>
   <button class="brass hbtn" id="btnParent">👨 Parent</button>
  </header>
  <div style="overflow:auto;flex:1">
@@ -355,6 +404,8 @@ svg .flash{animation:flash .6s 2}
   <div class="rclock" id="rcLock">D'abord : masque la fiche, récite-la, puis montre-la pour vérifier.</div></div>
  <div class="row"><button class="rclater" id="rcLater">Plus tard</button></div>
 </div></div>
+
+<div class="modal" id="mCarte"><div class="panel mbox"><div id="carteBody"></div><div class="row"><button class="brass" id="carteClose">Fermer</button></div></div></div>
 
 <div class="modal" id="mInfo"><div class="panel mbox">
  <div id="infoBody"></div>
@@ -596,7 +647,7 @@ function cfgOf(text){const n=stripAcc(text.toLowerCase());
 const SKEY="atelierDesAngles_v1";
 let SAVE;
 try{SAVE=JSON.parse(localStorage.getItem(SKEY))||{}}catch(e){SAVE={}}
-SAVE.stars=SAVE.stars||{};SAVE.hints=SAVE.hints||{};SAVE.recite=SAVE.recite||{};SAVE.reciteTodo=SAVE.reciteTodo||{};SAVE.forged=SAVE.forged||{};SAVE.redo=SAVE.redo||{};SAVE.log=SAVE.log||[];
+SAVE.stars=SAVE.stars||{};SAVE.hints=SAVE.hints||{};SAVE.recite=SAVE.recite||{};SAVE.mapSt=SAVE.mapSt||{};SAVE.reciteTodo=SAVE.reciteTodo||{};SAVE.forged=SAVE.forged||{};SAVE.redo=SAVE.redo||{};SAVE.log=SAVE.log||[];
 if(SAVE.sound===undefined)SAVE.sound=true;
 function save(){try{localStorage.setItem(SKEY,JSON.stringify(SAVE))}catch(e){}}
 function dstr(d){return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")}
@@ -717,6 +768,7 @@ function setupMachine(){
  $("doorTarget").textContent=tgt;$("doorTarget").style.fontSize=tgt.length>9?"16px":"21px";
  $("door").classList.remove("open","win");$("doorInside").innerHTML="";
  G.hopper=[];G.gear=null;renderHopper();renderGears();$("launch").disabled=false;if(typeof closeHint==="function")closeHint();
+ openMap();
 }
 function renderHopper(){
  const h=$("hopper");h.querySelectorAll(".chip,.empty").forEach(e=>e.remove());
@@ -748,6 +800,7 @@ let DR=null;
 function srcFromEl(el){return el&&el.closest?el.closest("[data-src]"):null;}
 document.addEventListener("pointerdown",e=>{
  if(!$("level").classList.contains("on")||G.busy)return;
+ if(G.mapOpen){const s0=srcFromEl(e.target);if(s0&&s0.closest("#level")&&!s0.closest("#mapPanel")){e.preventDefault();say("D'abord : <b>quelle forme vois-tu ?</b> Glisse ta machine dans le bon atelier de la carte.");}return}
  if(e.target.closest&&e.target.closest("[data-x]")){const f=e.target.closest("[data-x]").dataset.x;G.hopper=G.hopper.filter(x=>x!==f);renderHopper();SND.drop();e.preventDefault();return}
  const s=srcFromEl(e.target);if(!s||!s.closest("#level"))return;
  e.preventDefault();
@@ -784,6 +837,7 @@ document.addEventListener("pointercancel",e=>{if(DR&&DR.ghost)DR.ghost.remove();
 
 function soughtLater(f){return L.machines.some((m,i)=>i>G.mi&&m.sought===f);}
 function dropHopper(f){
+ if(G.mapOpen){say("D'abord : <b>quelle forme vois-tu ?</b> Place ta machine sur la carte.");return}
  const m=mach();
  if(G.hopper.includes(f)){say("Cet indice est déjà dans l'entrée.");return}
  if(f===m.sought){grip("<b>La machine grippe !</b> Tu utilises ce que tu cherches. Ce qu'on cherche n'est <b>jamais</b> dans « Je sais que ».");return}
@@ -804,6 +858,7 @@ function grip(msg){G.errors++;updStars();SND.grip();const h=$("hopper");h.classL
 /* ================= ÉTIQUETEUSE ================= */
 let LB=null;
 function pairAttempt(a,b){
+ if(G.mapOpen){say("D'abord : <b>quelle forme vois-tu ?</b> Place ta machine sur la carte.");return}
  const p=findPair(a,b);
  if(!p){SND.bad();say(`Les angles ${a} et ${b} ne forment pas une configuration de ton cours. Essaie une autre paire.`,"bad");return}
  const key="pair:"+pairKey(a,b);
@@ -883,7 +938,7 @@ $("fgGo").onclick=forgeGo;$("fgClose").onclick=()=>{$("mForge").classList.remove
 
 /* ================= LANCEMENT ================= */
 async function launch(){
- if(G.busy)return;G.busy=true;const m=mach();const btn=$("launch");btn.disabled=true;btn.classList.add("pull");SND.clank();
+ if(G.busy||G.mapOpen)return;G.busy=true;const m=mach();const btn=$("launch");btn.disabled=true;btn.classList.add("pull");SND.clank();
  await wait(450);btn.classList.remove("pull");
  const missing=m.needs.filter(n=>!G.hopper.includes(n));
  if(missing.length){const f=missing[0];let h;
@@ -1009,21 +1064,23 @@ function parent(){
  info(`<h2>👨 Espace parent</h2><p>Forges justes du premier coup : <b>${ok}</b> · avec corrections ou grand indice : <b>${ko}</b>.</p>
   <p>Étoiles : ${LEVELS.map(l=>`U${l.id} ${SAVE.stars[l.id]||0}★`).join(" · ")}</p>
   ${reciteTable()}
+  ${mapTable()}
   ${hintTable()}
   <table style="width:100%;border-collapse:collapse;font-size:14px" border="1" cellpadding="4"><tr><th>Date</th><th>Fiches justes</th><th>Fiches à refaire</th></tr>${rows||"<tr><td colspan=3>Aucune forge pour l'instant.</td></tr>"}</table>`,
   [["Ouvrir toutes les usines",()=>{SAVE.all=true;save()}],["Tout effacer",()=>{if(confirm("Effacer toute la progression ?")){localStorage.removeItem(SKEY);location.reload()}}],["Fermer"]]);
 }
 function hintTable(){
- const st=["entree","etiq","forge","donc"],sum=o=>st.reduce((a,k)=>a+((o||{})[k]||0),0);
+ const st=["carte","entree","etiq","forge","donc"],sum=o=>st.reduce((a,k)=>a+((o||{})[k]||0),0);
  const rows=LEVELS.map(l=>{const h=SAVE.hints[l.id];if(!h)return `<tr><td>U${l.id} ${esc(l.name)}</td>${st.map(()=>"<td>·</td>").join("")}<td>0</td><td>·</td></tr>`;
   return `<tr><td>U${l.id} ${esc(l.name)}</td>${st.map(k=>`<td>${h.tot[k]||0}</td>`).join("")}<td><b>${sum(h.tot)}</b></td><td>${sum(h.last)}${h.lastDay?" ("+h.lastDay.split("-").reverse().slice(0,2).join("/")+")":""}</td></tr>`;}).join("");
  return `<p style="margin-top:12px"><b>💡 Indices demandés par usine</b> <small>(cumul, par étape)</small></p>
- <table style="width:100%;border-collapse:collapse;font-size:13px;margin-bottom:10px" border="1" cellpadding="4"><tr><th>Usine</th><th>Je sais que</th><th>Étiqueteuse</th><th>Forge (Or)</th><th>Donc</th><th>Total</th><th>Dernière partie</th></tr>${rows}</table>
+ <table style="width:100%;border-collapse:collapse;font-size:13px;margin-bottom:10px" border="1" cellpadding="4"><tr><th>Usine</th><th>Carte</th><th>Je sais que</th><th>Étiqueteuse</th><th>Forge (Or)</th><th>Donc</th><th>Total</th><th>Dernière partie</th></tr>${rows}</table>
  <p class="legend">Indices dans Mon atelier : ${SAVE.hintsRedo||0}. Un indice 3 (le plus fort) à la forge renvoie la fiche en révision le lendemain.</p>`;
 }
 function howto(){
  info(`<h2>❓ Comment jouer</h2>
  <p>Chaque usine est un exercice de ton cours. Tu construis une <b>machine à démontrer</b>.</p>
+ <p><b>0. Quelle forme vois-tu ?</b> Regarde la figure et glisse ta machine dans le bon atelier : <b>Croix, Ligne, Rails, Triangle</b>. Le bouton 🗺️ montre la carte et les fiches de chaque atelier.</p>
  <p><b>1. ENTRÉE · Je sais que.</b> Glisse avec le doigt les indices de l'énoncé (mots soulignés) ou de la figure (droites, angles). Attention aux pièges : ce que tu cherches fait gripper la machine.</p>
  <p><b>2. L'étiqueteuse.</b> Glisse un angle de la figure <b>sur un autre angle</b>, puis écris le nom de leur configuration.</p>
  <p><b>3. ENGRENAGE · Or.</b> Touche l'engrenage vide et écris la loi <b>de mémoire</b>. Une définition (cadre vert) ne s'emboîte pas : il faut une propriété (cadre rouge).</p>
@@ -1174,7 +1231,7 @@ const CHINT={ // dans l'étiqueteuse, selon la vraie position des deux angles ch
  cor:["Sont-ils entre les deux droites ou dehors ? Du même côté de la sécante ou pas ?",
   "L'un est à l'intérieur, l'autre à l'extérieur. Ils sont du même côté de la sécante.",`Leur nom commence par « corr${BL} ».`]
 };
-const STEPNAME={entree:"Je sais que",etiq:"Étiqueteuse",forge:"Forge · Or",donc:"Donc",levier:"Levier"};
+const STEPNAME={carte:"Carte",entree:"Je sais que",etiq:"Étiqueteuse",forge:"Forge · Or",donc:"Donc",levier:"Levier"};
 function redoHints(f){
  const F=FICHES[f],w=plainFiche(f).split(" ");
  const kw=[...new Set(plainFiche(f).replace(/[«»().,:;•]/g," ").split(/\s+/).filter(x=>x.length>=7))].slice(0,3);
@@ -1189,6 +1246,7 @@ function hintCtx(){
   const h=HINTS[L.id+"-"+G.mi];return {where:"fg",step:"forge",key:L.id+"-"+G.mi+":forge",t:h.forge.t,g:[]};}
  if(!$("level").classList.contains("on")||!L||!G)return null;
  const m=mach(),h=HINTS[L.id+"-"+G.mi],base=L.id+"-"+G.mi+":";
+ if(G.mapOpen){const H=MAPH[L.id+"-"+G.mi];return {where:"main",step:"carte",key:base+"carte",t:[H.t[0],H.t[1],MAP3],g:H.g,keep:H.keep};}
  if($("door").classList.contains("win"))return null;
  if($("door").classList.contains("open"))return {where:"main",step:"donc",key:base+"donc",...h.donc};
  const missing=m.needs.filter(n=>!G.hopper.includes(n));
@@ -1224,7 +1282,7 @@ function renderHint(c,lv){
  if(c.where==="main")$("foreman").classList.add("hinting");
  const nb=box.querySelector(".hnext");if(nb)nb.onclick=()=>hintPress(true);
  box.querySelector(".hclose").onclick=()=>closeHint();
- HOPEN={where:c.where,key:c.key,glow:lv>=2?c.g:[]};applyGlow();
+ HOPEN={where:c.where,key:c.key,glow:lv>=2?c.g:[]};applyGlow();if(c.step==="carte"&&lv>=3)mapDim(c.keep);
 }
 function closeHint(silent){
  for(const w in HBOX){const b=$(HBOX[w]);b.classList.remove("on");b.innerHTML="";}
@@ -1283,7 +1341,7 @@ function rcCard(){
  const f=RC.list[RC.i],F=FICHES[f];RC.hidden=false;RC.cycled=false;RC.f=f;
  $("rcTitle").textContent="📜 Fiche à retenir"+(RC.list.length>1?` · ${RC.i+1} sur ${RC.list.length}`:"");
  $("rcSub").innerHTML=RC.from==="atelier"?"Récite cette fiche à papa.":`Pour réussir cette usine, tu as eu besoin de cette ${F.t==="P"?"propriété":"définition"}. Apprends-la par cœur.`;
- $("rcHead").innerHTML=`<span class="rcnum">Fiche ${f}</span> ${esc(F.title)} <span class="rctype ${F.t}">${F.t==="P"?"Propriété":"Définition"}</span>`;
+ $("rcHead").innerHTML=`<span class="rcnum">Fiche ${f}</span> ${esc(F.title)} <span class="rctype ${F.t}">${F.t==="P"?"Propriété":"Définition"}</span>${atTag(f)}`;
  $("rcText").innerHTML=ficheHTML(f)+(SIALORS[f]?`<div class="rcsa">En « Si… alors… » : ${esc(SIALORS[f]).replace(/\b(Si|alors)\b/g,'<b class="kw">$1</b>')}</div>`:"");
  $("rcCard").classList.remove("hid");$("rcStamp").className="rcstamp";$("rcStamp").textContent="";
  rcState();
@@ -1326,11 +1384,155 @@ function reciteTable(){
 $("rcToggle").onclick=rcToggle;$("rcLater").onclick=rcLater;
 document.querySelectorAll("#rcNote .rt").forEach(b=>b.onclick=()=>rcRate(b.dataset.r));
 
+const ICON={"croix": "<svg class=\"mfig\" viewBox=\"0 0 120 90\" xmlns=\"http://www.w3.org/2000/svg\"><line x1=\"12\" y1=\"73\" x2=\"108\" y2=\"17\" stroke=\"#2b2b2b\" stroke-width=\"3\" stroke-linecap=\"round\"/><line x1=\"12\" y1=\"17\" x2=\"108\" y2=\"73\" stroke=\"#2b2b2b\" stroke-width=\"3\" stroke-linecap=\"round\"/><path d=\"M60,45 L78.9,56.3 A22,22 0 0 0 78.9,33.7 Z\" fill=\"#f08a24\" fill-opacity=\".85\" stroke=\"#f08a24\" stroke-width=\"1\"/><path d=\"M60,45 L41.1,33.7 A22,22 0 0 0 41.1,56.3 Z\" fill=\"#f08a24\" fill-opacity=\".85\" stroke=\"#f08a24\" stroke-width=\"1\"/><path d=\"M60,45 L73.7,36.8 A16,16 0 0 0 46.3,36.8 Z\" fill=\"#3b8fd9\" fill-opacity=\".85\" stroke=\"#3b8fd9\" stroke-width=\"1\"/><path d=\"M60,45 L46.3,53.2 A16,16 0 0 0 73.7,53.2 Z\" fill=\"#3b8fd9\" fill-opacity=\".85\" stroke=\"#3b8fd9\" stroke-width=\"1\"/><circle cx=\"60\" cy=\"45\" r=\"3\" fill=\"#2b2b2b\"/></svg>", "ligne": "<svg class=\"mfig\" viewBox=\"0 0 120 90\" xmlns=\"http://www.w3.org/2000/svg\"><line x1=\"6\" y1=\"66\" x2=\"114\" y2=\"66\" stroke=\"#2b2b2b\" stroke-width=\"3\" stroke-linecap=\"round\"/><line x1=\"60\" y1=\"66\" x2=\"88\" y2=\"14\" stroke=\"#2b2b2b\" stroke-width=\"3\" stroke-linecap=\"round\"/><path d=\"M60,66 L82,66 A22,22 0 0 0 70.4,46.6 Z\" fill=\"#f08a24\" fill-opacity=\".85\" stroke=\"#f08a24\" stroke-width=\"1\"/><path d=\"M60,66 L68.5,50.2 A18,18 0 0 0 42,66 Z\" fill=\"#3b8fd9\" fill-opacity=\".85\" stroke=\"#3b8fd9\" stroke-width=\"1\"/><circle cx=\"60\" cy=\"66\" r=\"3\" fill=\"#2b2b2b\"/><text x=\"60\" y=\"86\" font-size=\"11\" font-weight=\"bold\" fill=\"#2b2b2b\" text-anchor=\"middle\" font-family=\"Andika,Trebuchet MS,Arial,sans-serif\">ensemble : 180°</text></svg>", "rails": "<svg class=\"mfig\" viewBox=\"0 0 120 90\" xmlns=\"http://www.w3.org/2000/svg\"><line x1=\"6\" y1=\"28\" x2=\"114\" y2=\"28\" stroke=\"#2b2b2b\" stroke-width=\"3\" stroke-linecap=\"round\"/><line x1=\"6\" y1=\"68\" x2=\"114\" y2=\"68\" stroke=\"#2b2b2b\" stroke-width=\"3\" stroke-linecap=\"round\"/><line x1=\"35\" y1=\"88\" x2=\"85\" y2=\"8\" stroke=\"#2b2b2b\" stroke-width=\"3\" stroke-linecap=\"round\"/><path d=\"M14,24 L20,28 L14,32\" fill=\"none\" stroke=\"#2b2b2b\" stroke-width=\"2\"/><path d=\"M14,64 L20,68 L14,72\" fill=\"none\" stroke=\"#2b2b2b\" stroke-width=\"2\"/><path d=\"M72.5,28 L58.5,28 A14,14 0 0 0 65.1,39.9 Z\" fill=\"#f08a24\" fill-opacity=\".85\" stroke=\"#f08a24\" stroke-width=\"1\"/><path d=\"M47.5,68 L61.5,68 A14,14 0 0 0 54.9,56.1 Z\" fill=\"#f08a24\" fill-opacity=\".85\" stroke=\"#f08a24\" stroke-width=\"1\"/><circle cx=\"72.5\" cy=\"28\" r=\"3\" fill=\"#2b2b2b\"/><circle cx=\"47.5\" cy=\"68\" r=\"3\" fill=\"#2b2b2b\"/></svg>", "tri": "<svg class=\"mfig\" viewBox=\"0 0 120 90\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M15,78 L105,78 L48,14 Z\" fill=\"none\" stroke=\"#2b2b2b\" stroke-width=\"3\" stroke-linejoin=\"round\"/><path d=\"M15,78 L27,78 A12,12 0 0 0 20.5,67.3 Z\" fill=\"#f08a24\" fill-opacity=\".85\" stroke=\"#f08a24\" stroke-width=\"1\"/><path d=\"M105,78 L97,69 A12,12 0 0 0 93,78 Z\" fill=\"#3b8fd9\" fill-opacity=\".85\" stroke=\"#3b8fd9\" stroke-width=\"1\"/><path d=\"M48,14 L42.5,24.7 A12,12 0 0 0 56,23 Z\" fill=\"#9b59d0\" fill-opacity=\".85\" stroke=\"#9b59d0\" stroke-width=\"1\"/><text x=\"66\" y=\"60\" font-size=\"10\" font-weight=\"bold\" fill=\"#2b2b2b\" text-anchor=\"middle\" font-family=\"Andika,Trebuchet MS,Arial,sans-serif\">a+b+c</text><text x=\"66\" y=\"72\" font-size=\"10\" font-weight=\"bold\" fill=\"#2b2b2b\" text-anchor=\"middle\" font-family=\"Andika,Trebuchet MS,Arial,sans-serif\">= 180°</text></svg>", "outils": "<svg class=\"mfig\" viewBox=\"0 0 120 90\" xmlns=\"http://www.w3.org/2000/svg\"><line x1=\"8\" y1=\"45\" x2=\"112\" y2=\"45\" stroke=\"#2b2b2b\" stroke-width=\"3\" stroke-linecap=\"round\"/><line x1=\"20\" y1=\"38\" x2=\"20\" y2=\"52\" stroke=\"#2b2b2b\" stroke-width=\"2\" stroke-linecap=\"round\"/><line x1=\"40\" y1=\"38\" x2=\"40\" y2=\"52\" stroke=\"#2b2b2b\" stroke-width=\"2\" stroke-linecap=\"round\"/><line x1=\"60\" y1=\"38\" x2=\"60\" y2=\"52\" stroke=\"#2b2b2b\" stroke-width=\"2\" stroke-linecap=\"round\"/><line x1=\"80\" y1=\"38\" x2=\"80\" y2=\"52\" stroke=\"#2b2b2b\" stroke-width=\"2\" stroke-linecap=\"round\"/><line x1=\"100\" y1=\"38\" x2=\"100\" y2=\"52\" stroke=\"#2b2b2b\" stroke-width=\"2\" stroke-linecap=\"round\"/><text x=\"40\" y=\"72\" font-size=\"15\" font-weight=\"bold\" fill=\"#2b2b2b\" text-anchor=\"middle\" font-family=\"Andika,Trebuchet MS,Arial,sans-serif\">−1</text><text x=\"60\" y=\"72\" font-size=\"15\" font-weight=\"bold\" fill=\"#2b2b2b\" text-anchor=\"middle\" font-family=\"Andika,Trebuchet MS,Arial,sans-serif\">0</text><text x=\"80\" y=\"72\" font-size=\"15\" font-weight=\"bold\" fill=\"#2b2b2b\" text-anchor=\"middle\" font-family=\"Andika,Trebuchet MS,Arial,sans-serif\">+1</text><path d=\"M106,39 L114,45 L106,51\" fill=\"none\" stroke=\"#2b2b2b\" stroke-width=\"2.5\"/><circle cx=\"60\" cy=\"45\" r=\"4\" fill=\"#f08a24\"/></svg>"};
+
+/* ================= LA CARTE DE L'USINE : QUELLE FORME VOIS-TU ? ================= */
+const ATL={
+ croix:{n:1,name:"Croix",col:"#e07b1a",see:"Deux droites qui se croisent en un point.",fiches:[5,6]},
+ ligne:{n:2,name:"Ligne",col:"#2f7fc1",see:"Des angles côte à côte, souvent sur une ligne droite.",fiches:[1,13,12,3,2,4]},
+ rails:{n:3,name:"Rails",col:"#2e9a52",see:"Deux droites coupées par une sécante.",fiches:[7,8,9,14,10,11,15,16]},
+ tri:{n:4,name:"Triangle",col:"#8e4fc4",see:"Une figure à trois côtés et trois angles.",fiches:[17,18,19,20]},
+ outils:{n:0,name:"Boîte à outils",col:"#7a5418",see:"Pas d'angles : nombres relatifs et droite graduée.",fiches:[21,22]}
+};
+const AT4=["croix","ligne","rails","tri"];
+const FATL={};for(const a in ATL)ATL[a].fiches.forEach(f=>FATL[f]=a);
+const atTag=f=>{const a=FATL[f];return a?`<span class="attag" style="--c:${ATL[a].col}">🏭 Atelier ${ATL[a].name}</span>`:""};
+/* pourquoi ce n'est pas le bon atelier : WHY[bon][choisi] */
+const WHY={
+ croix:{ligne:"Ici, les angles qui comptent ne sont pas côte à côte. Ils sont <b>face à face</b>, de chaque côté du point où les droites se croisent.",
+  rails:"Il n'y a pas de sécante qui coupe deux droites. Il y a seulement <b>deux droites qui se croisent</b>.",
+  tri:"Il n'y a pas de triangle sur cette figure. Compte les droites : il y en a deux, qui se croisent."},
+ ligne:{croix:"Les droites se croisent, c'est vrai. Mais l'angle cherché n'est pas en face de l'angle connu : il est <b>à côté</b>. Ensemble, ils forment une ligne droite.",
+  rails:"Il n'y a pas de sécante qui coupe deux droites ici. Regarde l'angle cherché et l'angle connu : ils sont <b>côte à côte</b>.",
+  tri:"Il n'y a pas de triangle ici. Les deux angles sont <b>côte à côte</b>, sur une même droite."},
+ rails:{croix:"La sécante croise bien les droites. Mais les deux angles ne sont pas au même point : ils sont sur <b>deux droites coupées par une sécante</b>.",
+  ligne:"Les angles utiles ne sont pas côte à côte. Ils sont sur <b>deux droites différentes</b>, reliées par une sécante.",
+  tri:"Il n'y a pas de triangle ici. Il y a <b>deux droites</b> et une <b>sécante</b> qui les coupe."},
+ tri:{croix:"Les angles utiles ne sont pas face à face. Ce sont <b>les trois angles d'un triangle</b>.",
+  ligne:"Les angles utiles ne sont pas côte à côte sur une droite. Ce sont <b>les trois coins d'un triangle</b>.",
+  rails:"Il n'y a pas de sécante ni de droites parallèles ici. La figure est <b>fermée, avec trois côtés</b>."}
+};
+/* par machine : indices de l'étape carte, atelier laissé allumé à l'indice 3, et explications propres à la figure */
+const MAPH={
+ "1-0":{t:["Regarde la figure en entier. Combien de droites vois-tu ? Que font-elles ?","Deux droites qui se coupent en un seul point O. Les angles AOB et COD sont face à face."],g:["l:AC","l:BD","a:AOB","a:COD"],keep:"ligne"},
+ "2-0":{t:["Regarde les points A, O et C. Où est l'angle cherché BOC par rapport à l'angle connu AOB ?","A, O et C sont sur une même droite. AOB et BOC sont côte à côte sur cette droite."],g:["l:AC","a:AOB","a:BOC"],keep:"croix"},
+ "3-0":{t:["Combien de droites vois-tu ? Y en a-t-il une qui coupe les deux autres ?","Deux droites (d₁) et (d₂), et une sécante (s) qui les coupe. On dirait des rails."],g:["l:d1","l:d2","l:s"],keep:"croix"},
+ "4-0":{t:["Tu dois prouver que deux droites sont parallèles. Quelle droite les coupe toutes les deux ?","Deux droites (d₁) et (d₂), et une sécante (s) qui les coupe en A et B."],g:["l:d1","l:d2","l:s"],keep:"croix"},
+ "5-0":{t:["Regarde la forme de la figure. Combien de côtés ? Combien de coins ?","Trois côtés, trois angles. L'énoncé dit ce qu'est DEF."],g:["l:DE","l:EF","l:FD"],keep:"ligne"},
+ "6-0":{t:["Question a. Combien de droites vois-tu ? Y en a-t-il une qui coupe les deux autres ?","Deux droites (d₁) et (d₂), et une sécante (s) qui les coupe en A et B."],g:["l:d1","l:d2","l:s"],keep:"croix"},
+ "6-1":{t:["Question b. Regarde l'angle cherché ABE et l'angle ABD. Où sont-ils l'un par rapport à l'autre ?","E, B et D sont alignés. ABE et ABD sont côte à côte sur la droite (d₂)."],g:["l:d2","a:ABD","a:ABE"],keep:"rails",
+  why:{rails:"Il y a des rails sur la figure, c'est vrai. Mais pour la question b, ABE et ABD sont <b>côte à côte</b> sur la droite (d₂). Ils forment un angle plat."}},
+ "7-0":{t:["Question a : il faut prouver que (d₁) et (d₂) sont parallèles. Quelle droite relie ces deux droites ?","(d₁) et (d₂) sont coupées par la sécante (AB). Le triangle servira plus tard."],g:["l:d1","l:d2","l:AB","a:PAB","a:ABC"],keep:"tri",
+  why:{tri:"Il y a un triangle, c'est vrai. Mais la question a parle de <b>deux droites</b> (d₁) et (d₂) et de la <b>sécante</b> (AB)."}},
+ "7-1":{t:["Question b : tu cherches ACB. Quelle droite relie (d₁) et (d₂) en passant par C ?","(AC) est une sécante qui coupe les deux droites. Regarde les angles QAC et ACB."],g:["l:d1","l:d2","l:AC","a:QAC","a:ACB"],keep:"tri",
+  why:{tri:"ACB est bien dans le triangle. Mais pour le trouver, on n'a qu'un angle du triangle. On passe par la <b>sécante</b> (AC) et l'angle QAC."}},
+ "7-2":{t:["Question c : tu cherches BAC. Dans quelle forme sont les angles ABC, ACB et BAC ?","Ce sont les trois angles d'une même figure fermée à trois côtés. Tu en connais déjà deux."],g:["a:ABC","a:ACB","a:BAC","l:AB","l:AC"],keep:"rails",
+  why:{rails:"Il y a des rails sur la figure, c'est vrai. Mais tu cherches un angle du <b>triangle</b> ABC, et tu connais ses deux autres angles."}}
+};
+const MAP3="J'ai éteint deux ateliers qui ne vont pas. Il en reste deux. Lequel ressemble à ta figure ?";
+function mapAnswer(){return FATL[mach().fiche];}
+function mapKey(){return L.id+"-"+G.mi;}
+function mapPanelHTML(){
+ return `<div class="mph">🗺️ Quelle forme vois-tu ?<small id="mapFor"></small></div>
+ <div class="mps">Regarde la figure. Glisse ta machine dans le bon atelier.</div>
+ <div class="floor" id="mapFloor">${AT4.map(a=>{const A=ATL[a];return `<div class="bld" data-at="${a}" style="--c:${A.col}"><div class="roof"></div><div class="bn"><span class="bnum">${A.n}</span>${A.name}</div>${ICON[a]}<div class="bdoor"></div></div>`}).join("")}
+  <div class="token" id="mapToken"><span class="tg">⚙️</span><b id="mapTokLbl">Machine</b></div></div>
+ <div class="mpmsg" id="mapMsg"><b>Croix</b> · <b>Ligne</b> · <b>Rails</b> · <b>Triangle</b></div>`;
+}
+function openMap(){
+ G.mapOpen=true;G.mapTries=0;G.mapWrong=[];
+ const p=$("mapPanel");p.innerHTML=mapPanelHTML();p.classList.add("on");p.classList.remove("leaving");
+ $("mapFor").textContent=L.machines.length>1?` · Machine ${"abc"[G.mi]} sur ${L.machines.length}`:"";
+ $("mapTokLbl").textContent=L.machines.length>1?`Machine ${"abc"[G.mi]}`:"Machine";
+ tokenHome();bindMap();
+ setTimeout(()=>{if(!G.mapOpen)return;
+  const f=$("foreman");G.afterMap=[$("fmsg").innerHTML,f.classList.contains("good")?"good":f.classList.contains("bad")?"bad":undefined];
+  say(L.tuto&&G.mi===0?"Bienvenue à l'usine, apprenti ! <b>D'abord : quelle forme vois-tu ?</b> Regarde la figure, puis glisse ta machine dans le bon atelier de la carte."
+   :G.mi>0?`Machine suivante ! <b>Quelle forme vois-tu</b> pour la question ${"abc"[G.mi]} ? Glisse la machine dans son atelier.`
+   :`Usine ${L.id}. <b>Quelle forme vois-tu ?</b> Regarde la figure, puis glisse ta machine dans le bon atelier.`);},0);
+}
+function tokenHome(anim){const t=$("mapToken");if(!t)return;t.classList.toggle("anim",!!anim);t.style.left="";t.style.top="";t.style.margin="";}
+function tokenFix(){const t=$("mapToken"),fl=$("mapFloor").getBoundingClientRect(),r=t.getBoundingClientRect();t.style.margin="0";t.style.left=(r.left-fl.left)+"px";t.style.top=(r.top-fl.top)+"px";}
+function tokenTo(b,cb){const t=$("mapToken");t.classList.remove("anim");tokenFix();void t.offsetWidth;const fl=$("mapFloor").getBoundingClientRect(),r=b.getBoundingClientRect();t.classList.add("anim");
+ t.style.left=(r.left-fl.left+r.width/2-t.offsetWidth/2)+"px";t.style.top=(r.top-fl.top+r.height/2-t.offsetHeight/2)+"px";setTimeout(cb,330);}
+let MD=null;
+function bindMap(){
+ const t=$("mapToken");
+ t.addEventListener("pointerdown",e=>{if(!G.mapOpen||G.mapBusy)return;e.preventDefault();e.stopPropagation();ac();
+  t.classList.remove("anim");tokenFix();const r=t.getBoundingClientRect();MD={id:e.pointerId,dx:e.clientX-r.left,dy:e.clientY-r.top,moved:false,x0:e.clientX,y0:e.clientY};t.classList.add("drag");try{t.setPointerCapture(e.pointerId)}catch(_){}});
+ t.addEventListener("pointermove",e=>{if(!MD||e.pointerId!==MD.id)return;e.preventDefault();
+  if(Math.hypot(e.clientX-MD.x0,e.clientY-MD.y0)>5)MD.moved=true;
+  const fl=$("mapFloor").getBoundingClientRect();t.style.left=(e.clientX-fl.left-MD.dx)+"px";t.style.top=(e.clientY-fl.top-MD.dy)+"px";
+  const b=bldAt(e.clientX,e.clientY);document.querySelectorAll(".bld.over").forEach(x=>x.classList.remove("over"));if(b)b.classList.add("over");});
+ const end=e=>{if(!MD||e.pointerId!==MD.id)return;const moved=MD.moved;MD=null;t.classList.remove("drag");
+  document.querySelectorAll(".bld.over").forEach(x=>x.classList.remove("over"));
+  const b=bldAt(e.clientX,e.clientY);
+  if(b&&moved)mapChoose(b.dataset.at);else{tokenHome(true);if(!moved)mapSay("Pose ton doigt sur la machine et <b>glisse-la</b> jusqu'à un atelier. Tu peux aussi toucher l'atelier.");}};
+ t.addEventListener("pointerup",end);t.addEventListener("pointercancel",e=>{if(MD){MD=null;t.classList.remove("drag");tokenHome(true);}});
+ document.querySelectorAll("#mapFloor .bld").forEach(b=>b.addEventListener("click",()=>{if(!G.mapOpen||G.mapBusy||b.classList.contains("dim"))return;ac();G.mapBusy=true;tokenTo(b,()=>{G.mapBusy=false;mapChoose(b.dataset.at);});}));
+}
+function bldAt(x,y){const t=$("mapToken");const pe=t.style.pointerEvents;t.style.pointerEvents="none";const e=document.elementFromPoint(x,y);t.style.pointerEvents=pe;return e&&e.closest?e.closest("#mapFloor .bld"):null;}
+function mapSay(h,cls){const m=$("mapMsg");if(m){m.innerHTML=h;m.className="mpmsg "+(cls||"");}}
+function mapStat(good,wrong){
+ const st=SAVE.mapSt[good]=SAVE.mapSt[good]||{n:0,first:0,err:0,conf:{}};
+ if(wrong){st.err++;st.conf[wrong]=(st.conf[wrong]||0)+1;}
+ save();return st;
+}
+function mapChoose(at,instant){
+ if(!G||!G.mapOpen)return;const good=mapAnswer(),b=document.querySelector(`#mapFloor .bld[data-at="${at}"]`);G.mapTries++;
+ if(at!==good){
+  mapStat(good,at);G.mapWrong.push(at);
+  const H=MAPH[mapKey()]||{};const why=(H.why&&H.why[at])||WHY[good][at];
+  if(b){b.classList.remove("bad");void b.offsetWidth;b.classList.add("bad");setTimeout(()=>b.classList.remove("bad"),700);}
+  tokenHome(true);SND.bad();mapSay(`❌ Pas l'atelier <b>${ATL[at].name}</b>. ${why}`,"bad");G.errors++;updStars();
+  say(`<b>Pas l'atelier ${ATL[at].name}.</b> ${why}`,"bad");return false}
+ const st=mapStat(good);st.n++;if(G.mapTries===1)st.first++;save();
+ G.mapOpen=false;G.atel=good;closeHint();
+ const A=ATL[good];
+ if(b)b.classList.add("ok");document.querySelectorAll("#mapFloor .bld").forEach(x=>x.classList.remove("dim"));
+ mapSay(`✅ Oui ! <b>Atelier ${A.name}</b> : ${A.see}`,"good");SND.stamp();setTimeout(()=>SND.win(),120);
+ $("mTitle").innerHTML=`<span class="attag" style="--c:${A.col}">${A.name}</span> `+esc($("mTitle").textContent);
+ const p=$("mapPanel"),done=()=>{p.classList.remove("on","leaving");p.innerHTML="";};
+ if(instant)done();else{setTimeout(()=>p.classList.add("leaving"),900);setTimeout(done,1250);}
+ let am=G.afterMap;G.afterMap=null;
+ if(L.tuto&&G.mi===0)say(`Bien vu : <b>atelier ${A.name}</b> ! <b>1.</b> Maintenant, <b>Je sais que</b> : glisse avec le doigt les indices de l'énoncé (mots soulignés) ou de la figure jusqu'à l'<b>ENTRÉE</b>.`,"good");
+ else if(am&&!/Quelle forme/.test(am[0]))say(`Atelier ${A.name} ! `+am[0],am[1]);
+ else say(`Bien vu : <b>atelier ${A.name}</b> ! Maintenant, mets dans l'ENTRÉE seulement ce que tu <b>sais</b>.`,"good");
+ return true;
+}
+function mapDim(keep){document.querySelectorAll("#mapFloor .bld").forEach(b=>{const a=b.dataset.at;b.classList.toggle("dim",a!==mapAnswer()&&a!==keep);});}
+/* ---- la carte à consulter (bouton 🗺️) ---- */
+function metFiches(){const s=new Set([...Object.keys(SAVE.forged),...Object.keys(SAVE.recite),...Object.keys(SAVE.reciteTodo)].map(Number));
+ for(const l of LEVELS)if(SAVE.stars[l.id])l.machines.forEach(m=>s.add(m.fiche));return s;}
+function openCarte(){
+ const met=metFiches();
+ const card=a=>{const A=ATL[a],got=A.fiches.filter(f=>met.has(f)),miss=A.fiches.length-got.length;
+  return `<div class="cbld ${a==="outils"?"tools":""}" style="--c:${A.col}"><div class="cbh">${A.n?`<span class="bnum">${A.n}</span>`:"🧰 "}${A.name}</div>
+   <div class="cbb">${ICON[a]}<div class="csee">${A.see}</div></div>
+   <div class="cfs">${got.map(f=>{const r=(SAVE.recite[f]||{}).last;return `<button class="fchip ${FICHES[f].t}" data-f="${f}"><span class="ft">${FICHES[f].t}${f}</span> ${esc(FICHES[f].title)}${r?` <span class="rb k-${r}">${RNAME[r]}</span>`:""}</button>`}).join("")}
+   ${miss?`<span class="cmiss">🔒 ${miss} fiche${miss>1?"s":""} à découvrir</span>`:""}</div></div>`};
+ $("carteBody").innerHTML=`<h2>🗺️ La carte de l'usine</h2><p class="cq">Devant une figure : <b>quelle forme je vois ?</b></p>
+  <p class="cmn"><b style="background:#e07b1a">Croix</b> · <b style="background:#2f7fc1">Ligne</b> · <b style="background:#2e9a52">Rails</b> · <b style="background:#8e4fc4">Triangle</b></p>
+  <div class="cgrid">${AT4.map(card).join("")}</div>${card("outils")}
+  <div class="cdet" id="carteDet">Touche une fiche pour la relire. <span class="ft D">D</span> définition · <span class="ft P">P</span> propriété.</div>`;
+ $("carteBody").querySelectorAll(".fchip").forEach(b=>b.onclick=()=>{const f=+b.dataset.f,F=FICHES[f];
+  $("carteDet").innerHTML=`<b>Fiche ${f} · ${esc(F.title)}</b> <span class="ft ${F.t}">${F.t==="P"?"Propriété":"Définition"}</span><div class="cdt">${ficheHTML(f)}</div>`;});
+ $("mCarte").classList.add("on");
+}
+function mapTable(){
+ const rows=AT4.map(a=>{const s=SAVE.mapSt[a];if(!s)return `<tr><td>${ATL[a].name}</td><td>0</td><td>·</td><td>0</td><td>·</td></tr>`;
+  const conf=Object.entries(s.conf).sort((x,y)=>y[1]-x[1]).map(([k,n])=>`${ATL[k].name} ×${n}`).join(", ");
+  return `<tr><td><b style="color:${ATL[a].col}">${ATL[a].name}</b></td><td>${s.n}</td><td>${s.first}</td><td>${s.err?`<b style="color:#ff8a7a">${s.err}</b>`:0}</td><td>${conf||"·"}</td></tr>`}).join("");
+ return `<p style="margin-top:12px"><b>🗺️ Quelle forme ? La carte des ateliers</b></p>
+ <table style="width:100%;border-collapse:collapse;font-size:13px;margin-bottom:10px" border="1" cellpadding="4"><tr><th>Atelier (bonne réponse)</th><th>Machines placées</th><th>Du premier coup</th><th>Erreurs</th><th>Confondu avec</th></tr>${rows}</table>`;
+}
+$("btnCarte").onclick=openCarte;$("btnCarte2").onclick=openCarte;$("btnCarte3").onclick=openCarte;$("carteClose").onclick=()=>$("mCarte").classList.remove("on");
+
 $("launch").onclick=launch;$("btnBack").onclick=goHome;$("btnBack2").onclick=goHome;$("btnHelp").onclick=howto;$("btnHowto").onclick=howto;
 $("btnAtelier").onclick=renderAtelier;$("btnParent").onclick=parent;$("btnSound1").onclick=toggleSound;$("btnSound2").onclick=toggleSound;
 document.querySelector("#logoGear").setAttribute("d",gearPath(12,46,36));
 soundBtns();goHome();
-window.__game={LEVELS,FICHES,recognise,tokenize,diff,get G(){return G},get L(){return L},startLevel,dropHopper,pairAttempt,placeGear,SAVE,hintPress,hintCtx,HINTS,HINT_IDLE,closeHint,openForge,reciteFlow,rateFiche,get RC(){return RC}};
+window.__game={LEVELS,FICHES,recognise,tokenize,diff,get G(){return G},get L(){return L},startLevel,dropHopper,pairAttempt,placeGear,SAVE,hintPress,hintCtx,HINTS,HINT_IDLE,closeHint,openForge,reciteFlow,rateFiche,get RC(){return RC},mapChoose,mapAnswer,openCarte,openMap,ATL,FATL,MAPH};
 </script>
 </body>
 </html>
