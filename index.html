@@ -149,6 +149,10 @@ svg .flash{animation:flash .6s 2}
 .diff .ex{color:#c0271b;text-decoration:line-through;background:#ffd9d4;border-radius:3px;padding:0 2px}
 .diff .mi{color:#1b7b22;background:#d8f5d3;border-bottom:2px solid #1b7b22;border-radius:3px;padding:0 3px;font-weight:bold}
 .diff .ne{background:#fff0a0;border-bottom:2px dotted #a07800;border-radius:3px}
+.diff .soft,.soft{color:#8d8a84;background:#efede8;border-bottom:1px dashed #bdb8ad;border-radius:3px;padding:0 2px}
+.soft s{color:#a8a39a}
+.diff .sy{background:#eceae4;border-bottom:2px dotted #8d8a84;border-radius:3px}
+.cj{color:#1b7b22;font-weight:bold}
 .legend{font-size:13px;opacity:.85;margin-top:4px}
 .forgeanim{display:flex;justify-content:center;margin:8px 0}
 .forgeanim svg{width:120px;height:120px}
@@ -569,74 +573,201 @@ const LEVELS=[
 ];
 /* ================= COMPARAISON DE TEXTE ================= */
 const stripAcc=s=>s.normalize("NFD").replace(/[\u0300-\u036f]/g,"");
-function tokenize(str,keepOpt){
- // retourne [{n:normalisé, d:affichage, o:facultatif}]
+const PUN=/[«»"“”•…;:!?,.()\[\]]/g;
+const SYMS=new Set(["=","+","÷","×","−","⇄"]);
+const HYPH=[];
+(function(){const seen=new Set();for(const k in FICHES){(FICHES[k].txt.match(/[A-Za-zÀ-ÿ]+-[A-Za-zÀ-ÿ]+/g)||[]).forEach(w=>{const l=w.toLowerCase();if(!seen.has(l)){seen.add(l);const p=l.split("-");HYPH.push({re:new RegExp("(^|[^A-Za-zÀ-ÿ])"+p[0]+"[\\s\\-]+"+p[1]+"(?=$|[^A-Za-zÀ-ÿ])","gi"),w:l});}});}})();
+function prep(str,user){
+ let s=str.replace(/[’‘`´]/g,"'").replace(/\u00a0/g," ").replace(/\n/g," ");
+ if(user){
+  s=s.replace(/(\d)\s*(°|degr[eé]s?(?![a-z])|deg(?![a-z]))/gi,"$1°");
+  for(const h of HYPH)s=s.replace(h.re,"$1"+h.w);
+  s=s.replace(/[–—]/g,"-").replace(/-(?=\d)/g,"−").replace(/(^|\s)-(?=\s|$)/g,"$1−");
+  s=s.replace(/(\S)\s*\/\s*(?=\d)/g,"$1 ÷ ").replace(/\*/g," × ");
+ }
+ s=s.replace(/(^|[^A-Za-zÀ-ÿ])(qu|[cdjlmnst])'(?=[A-Za-zÀ-ÿ])/gi,"$1$2' ");
+ s=s.replace(/([=+÷×⇄])/g," $1 ").replace(/\s−\s/g," − ").replace(/«/g,"« ").replace(/»/g," »");
+ return s;
+}
+function tokenize(str,user){
  const out=[];let opt=false;
- const segs=keepOpt?str.split(/([{}])/):[str.replace(/[{}]/g,"")];
+ const segs=user?[str.replace(/[{}]/g,"")]:str.split(/([{}])/);
  for(const seg of segs){
   if(seg==="{"){opt=true;continue}if(seg==="}"){opt=false;continue}
-  let s=seg.replace(/[’‘`´]/g,"'").replace(/\^/g,"")
-   .replace(/(\d)\s*°/g,"$1 °").replace(/°/g," ° ")
-   .replace(/[=+÷×*\/]/g,m=>" "+m+" ").replace(/\s[-−]\s/g," − ").replace(/−/g," − ")
-   .replace(/([A-Za-zÀ-ÿ])-([A-Za-zÀ-ÿ])/g,"$1 $2").replace(/([A-Za-zÀ-ÿ])-([A-Za-zÀ-ÿ])/g,"$1 $2")
-   .replace(/'/g,"' ");
-  for(let raw of s.split(/\s+/)){
-   let w=raw.replace(/[«»"•…;:!?,.()\[\]]/g,"");
-   if(!w)continue;
-   let disp=w;
-   let n;
-   if(/^[A-Z]{3}$/.test(w))n="§ang";
-   else if(/^[A-Z]{2}$/.test(w))n="§dr";
-   else{
-    n=stripAcc(w.toLowerCase()).replace(/'$/,"");
-    if(n==="")continue;
-    if(/^(degres?|deg)$/.test(n))n="°";
-    else if(n==="x"||n==="*")n="×";
-    else if(n==="/")n="÷";
-    else if(n==="-")n="−";
-    else if(n==="deux")n="2";
-    else if(n==="trois")n="3";
-   }
-   out.push({n,d:disp,o:opt});
+  for(const raw of prep(seg,user).split(/\s+/)){
+   if(!raw)continue;
+   const core=raw.replace(PUN,"");
+   if(!core){out.push({d:raw,p:1,o:opt});continue}
+   let n=core.toLowerCase();
+   if(n==="/")n="÷";else if(n==="*"||n==="x")n="×";else if(n==="-")n="−";
+   else if(n==="deux")n="2";else if(n==="trois")n="3";
+   const sym=SYMS.has(n);
+   const name=/^[A-Z]{2,3}$/.test(core)||/^[A-Z]−?\d/.test(core)||/^[A-Z]$/.test(core);
+   out.push({d:raw,c:core,n,l:stripAcc(n),o:opt,sym,name});
   }
  }
  return out;
 }
-function lev(a,b){if(Math.abs(a.length-b.length)>1)return 9;const m=a.length,n=b.length;let p=Array(n+1).fill(0).map((_,j)=>j);
+function lev(a,b){if(Math.abs(a.length-b.length)>1)return 9;const m=a.length,n=b.length;let p=Array.from({length:n+1},(_,j)=>j);
  for(let i=1;i<=m;i++){const c=[i];for(let j=1;j<=n;j++)c[j]=Math.min(p[j]+1,c[j-1]+1,p[j-1]+(a[i-1]===b[j-1]?0:1));p=c}return p[n];}
-function tokEq(r,u){if(r.n===u.n)return 1;if(r.n[0]==="§"||u.n[0]==="§")return 0;if(r.n.length>=5&&u.n.length>=4&&lev(r.n,u.n)<=1)return .85;return 0;}
-function diff(ref,usr){
- const m=ref.length,n=usr.length,S=[];for(let i=0;i<=m;i++)S.push(new Float32Array(n+1));
- for(let i=m-1;i>=0;i--)for(let j=n-1;j>=0;j--){const e=tokEq(ref[i],usr[j]);S[i][j]=Math.max(S[i+1][j],S[i][j+1],e?S[i+1][j+1]+e:0);}
- const ops=[];let i=0,j=0;
- while(i<m&&j<n){const e=tokEq(ref[i],usr[j]);
-  if(e&&Math.abs(S[i][j]-(S[i+1][j+1]+e))<1e-4){ops.push({k:e===1?"ok":"ne",r:ref[i],u:usr[j]});i++;j++;}
-  else if(S[i+1][j]>=S[i][j+1]){ops.push({k:"mi",r:ref[i]});i++;}
-  else{ops.push({k:"ex",u:usr[j]});j++;}}
- while(i<m)ops.push({k:"mi",r:ref[i++]});while(j<n)ops.push({k:"ex",u:usr[j++]});
- let match=0,missReq=0,extra=0,req=0,optMatched=0;
- for(const o of ops){if(o.k==="ok"||o.k==="ne"){match+=(o.k==="ok"?1:.85);if(o.r.o)optMatched++;}
-  if(o.k==="mi"&&!o.r.o)missReq++;if(o.k==="ex")extra++;}
- req=ref.filter(t=>!t.o).length+optMatched;
- const score=2*match/(req+n||1);
- return {ops,missReq,extra,score,exact:missReq===0&&extra===0&&n>0};
+/* ================= VÉRIFICATION SOUPLE : le sens d'abord =================
+   Mots-clés (termes de géométrie, nombres, symboles, si / alors / et / donc,
+   négations, noms d'angles) : exigés, une erreur se voit à sa place.
+   Petits mots (articles, prépositions, qui, que, est, sont...) : libres,
+   montrés en gris « petit mot à revoir », sans fissure et sans repasse.
+   Synonymes du cours acceptés fiche par fiche (liste prudente).
+   Le « si » et le « alors » ne s'échangent pas : ce serait la réciproque. */
+var NAME_LOOSE=true; /* atelier : on peut écrire la propriété avec les noms de sa figure */
+const FREE=new Set("le la les l' un une des du de d' a au aux en par pour avec sur sous dans entre vers dont qui que qu' est sont ont ce cet cette ces c' sa ses son leur leurs ils il elles elle on se s' y ayant situes situe situee situees".split(" "));
+/* petits mots propres à une fiche (n'en changent pas le sens) */
+const FREEX={18:["possede"],10:["formes"],11:["formes"],15:["formes"],16:["formes"],17:["tout"],20:["3"],14:["souvent"]};
+function stem1(s){if(/\d/.test(s))return s.replace(/°/g,"");return s.replace(/aux$/,"al").replace(/(ent|s|x)$/,"").replace(/e+$/,"");}
+function stemW(l){return String(l).split("-").map(stem1).join("-");}
+const DANGER=new Set("ne n' pas non jamais aucun aucune si alors parallele paralleles secante secantes perpendiculaire perpendiculaires adjacents supplementaires complementaires opposes correspondants alternes-internes alternes-externes internes externes bissectrice rectangle isocele equilateral reciproque".split(" ").map(stemW));
+function isFree(t,f){if(!t||t.p||t.name||t.sym||t.syn)return false;if(FREEX[f]&&FREEX[f].includes(t.l))return true;if(/\d/.test(t.l))return false;return FREE.has(t.l);}
+function isDanger(t){return !!t&&(t.syn?false:(/\d/.test(t.l)||t.sym||DANGER.has(stemW(t.l))));}
+const ELI=new Set(["d","l","s","qu","n","c"]);
+function siFix(T){T=T.map(t=>(!t.p&&!t.name&&ELI.has(t.l))?Object.assign({},t,{n:t.n+"'",l:t.l+"'"}):t);return T.map((t,i)=>{if(t.l==="s'"){const nx=T[i+1];if(nx&&/^ils?$/.test(nx.l))return Object.assign({},t,{n:"si",l:"si"});}return t;});}
+/* ---- synonymes ---- */
+const SYN_G={EGAL:["ont la même mesure","ont une même mesure","ont même mesure","sont de même mesure","sont de la même mesure","sont égaux","sont égales","ont des mesures égales","ont une mesure égale","a la même mesure","est de même mesure","de même mesure","de la même mesure","égaux","égales","de mesures égales","de mesure égale"]};
+const SYN_VAUT=["vaut","valent","est égale à","est égal à","sont égales à","égale à","égal à","égale","égal","fait","font","mesure","mesurent","est de","sont de","est","égalent","="];
+const SYN_F={
+ 3:{PART:["partage","coupe","divise","sépare"]},
+ 7:{COUPE:["coupe","croise"]},
+ 12:{SOMME:["la somme de leurs mesures","la somme des mesures","leur somme"]},
+ 13:{SOMME:["la somme de leurs mesures","la somme des mesures","leur somme"]},
+ 14:{ECH:["en échangeant","en inversant","en permutant"]},
+ 17:{SOMME3:["la somme des mesures des angles","la somme des angles","la somme des mesures de ses angles","la somme de ses angles","la somme des mesures de ses trois angles","la somme de ses trois angles","la somme des trois angles","la somme des mesures des trois angles"]},
+ 18:{DROIT:["un angle de mesure égale à 90°","un angle droit","un angle de 90°","un angle mesurant 90°","un angle de mesure 90°","un angle qui mesure 90°"],
+     SOMME2:["la somme des mesures des deux autres angles","la somme des deux autres angles"]}
+};
+function compileGroups(G,f){const out=[];for(const id in G){const g={id,pats:[],lead:new Set()};
+ for(const ph of G[id]){const T=siFix(tokenize(ph,true).filter(t=>!t.p));const keys=[];let first=true;
+  for(const t of T){if(isFree(t,f)){if(first)g.lead.add(t.l);}else{first=false;keys.push(stemW(t.l));}}
+  if(keys.length)g.pats.push(keys);}
+ g.pats.sort((a,b)=>b.length-a.length);out.push(g);}return out;}
+const SYNC={};function groupsOf(f){if(!SYNC[f])SYNC[f]={F:compileGroups(SYN_F[f]||{},f),G:compileGroups(SYN_G,f)};return SYNC[f];}
+const VAUTC=SYN_VAUT.map(ph=>tokenize(ph,true).filter(t=>!t.p).map(t=>stemW(t.l))).sort((a,b)=>b.length-a.length);
+function mkSyn(span,id,f){const c=span.map(t=>t.c).join(" ").replace(/' /g,"'");
+ return {d:c,c,n:"§"+id,l:"§"+id,o:span.every(t=>t.o),syn:id,ks:span.filter(t=>!isFree(t,f)).map(t=>stemW(t.l)).join(" "),parts:span};}
+function applyGroups(T,groups,f){
+ for(let i=0;i<T.length;i++){const t=T[i];if(t.syn||isFree(t,f))continue;let best=null;
+  for(const g of groups)for(const p of g.pats){let j=i,k=0,last=-1;
+   while(k<p.length&&j<T.length){const u=T[j];if(u.syn)break;if(isFree(u,f)){if(k===0)break;j++;continue;}
+    if(stemW(u.l)===p[k]){last=j;k++;j++;}else break;}
+   if(k===p.length&&(!best||p.length>best.len))best={g,len:p.length,end:last};}
+  if(best){let a=i;while(a>0&&a>i-3&&!T[a-1].syn&&isFree(T[a-1],f)&&best.g.lead.has(T[a-1].l))a--;
+   const span=T.slice(a,best.end+1);T.splice(a,span.length,mkSyn(span,best.g.id,f));i=a;}}
+ return T;}
+function applyVaut(T,f){
+ for(let i=0;i<T.length;i++){if(T[i].syn)continue;
+  for(const p of VAUTC){const nx=T[i+p.length];if(!nx||nx.syn||!/\d/.test(nx.l))continue;let ok=true;
+   for(let k=0;k<p.length;k++){const u=T[i+k];if(u.syn||stemW(u.l)!==p[k]){ok=false;break;}}
+   if(ok){const span=T.slice(i,i+p.length);T.splice(i,p.length,mkSyn(span,"VAUT",f));break;}}}
+ return T;}
+function mergeSyn(T,f){const g=groupsOf(f);let o=T.slice();o=applyGroups(o,g.F,f);o=applyVaut(o,f);o=applyGroups(o,g.G,f);return o;}
+/* ---- comparaison d'un mot : 2 = juste, 1 = petite faute acceptée, 3 = synonyme, 0 = faux ---- */
+function eqTok(r,u){
+ if(r.syn||u.syn){if(!(r.syn&&u.syn&&r.n===u.n))return 0;return r.ks===u.ks?2:3;}
+ if(NAME_LOOSE&&r.name&&u.name&&r.c.length===u.c.length&&/^[A-Z]+$/.test(r.c)&&/^[A-Z]+$/.test(u.c))return 2;
+ if(r.n===u.n)return 2;
+ if(r.l===u.l)return 1;
+ const rl=r.l.replace(/°/g,""),ul=u.l.replace(/°/g,"");
+ if(rl===ul&&/\d/.test(rl))return 1;
+ if(/\d/.test(rl)||/\d/.test(ul))return 0;
+ if(rl.length>=3&&ul.length>=3&&stemW(rl)===stemW(ul))return 1;
+ if(r.l.length>=5&&u.l.length>=4&&lev(r.l,u.l)<=1)return 1;
+ return 0;
 }
-const REF={};for(const k in FICHES)REF[k]=tokenize(FICHES[k].txt,true);
+function minorWhy(r,u){if(r.l===u.l)return "accent";if(r.l.replace(/°/g,"")===u.l.replace(/°/g,""))return "le °";if(stemW(r.l)===stemW(u.l))return "accord";return "orthographe";}
+function segsOf(T){const si=T.findIndex(t=>t.l==="si");if(si<0)return T.map(()=>0);let al=-1;for(let i=si+1;i<T.length;i++)if(T[i].l==="alors"){al=i;break}
+ return T.map((t,i)=>i<si?0:(al>=0&&i>=al?2:1));}
+const _refCache=new WeakMap();
+function diff(refT,usrT,f){
+ if(f==null)f=refT.__f;
+ let R=_refCache.get(refT);if(!R){R=mergeSyn(siFix(refT.filter(t=>!t.p)),f);_refCache.set(refT,R);}
+ const U=mergeSyn(siFix(usrT.filter(t=>!t.p)),f);
+ const m=R.length,n=U.length;
+ const E=(r,u)=>{if(isFree(r,f)!==isFree(u,f))return 0;return eqTok(r,u);};
+ const W=(e,r)=>!e?0:isFree(r,f)?(e===2?.4:.3):(e===1?.8:1);
+ const S=[];for(let i=0;i<=m;i++)S.push(new Float32Array(n+1));
+ for(let i=m-1;i>=0;i--)for(let j=n-1;j>=0;j--){const e=E(R[i],U[j]);S[i][j]=Math.max(S[i+1][j],S[i][j+1],e?S[i+1][j+1]+W(e,R[i]):0);}
+ let raw=[];let i=0,j=0;
+ while(i<m&&j<n){const e=E(R[i],U[j]);
+  if(e&&Math.abs(S[i][j]-(S[i+1][j+1]+W(e,R[i])))<1e-4){const fr=isFree(R[i],f);raw.push({k:fr||e===2?"ok":e===3?"sy":"mn",r:R[i],u:U[j],i,j});i++;j++;}
+  else if(S[i+1][j]>=S[i][j+1]){raw.push({k:"mi",r:R[i],i});i++;}
+  else{raw.push({k:"ex",u:U[j],j});j++;}}
+ while(i<m){raw.push({k:"mi",r:R[i],i});i++;}while(j<n){raw.push({k:"ex",u:U[j],j});j++;}
+ // ordre un peu différent : un mot-clé (pas un terme de géométrie, pas un nombre) déplacé dans la même partie de la phrase
+ const sR=segsOf(R),sU=segsOf(U);
+ for(const o of raw){if(o.k!=="mi"||o.r.o||isFree(o.r,f)||isDanger(o.r)||o.r.syn&&false)continue;
+  const x=raw.find(q=>q.k==="ex"&&!q.used&&!isFree(q.u,f)&&sR[o.i]===sU[q.j]&&E(o.r,q.u)>0);
+  if(x){x.used=true;o.k="mv";o.u=x.u;}}
+ raw=raw.filter(q=>!q.used);
+ // trous : mot-clé oublié ou remplacé = erreur ; petit mot = gris
+ const ops=[];let run=[];
+ const flush=()=>{if(!run.length)return;
+  const miK=run.filter(o=>o.k==="mi"&&!o.r.o&&!isFree(o.r,f)),miF=run.filter(o=>o.k==="mi"&&!o.r.o&&isFree(o.r,f));
+  const exK=run.filter(o=>o.k==="ex"&&!isFree(o.u,f)),exF=run.filter(o=>o.k==="ex"&&isFree(o.u,f));
+  const pair=new Map();let a=0;for(const o of miK){if(a<exK.length){pair.set(o,exK[a]);exK[a].paired=true;a++;}}
+  let b=0;for(const o of miF){if(b<exF.length){pair.set(o,exF[b]);exF[b].paired=true;b++;}}
+  for(const o of run){
+   if(o.k==="mi"){if(o.r.o){ops.push({k:"op",r:o.r});continue}const p=pair.get(o);
+    if(isFree(o.r,f))ops.push(p?{k:"fw",r:o.r,u:p.u}:{k:"fm",r:o.r});
+    else ops.push(p?{k:"wr",r:o.r,u:p.u}:{k:"mi",r:o.r});}
+   else if(!o.paired)ops.push(!isFree(o.u,f)&&isDanger(o.u)?{k:"ex",u:o.u}:{k:"fx",u:o.u});}
+  run=[];};
+ for(const o of raw){if(o.k==="mi"||o.k==="ex")run.push(o);else{flush();ops.push(o);}}flush();
+ // si / alors échangés ?
+ let swapped=false;const rs=R.findIndex(t=>t.l==="si"),ra=R.findIndex(t=>t.l==="alors");
+ if(rs>=0&&ra>rs){const keyset=(T,sg,s)=>new Set(T.filter((t,k)=>sg[k]===s&&!t.o&&!isFree(t,f)&&t.l!=="si"&&t.l!=="alors").map(t=>t.syn?t.n:stemW(t.l)));
+  const c1=keyset(R,sR,1),c2=keyset(R,sR,2);const both=[...c1].filter(x=>c2.has(x));both.forEach(x=>{c1.delete(x);c2.delete(x);});
+  const u1=keyset(U,sU,1),u2=keyset(U,sU,2);
+  const hit=(A,B)=>[...A].filter(x=>B.has(x)).length;
+  if(c1.size&&c2.size&&hit(c1,u2)>=Math.max(1,Math.ceil(c1.size/2))&&hit(c2,u1)>=Math.max(1,Math.ceil(c2.size/2)))swapped=true;}
+ let err=0,minor=0,match=0;const soft=[];
+ for(const o of ops){if(o.k==="wr"||o.k==="mi"||o.k==="ex")err++;if(o.k==="mn")minor++;
+  if(o.k==="ok"||o.k==="mn"||o.k==="sy"||o.k==="mv"||o.k==="fw")match+=isFree(o.r,f)?.5:1;
+  if(o.k==="fm"||o.k==="fx"||o.k==="fw"||o.k==="sy"||o.k==="mv")soft.push(o);}
+ if(swapped)err=Math.max(err,1);
+ const req=R.filter(t=>!t.o).reduce((s,t)=>s+(isFree(t,f)?.5:1),0)+ops.filter(o=>o.r&&o.r.o&&(o.k==="ok"||o.k==="mn"||o.k==="sy")).length;
+ const ulen=U.reduce((s,t)=>s+(isFree(t,f)?.5:1),0);
+ const score=2*match/((req+ulen)||1);
+ return {ops,err,minor,soft,swapped,score,ok:err===0&&n>0,n};
+}
+function softLabel(o){
+ if(o.k==="fm")return `« ${o.r.c} » oublié`;
+ if(o.k==="fx")return `« ${o.u.c} » en plus`;
+ if(o.k==="fw")return `« ${o.u.c} » au lieu de « ${o.r.c} »`;
+ if(o.k==="sy")return `« ${o.u.c} » pour « ${o.r.c} »`;
+ if(o.k==="mv")return `« ${o.r.c} » déplacé`;return "";}
+function softText(res){const s=(res.soft||[]).map(softLabel).filter(Boolean);if(!s.length)return "";
+ return s.slice(0,6).join(" · ")+(s.length>6?" …":"");}
+const SWAP_MSG="Attention : tu as échangé la partie « si » et la partie « alors ». Ça devient la réciproque, ce n'est plus la même propriété !";
+const REF={};for(const k in FICHES){REF[k]=siFix(tokenize(FICHES[k].txt,false));REF[k].__f=+k;}
+function diffA(ref,usr){const d=diff(ref,usr);d.exact=d.ok;return d;}
 function recognise(text,prefer){
- const u=tokenize(text,false);if(u.length<3)return null;
+ const u=tokenize(text,true);if(u.filter(t=>!t.p).length<3)return null;
  let best=null;
- for(const k in REF){const d=diff(REF[k],u);d.f=+k;
+ for(const k in REF){const d=diffA(REF[k],u);d.f=+k;
   if(!best||d.score>best.score+1e-6||(Math.abs(d.score-best.score)<1e-6&&+k===prefer))best=d;}
  if(best.score<0.34)return null;return best;
 }
 function diffHTML(d){
  return d.ops.map(o=>{
-  if(o.k==="ok")return esc(o.u.d);
-  if(o.k==="ne")return `<span class="ne" title="${esc(o.r.d)}">${esc(o.u.d)}</span>`;
-  if(o.k==="ex")return `<span class="ex">${esc(o.u.d)}</span>`;
-  if(o.r.o)return "";return `<span class="mi">${esc(o.r.d)}</span>`;
+  if(o.k==="ok"||o.k==="mv")return esc(o.u.c);
+  if(o.k==="mn")return `<span class="ne" title="${esc(o.r.c)}">${esc(o.u.c)}</span>`;
+  if(o.k==="sy")return `<span class="sy" title="le cahier dit : ${esc(o.r.c)}">${esc(o.u.c)}</span>`;
+  if(o.k==="wr")return `<span class="ex">${esc(o.u.c)}</span> <span class="mi">${esc(o.r.c)}</span>`;
+  if(o.k==="ex")return `<span class="ex">${esc(o.u.c)}</span>`;
+  if(o.k==="mi")return `<span class="mi">${esc(o.r.c)}</span>`;
+  if(o.k==="fm")return `<span class="soft" title="petit mot à revoir">${esc(o.r.c)}</span>`;
+  if(o.k==="fx")return `<span class="soft" title="petit mot à revoir"><s>${esc(o.u.c)}</s></span>`;
+  if(o.k==="fw")return `<span class="soft" title="le cahier dit : ${esc(o.r.c)}">${esc(o.u.c)}</span>`;
+  return "";
  }).filter(Boolean).join(" ");
 }
+function softHTML(d){return (d.soft||[]).slice(0,8).map(o=>`<span class="soft">${esc(softLabel(o))}</span>`).join(" · ");}
 function esc(s){return String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));}
 function cfgOf(text){const n=stripAcc(text.toLowerCase());
  if(/altern/.test(n)&&/intern/.test(n))return "alt";if(/altern/.test(n)&&/extern/.test(n))return "altext";
@@ -900,17 +1031,17 @@ function forgeGo(){
  if(FG.done)return;const txt=$("fgText").value.trim();if(!txt)return;
  let d;
  if(FG.mode==="level")d=recognise(txt,mach().fiche);
- else{d=diff(REF[FG.fiche],tokenize(txt,false));d.f=FG.fiche;if(d.score<.2)d=null;}
+ else{d=diffA(REF[FG.fiche],tokenize(txt,true));d.f=FG.fiche;if(d.score<.2)d=null;}
  if(!d){SND.bad();$("fgOut").innerHTML=`<p>❌ Je ne reconnais aucune phrase de ton cahier. Écris une phrase complète.</p>`;return}
  const F=FICHES[d.f];
  if(!d.exact){FG.fails.add(d.f);SND.bad();errNudge();
-  $("fgOut").innerHTML=`<p>Le métal se fend : il y a des erreurs. ${FG.mode==="level"?`Tu as écrit la fiche <b>${d.f}</b>, « ${esc(F.title)} ».`:""} Corrige et forge à nouveau.</p>
-   <div class="diff">${diffHTML(d)}</div><div class="legend"><span class="ex">rouge barré</span> : mot faux ou en trop · <span class="mi" style="color:#1b7b22">vert</span> : mot oublié · <span class="ne" style="color:#333;background:#fff0a0">jaune</span> : petite faute acceptée</div>`;
+  $("fgOut").innerHTML=`<p>${d.swapped?`<b>${SWAP_MSG}</b><br>`:""}Le métal se fend : il y a des erreurs. ${FG.mode==="level"?`Tu as écrit la fiche <b>${d.f}</b>, « ${esc(F.title)} ».`:""} Corrige et forge à nouveau.</p>
+   <div class="diff">${diffHTML(d)}</div><div class="legend"><span class="ex">rouge barré</span> : mot faux ou en trop · <span class="mi" style="color:#1b7b22">vert</span> : mot oublié · <span class="ne" style="color:#333;background:#fff0a0">jaune</span> : petite faute acceptée · <span class="soft">gris</span> : petit mot à revoir, ça ne bloque pas</div>`;
   return}
  FG.done=true;const usedH3=FG.mode==="level"?G.forgeH3.has(d.f):FG.h3;const firstOk=!FG.fails.has(d.f)&&!usedH3;closeHint();recordForge(d.f,firstOk);SND.forge();
  const col=F.t==="P"?"#d8584a":"#5fae55";
  $("fgOut").innerHTML=`<div class="forgeanim"><svg viewBox="-70 -70 140 140"><g>${gearSVG(16,62,col,16)}</g></svg></div>
-  <p style="text-align:center"><b>Engrenage forgé !</b> Fiche ${d.f} : « ${esc(F.title)} ». ${d.ops.some(o=>o.k==="ne")?"<br><small>(petite faute d'orthographe acceptée)</small>":""}
+  <p style="text-align:center"><b>Engrenage forgé !</b> Fiche ${d.f} : « ${esc(F.title)} ». ${d.soft&&d.soft.length?`<br><span class="cj">C'est juste ! Petits mots différents :</span> ${softHTML(d)}`:""}${d.ops.some(o=>o.k==="mn")?"<br><small>(petite faute d'orthographe acceptée)</small>":""}
   ${firstOk?"":`<br><small>${FG.fails.has(d.f)?"Tu as dû corriger":"Tu as utilisé le grand indice"} : cette fiche reviendra demain dans ton atelier.</small>`}</p>`;
  setTimeout(()=>{$("mForge").classList.remove("on");
   if(FG.mode==="level")placeGear(d.f);else{const f=d.f;renderAtelier();reciteFlow([f],"atelier",renderAtelier);}},firstOk?1300:2200);
