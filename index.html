@@ -795,14 +795,42 @@ function recordForge(f,firstTryOk){
 function unlocked(id){if(SAVE.all)return true;if(id===1)return true;return !!SAVE.stars[id-1];}
 
 /* ================= SONS (WebAudio) ================= */
-let AC=null;
-function ac(){if(!SAVE.sound)return null;if(!AC){try{AC=new (window.AudioContext||window.webkitAudioContext)()}catch(e){return null}}if(AC.state==="suspended")AC.resume();return AC;}
+/* ===== Déblocage du son sur iPad (partagé entre les jeux) =====
+   1. Le contexte audio est créé et relancé dans un vrai geste (touchend, pointerup, click...).
+   2. On le relance à chaque geste et au retour dans l'appli (iOS le met en « interrupted »).
+   3. Le bouton silencieux de l'iPad coupe WebAudio : session audio « playback » (Safari 16.4+),
+      sinon un petit son muet en boucle dans une balise audio. */
+window.__snd=window.__snd||{state:"none",count:{},log:[],played:0,unlocks:0};
+const IOSAU={get:null,el:null,unlocked:false,
+ session(){try{if(navigator.audioSession&&navigator.audioSession.type!=="playback")navigator.audioSession.type="playback";}catch(e){}},
+ setup(get){this.get=get;this.session();
+  ["touchstart","touchend","pointerdown","pointerup","mousedown","click","keydown"].forEach(ev=>document.addEventListener(ev,()=>this.unlock(),{capture:true,passive:true}));
+  document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="visible")this.resume();});
+  window.addEventListener("pageshow",()=>this.resume());window.addEventListener("focus",()=>this.resume());},
+ watch(c){if(c&&!c.__w){c.__w=1;__snd.state=c.state;c.addEventListener("statechange",()=>{__snd.state=c.state;});}return c;},
+ resume(){const c=this.get&&this.get(false);if(!c||c.state==="running"||c.state==="closed")return;try{const p=c.resume();if(p&&p.then)p.then(()=>{__snd.state=c.state;},()=>{});}catch(e){}},
+ unlock(){const c=this.get&&this.get(true);if(!c)return;this.watch(c);this.session();
+  if(c.state!=="running"||!this.unlocked){this.resume();try{const b=c.createBuffer(1,1,22050),s=c.createBufferSource();s.buffer=b;s.connect(c.destination);s.start(0);this.unlocked=true;__snd.unlocks++;}catch(e){}}
+  if(!navigator.audioSession)this.silentLoop();},
+ silentURL(){const sr=8000,n=4000,b=new ArrayBuffer(44+n*2),v=new DataView(b);let o=0;const s=t=>{for(const ch of t)v.setUint8(o++,ch.charCodeAt(0));},u32=x=>{v.setUint32(o,x,true);o+=4;},u16=x=>{v.setUint16(o,x,true);o+=2;};
+  s("RIFF");u32(36+n*2);s("WAVE");s("fmt ");u32(16);u16(1);u16(1);u32(sr);u32(sr*2);u16(2);u16(16);s("data");u32(n*2);return URL.createObjectURL(new Blob([b],{type:"audio/wav"}));},
+ silentLoop(){try{if(!this.el){const a=document.createElement("audio");a.src=this.silentURL();a.loop=true;a.preload="auto";a.setAttribute("playsinline","");a.setAttribute("webkit-playsinline","");a.setAttribute("x-webkit-airplay","deny");this.el=a;}
+  if(this.el.paused){const p=this.el.play();if(p&&p.catch)p.catch(()=>{});}}catch(e){}},
+ /* compteur de débogage : chaque son demandé est compté dans window.__snd */
+ instrument(SND){Object.keys(SND).forEach(k=>{const f=SND[k];if(typeof f!=="function")return;SND[k]=function(...a){__snd.count[k]=(__snd.count[k]||0)+1;__snd.log.push(k);if(__snd.log.length>300)__snd.log.shift();return f.apply(this,a);};});return SND;}
+};
+let AC=null,ACOUT=null;
+function acGet(create){if(!AC&&create){const C=window.AudioContext||window.webkitAudioContext;if(!C)return null;try{AC=new C({latencyHint:"interactive"})}catch(e){try{AC=new C()}catch(e2){return null}}
+ ACOUT=AC.createDynamicsCompressor();ACOUT.threshold.value=-12;ACOUT.ratio.value=5;const g=AC.createGain();g.gain.value=1.3;ACOUT.connect(g);g.connect(AC.destination);}return AC;}
+IOSAU.setup(acGet);
+/* un son ne part que si le contexte tourne (sinon on le relance au prochain geste) */
+function ac(){if(!SAVE.sound)return null;const a=acGet(false);if(!a)return null;if(a.state!=="running"){IOSAU.resume();return null;}__snd.played++;return a;}
 function tone(f,dur,type,vol,delay,slide){const a=ac();if(!a)return;const t=a.currentTime+(delay||0);const o=a.createOscillator(),g=a.createGain();
  o.type=type||"sine";o.frequency.setValueAtTime(f,t);if(slide)o.frequency.exponentialRampToValueAtTime(slide,t+dur);
- g.gain.setValueAtTime(vol||.2,t);g.gain.exponentialRampToValueAtTime(.001,t+dur);o.connect(g).connect(a.destination);o.start(t);o.stop(t+dur+.05);}
+ g.gain.setValueAtTime(vol||.2,t);g.gain.exponentialRampToValueAtTime(.001,t+dur);o.connect(g).connect(ACOUT);o.start(t);o.stop(t+dur+.05);}
 function noise(dur,vol,freq,delay){const a=ac();if(!a)return;const t=a.currentTime+(delay||0);const b=a.createBuffer(1,a.sampleRate*dur,a.sampleRate),d=b.getChannelData(0);
  for(let i=0;i<d.length;i++)d[i]=(Math.random()*2-1)*(1-i/d.length);const s=a.createBufferSource();s.buffer=b;const fl=a.createBiquadFilter();fl.type="bandpass";fl.frequency.value=freq||1200;fl.Q.value=1.2;
- const g=a.createGain();g.gain.value=vol||.3;s.connect(fl).connect(g).connect(a.destination);s.start(t);}
+ const g=a.createGain();g.gain.value=vol||.3;s.connect(fl).connect(g).connect(ACOUT);s.start(t);}
 const SND={
  drop(){tone(520,.08,"square",.08);tone(780,.1,"square",.06,.05)},
  clank(){noise(.18,.35,900);tone(140,.25,"triangle",.25)},
@@ -813,8 +841,18 @@ const SND={
  forge(){noise(.25,.4,3000);tone(880,.4,"sine",.12,.1);tone(1320,.5,"sine",.1,.25)},
  bad(){tone(220,.18,"square",.1);tone(160,.3,"square",.1,.15)},
  stamp(){noise(.12,.5,400);tone(90,.2,"sine",.3)},
- hint(){tone(1175,.12,"sine",.09);tone(1568,.22,"sine",.07,.09)}
+ hint(){tone(1175,.12,"sine",.09);tone(1568,.22,"sine",.07,.09)},
+ click(){tone(900,.035,"square",.05)},
+ nudge(){tone(520,.08,"sine",.1);tone(440,.1,"sine",.08,.08)},
+ start(){noise(.3,.3,250);tone(196,.25,"triangle",.15);tone(294,.3,"triangle",.13,.15);tone(392,.35,"triangle",.12,.3)},
+ level(){[523,659,784,1046,784,1046,1318].forEach((f,i)=>{tone(f,.22,"square",.06,i*.11);tone(f/2,.22,"triangle",.1,i*.11)});[1046,1318,1568].forEach(f=>tone(f,.8,"triangle",.07,.8));noise(.4,.2,5000,.8)},
+ locked(){tone(150,.12,"square",.1);noise(.1,.4,300,.0);tone(120,.15,"square",.08,.1)},
+ move(){noise(.25,.2,700);tone(300,.25,"triangle",.06,0,500)},
+ later(){tone(660,.1,"sine",.08);tone(523,.15,"sine",.07,.1)}
 };
+IOSAU.instrument(SND);
+/* petit clic sur tous les boutons */
+document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("button");if(b&&!b.disabled)SND.click();},true);
 
 /* ================= OUTILS UI ================= */
 const $=id=>document.getElementById(id);
@@ -845,7 +883,7 @@ function factChip(id){
 function findPair(a,b){return L.pairs.find(p=>(p[0]===a&&p[1]===b)||(p[0]===b&&p[1]===a));}
 function mach(){return L.machines[G.mi];}
 
-function startLevel(id){
+function startLevel(id){SND.start();
  L=LEVELS.find(l=>l.id===id);FIG=L.fig();
  G={mi:0,known:new Set(),hopper:[],gear:null,errors:0,products:[],busy:false,solvedCopy:[],firstFail:new Set(),pairsDone:{},hl:{},hc:{},h3:0,forgeH3:new Set(),lastErr:0};
  if(typeof closeHint==="function"){closeHint();stopNudge();}
@@ -931,7 +969,7 @@ let DR=null;
 function srcFromEl(el){return el&&el.closest?el.closest("[data-src]"):null;}
 document.addEventListener("pointerdown",e=>{
  if(!$("level").classList.contains("on")||G.busy)return;
- if(G.mapOpen){const s0=srcFromEl(e.target);if(s0&&s0.closest("#level")&&!s0.closest("#mapPanel")){e.preventDefault();say("D'abord : <b>quelle forme vois-tu ?</b> Glisse ta machine dans le bon atelier de la carte.");}return}
+ if(G.mapOpen){const s0=srcFromEl(e.target);if(s0&&s0.closest("#level")&&!s0.closest("#mapPanel")){e.preventDefault();SND.nudge();say("D'abord : <b>quelle forme vois-tu ?</b> Glisse ta machine dans le bon atelier de la carte.");}return}
  if(e.target.closest&&e.target.closest("[data-x]")){const f=e.target.closest("[data-x]").dataset.x;G.hopper=G.hopper.filter(x=>x!==f);renderHopper();SND.drop();e.preventDefault();return}
  const s=srcFromEl(e.target);if(!s||!s.closest("#level"))return;
  e.preventDefault();
@@ -953,7 +991,7 @@ function endDrag(e){
  if(!DR||e.pointerId!==DR.id)return;const d=DR;DR=null;
  $("hopper").classList.remove("over");document.querySelectorAll(".wedge.hot").forEach(w=>w.classList.remove("hot"));
  if(!d.ghost){ // simple toucher
-  if(d.arc||d.src.classList.contains("frag")||d.src.classList.contains("hitln")||d.src.classList.contains("poly"))say("Il faut <b>glisser</b> avec le doigt, pas seulement toucher. Fais-le glisser jusqu'à l'ENTRÉE.");
+  if(d.arc||d.src.classList.contains("frag")||d.src.classList.contains("hitln")||d.src.classList.contains("poly")){SND.nudge();say("Il faut <b>glisser</b> avec le doigt, pas seulement toucher. Fais-le glisser jusqu'à l'ENTRÉE.");}
   return}
  d.ghost.remove();
  const t=document.elementFromPoint(e.clientX,e.clientY);
@@ -968,9 +1006,9 @@ document.addEventListener("pointercancel",e=>{if(DR&&DR.ghost)DR.ghost.remove();
 
 function soughtLater(f){return L.machines.some((m,i)=>i>G.mi&&m.sought===f);}
 function dropHopper(f){
- if(G.mapOpen){say("D'abord : <b>quelle forme vois-tu ?</b> Place ta machine sur la carte.");return}
+ if(G.mapOpen){SND.nudge();say("D'abord : <b>quelle forme vois-tu ?</b> Place ta machine sur la carte.");return}
  const m=mach();
- if(G.hopper.includes(f)){say("Cet indice est déjà dans l'entrée.");return}
+ if(G.hopper.includes(f)){SND.nudge();say("Cet indice est déjà dans l'entrée.");return}
  if(f===m.sought){grip("<b>La machine grippe !</b> Tu utilises ce que tu cherches. Ce qu'on cherche n'est <b>jamais</b> dans « Je sais que ».");return}
  if(!G.known.has(f)){
   if(soughtLater(f))grip("<b>La machine grippe !</b> Tu ne connais pas encore ça. C'est la question d'une autre machine, plus tard.");
@@ -989,11 +1027,11 @@ function grip(msg){G.errors++;updStars();SND.grip();const h=$("hopper");h.classL
 /* ================= ÉTIQUETEUSE ================= */
 let LB=null;
 function pairAttempt(a,b){
- if(G.mapOpen){say("D'abord : <b>quelle forme vois-tu ?</b> Place ta machine sur la carte.");return}
+ if(G.mapOpen){SND.nudge();say("D'abord : <b>quelle forme vois-tu ?</b> Place ta machine sur la carte.");return}
  const p=findPair(a,b);
  if(!p){SND.bad();say(`Les angles ${a} et ${b} ne forment pas une configuration de ton cours. Essaie une autre paire.`,"bad");return}
  const key="pair:"+pairKey(a,b);
- if(G.hopper.includes(key)){say("Cette étiquette est déjà dans l'entrée.");return}
+ if(G.hopper.includes(key)){SND.nudge();say("Cette étiquette est déjà dans l'entrée.");return}
  if(G.pairsDone[key]){G.hopper.push(key);renderHopper();SND.drop();say("Étiquette remise dans l'entrée.");return}
  LB={a:p[0],b:p[1],c:p[2],key};closeHint();
  $("lbIntro").innerHTML=`Les angles <b>${p[0]}</b> et <b>${p[1]}</b> sont… <br><small>Écris le nom de leur configuration.</small>`;
@@ -1147,7 +1185,7 @@ function finishLevel(){
  const fiches=[...new Set(G.solvedCopy.map(x=>x.m.fiche))];
  reciteFlow(fiches,"usine",res=>endScreen(st,nh,res));
 }
-function endScreen(st,nh,res){
+function endScreen(st,nh,res){SND.level();
  const next=LEVELS.find(l=>l.id===L.id+1);
  const rl=(res||[]).map(x=>`Fiche ${x.f} ${x.r?rbadge(x.r):'<span class="rb k-none">Plus tard</span>'}`).join(" · ");
  info(`<h2>🏭 Usine ${L.id} terminée !</h2>${rl?`<p class="endrec">👨 Note de papa : ${rl}</p>`:""}<div class="stars big" style="text-align:center;font-size:40px">${starsHTML(st)}</div>
@@ -1168,7 +1206,7 @@ function goHome(){
  for(const l of LEVELS){const ok=unlocked(l.id),s=SAVE.stars[l.id]||0;const b=document.createElement("button");
   b.className="panel lvl"+(ok?"":" locked");
   b.innerHTML=`<span class="badge">${l.machines.length>1?l.machines.length+" machines":"1 machine"}</span><b>Usine ${l.id}</b><span>${esc(l.name)}</span><span class="src">${esc(l.src)}</span><span class="stars">${ok?starsHTML(s):"🔒"}</span>`;
-  b.onclick=()=>{if(ok)startLevel(l.id);else info("<h2>🔒 Usine fermée</h2><p>Termine l'usine précédente pour ouvrir celle-ci.</p>",[["OK"]])};box.appendChild(b);}
+  b.onclick=()=>{if(ok)startLevel(l.id);else{SND.locked();info("<h2>🔒 Usine fermée</h2><p>Termine l'usine précédente pour ouvrir celle-ci.</p>",[["OK"]])}};box.appendChild(b);}
  const n=dueList().length,nr=Object.keys(SAVE.reciteTodo).length;$("dueCount").textContent=[n?`${n} à refabriquer`:"",nr?`${nr} à réciter`:""].filter(Boolean).join(", ").replace(/^(.+)$/,"($1)");
  show("home");
 }
@@ -1496,7 +1534,7 @@ async function rcRate(r){
  $("rcInstr").innerHTML=r==="coeur"?"Bravo ! Elle reviendra dans quelques jours pour être sûr.":r==="diff"?"Presque. Elle reviendra dans 3 jours.":"Pas grave. Relis-la encore. Elle revient demain.";
  await wait(1100);RC.busy=false;rcNext();
 }
-function rcLater(){if(!RC||RC.busy)return;SAVE.reciteTodo[RC.f]=today();save();RC.res.push({f:RC.f,r:null});rcNext();}
+function rcLater(){if(!RC||RC.busy)return;SND.later();SAVE.reciteTodo[RC.f]=today();save();RC.res.push({f:RC.f,r:null});rcNext();}
 function rcNext(){RC.i++;if(RC.i<RC.list.length){rcCard();return}
  $("mRecite").classList.remove("on");const d=RC.done,res=RC.res;RC=null;d&&d(res);}
 const rbadge=r=>`<span class="rb k-${r||"none"}">${r?RNAME[r]:"Pas encore récitée"}</span>`;
@@ -1600,7 +1638,7 @@ function bindMap(){
   const b=bldAt(e.clientX,e.clientY);
   if(b&&moved)mapChoose(b.dataset.at);else{tokenHome(true);if(!moved)mapSay("Pose ton doigt sur la machine et <b>glisse-la</b> jusqu'à un atelier. Tu peux aussi toucher l'atelier.");}};
  t.addEventListener("pointerup",end);t.addEventListener("pointercancel",e=>{if(MD){MD=null;t.classList.remove("drag");tokenHome(true);}});
- document.querySelectorAll("#mapFloor .bld").forEach(b=>b.addEventListener("click",()=>{if(!G.mapOpen||G.mapBusy||b.classList.contains("dim"))return;ac();G.mapBusy=true;tokenTo(b,()=>{G.mapBusy=false;mapChoose(b.dataset.at);});}));
+ document.querySelectorAll("#mapFloor .bld").forEach(b=>b.addEventListener("click",()=>{if(!G.mapOpen||G.mapBusy||b.classList.contains("dim"))return;IOSAU.unlock();SND.move();G.mapBusy=true;tokenTo(b,()=>{G.mapBusy=false;mapChoose(b.dataset.at);});}));
 }
 function bldAt(x,y){const t=$("mapToken");const pe=t.style.pointerEvents;t.style.pointerEvents="none";const e=document.elementFromPoint(x,y);t.style.pointerEvents=pe;return e&&e.closest?e.closest("#mapFloor .bld"):null;}
 function mapSay(h,cls){const m=$("mapMsg");if(m){m.innerHTML=h;m.className="mpmsg "+(cls||"");}}
