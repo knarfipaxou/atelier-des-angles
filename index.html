@@ -355,6 +355,127 @@ svg .flash{animation:flash .6s 2}
 .schbox.schbp .schsvg{height:clamp(110px,25vh,210px)}
 @media (max-height:700px){.schbox.schbp .schsvg{height:clamp(70px,16vh,120px)}}
 /*SCH-CSS-END*/
+
+/* ===== MÉMO ===== */
+#mMemo{position:fixed;inset:0;z-index:20000;background:rgba(10,5,2,.84);display:none;flex-direction:column}
+#mMemo.on{display:flex}
+#mMemo .memo-bar{flex:none;display:flex;align-items:center;gap:8px;padding:8px 10px;background:linear-gradient(#3b2614,#2a1a0c);border-bottom:3px solid #8a5d1c;min-height:56px}
+#mMemo .memo-bar .t{flex:1;color:#ffd77a;font:bold 18px Georgia,serif;min-width:0}
+#mMemo .memo-zoom{display:flex;gap:6px;flex:none}
+#mMemo .memo-scroll{flex:1;overflow:auto;-webkit-overflow-scrolling:touch;touch-action:pan-x pan-y pinch-zoom;padding:8px 8px 16px}
+#memoScale{transform-origin:top center;width:210mm;margin:0 auto;background:#f4ebd4}
+#mMemo .mm-rule .rec .rt,#mMemo .mm-rule .rec .rx{position:relative;z-index:1}
+#mMemo .mm-rule .rec .mm-fig{overflow:hidden}
+.mtitle-row{position:relative;display:flex;align-items:center;justify-content:center;min-height:28px}
+.mtitle-row .mtitle{flex:1;text-align:center;padding:0 96px}
+#btnMemoMachine{position:absolute;right:4px;top:50%;transform:translateY(-50%);font-size:14px;height:34px;min-width:0;padding:0 10px;z-index:2}
+.hbtn.memobtn{font-size:15px;padding:0 8px;min-width:44px}
+#fgBag{width:100%;margin:8px 0 2px;min-height:52px;font-size:17px;background:linear-gradient(180deg,#ffe7a8,#d9982c);color:#2b1906;border:2px solid #8a5d1c}
+#fgBag:active{transform:translateY(2px)}
+#mBag{z-index:800}
+.bagbox{width:min(920px,100%);max-height:100%;display:flex;flex-direction:column}
+.bagbox h2{margin:0 0 4px}
+.baglead{margin:0 0 8px;font-size:16px;line-height:1.35}
+.bag-slot{min-height:64px;border:3px dashed #c99a45;border-radius:12px;background:repeating-linear-gradient(45deg,#3a2512 0 10px,#33200f 10px 20px);display:flex;align-items:center;justify-content:center;color:#f6e7c8;font-weight:bold;margin:0 0 10px;padding:8px}
+.bag-slot.over{border-color:#ffd34d;background:#4d3417}
+.bag-slot .chip{cursor:default}
+.bagfams{flex:1;overflow:auto;-webkit-overflow-scrolling:touch;display:flex;flex-direction:column;gap:10px;padding:2px 2px 8px;min-height:0}
+.bagfam{background:#fffaf0;border:3px solid var(--c);border-radius:12px;overflow:visible;color:#2b1906;flex:none}
+.bagfam h3{margin:0;padding:6px 10px;background:var(--c);color:#fff;font:bold 16px Georgia,serif}
+.baggrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:8px;padding:8px}
+.bagcard{display:flex;align-items:flex-start;gap:8px;text-align:left;min-height:52px;padding:7px 8px;border-radius:10px;border:2px solid;font:bold 13.5px/1.25 "Trebuchet MS",sans-serif;color:#2b1906;cursor:grab;touch-action:none;user-select:none;white-space:normal}
+.bagcard.d{background:#eaf3fc;border-color:#1f5fb8}
+.bagcard.p{background:#fff3e4;border-color:#d4650a}
+.bagcard.on{outline:3px solid #ffd34d;box-shadow:0 0 0 3px rgba(255,211,77,.45)}
+.bagcard .bno{flex:none;width:28px;height:28px;border-radius:50%;color:#fff;display:flex;align-items:center;justify-content:center;font:800 13px Georgia,serif}
+.bagcard.d .bno{background:#1f5fb8}
+.bagcard.p .bno{background:#d4650a}
+#bagMsg{min-height:24px;margin:8px 0 0;font-size:16px;line-height:1.35}
+#bagMsg.bad{color:#ffc2b5}
+#bagMsg.good{color:#d4ffc9}
+#bagConfirm{min-height:48px}
+@media (orientation:portrait){
+  .mtitle-row .mtitle{padding:0 88px;font-size:15px}
+  #btnMemoMachine{font-size:13px;height:30px;padding:0 8px}
+  #fgBag{font-size:16px;min-height:48px}
+  .baggrid{grid-template-columns:repeat(auto-fill,minmax(140px,1fr))}
+}
+/*MEMO-CSS-END*/
+
+/* ===== MÉMO PAGE ===== */
+
+
+
+
+*{box-sizing:border-box}
+
+#mMemo .mm{font-family:Nunito,"Trebuchet MS",Arial,sans-serif;color:#2a1908;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.mm{width:210mm;height:297mm;padding:5mm 5.2mm 4.6mm;display:flex;flex-direction:column;gap:2mm;
+  background:#f4ebd4 repeating-linear-gradient(45deg,transparent 0 18px,rgba(138,93,28,.03) 18px 20px)}
+.mm-head{background:linear-gradient(180deg,#4a3019,#2a1a0c);border:2.5px solid #b07d2c;border-radius:10px;color:#f6e7c8;padding:2.4mm 4mm 2.6mm;text-align:center;flex:none}
+.mm-brand{font:700 8.5pt Outfit,Georgia,serif;letter-spacing:.12em;color:#e2b35a;text-transform:uppercase}
+.mm-head h1{margin:.4mm 0 1.4mm;font:800 18.5pt/1.05 Outfit,Georgia,serif;color:#ffd77a}
+.mm-q{display:inline-block;background:#fff8e4;color:#2a1908;font:800 11.5pt/1.15 Nunito,sans-serif;padding:1.1mm 4mm;border-radius:999px;border:2px solid #e2b35a}
+.mm-leg{display:flex;justify-content:center;gap:7mm;margin-top:2mm;font:700 9pt/1.2 Nunito,sans-serif;color:#f6e7c8}
+.mm-pill{display:inline-flex;align-items:center;gap:1.6mm}
+.mm-sw{display:inline-flex;align-items:center;justify-content:center;min-width:7.2mm;height:5.6mm;border-radius:5px;color:#fff;font:800 8pt Outfit,sans-serif;padding:0 1.4mm}
+.mm-sw.d{background:#1f5fb8}.mm-sw.p{background:#d4650a}
+.mm-top{display:grid;grid-template-columns:1.18fr .9fr .92fr;gap:2mm;flex:1.14 1 0;min-height:0}
+.mm-fam{background:#fffaf0;border:2.3px solid var(--c);border-radius:9px;display:flex;flex-direction:column;min-height:0;overflow:hidden;box-shadow:0 1.5px 0 rgba(0,0,0,.07)}
+.mm-fh{background:var(--c);color:#fff;display:flex;align-items:center;gap:2.2mm;padding:1.2mm 2.4mm;flex:none}
+.mm-fh .ico{flex:none;width:15.5mm;height:11.5mm;background:#fff;border-radius:5px;padding:.4mm}
+.mm-fh .ico svg{width:100%;height:100%;display:block}
+.mm-fh .ttl{font:800 12pt/1.05 Outfit,Georgia,serif}
+.mm-fh .see{font:650 8pt/1.2 Nunito,sans-serif;opacity:.96;margin-top:.25mm}
+.mm-cards{flex:1;display:grid;gap:1.3mm;padding:1.5mm;min-height:0}
+.mm-card{display:grid;grid-template-columns:1fr auto;grid-template-rows:auto auto;gap:.15mm 1.5mm;align-items:center;border-radius:6px;padding:1.1mm 1.4mm;min-height:0}
+.mm-card.d{background:#eaf3fc;border:1.3px solid #8eb4e0}
+.mm-card.p{background:#fff3e4;border:1.3px solid #e8b07a}
+.mm-meta{grid-column:1;grid-row:1;display:flex;align-items:flex-start;gap:1.3mm;min-width:0}
+.mm-no{flex:none;width:5.8mm;height:5.8mm;border-radius:50%;color:#fff;font:800 8pt Outfit,sans-serif;display:flex;align-items:center;justify-content:center;margin-top:.15mm}
+.mm-card.d .mm-no{background:#1f5fb8}
+.mm-card.p .mm-no{background:#d4650a}
+.mm-ti{font:800 8.3pt/1.15 Nunito,sans-serif;min-width:0;flex:1;hyphens:auto;-webkit-hyphens:auto}
+.mm-txt{grid-column:1;grid-row:2;font:700 8pt/1.22 Nunito,sans-serif;min-width:0}
+.mm-txt b{font-weight:800}
+.mm-fig{grid-column:2;grid-row:1 / span 2;width:25mm;height:17.5mm;background:#fff;border:1px solid #e4d5b4;border-radius:5px;overflow:hidden;align-self:center}
+.mm-fig svg{width:100%;height:100%;display:block}
+.f1 .mm-cards{grid-template-columns:1fr;grid-template-rows:repeat(4,1fr)}
+.f1 .mm-fig{width:24mm;height:12.8mm}
+.f2 .mm-cards,.f4 .mm-cards{grid-template-rows:1fr 1fr}
+.f2 .mm-fig{width:24mm;height:22mm}
+.f4 .mm-fig{width:19mm;height:20mm}
+.mm-mid{flex:1.52 1 0;min-height:0}
+.f3 .mm-cards{grid-template-columns:1.05fr 1.15fr;grid-template-rows:1fr;padding-top:1.2mm}
+.f3 .row{display:grid;gap:1.1mm;min-height:0;height:100%;grid-template-columns:1fr;grid-auto-rows:1fr;align-content:stretch}
+.f3 .mm-fig{width:23mm;height:12mm}
+.f3 .mm-card{padding:.8mm 1.2mm;gap:0 1.2mm;align-items:center}
+.f3 .mm-txt{font:700 7.7pt/1.18 Nunito,sans-serif}
+.mm-rule{margin:0 1.5mm;margin-top:1.4mm;display:grid;grid-template-columns:1fr 1fr 1.5fr;gap:1.3mm;flex:none}
+.mm-rule .box{border-radius:7px;padding:1.1mm 1.8mm;font:700 8.1pt/1.2 Nunito,sans-serif}
+.mm-rule .know{background:#e7f6ea;border:2px solid #2e8a4a;color:#145226}
+.mm-rule .want{background:#fff0d6;border:2px solid #c47a10;color:#6a3a00}
+.mm-rule .lab{display:block;font:800 8.3pt Outfit,sans-serif;letter-spacing:.02em;margin-bottom:.2mm;text-transform:uppercase}
+.mm-rule .rec{background:#f3e9fb;border:2px solid #7a3eb0;color:#4a1e75;display:grid;grid-template-columns:auto 1fr auto;gap:0 1.5mm;align-items:center;text-align:left;padding:1mm 1.5mm}
+.mm-rule .rec .mm-no{background:#7a3eb0;margin:0}
+.mm-rule .rec .rt{font:800 8.2pt Nunito,sans-serif}
+.mm-rule .rec .rx{font:700 7.6pt/1.18 Nunito,sans-serif}
+.mm-rule .rec .mm-fig{grid-column:3;grid-row:1;width:26mm;height:15mm;border-color:#d0b4e8}
+.mm-bot{flex:.72 1 0;min-height:0}
+.f5 .mm-cards{grid-template-columns:1fr 1fr 1fr 1fr}
+.f5 .mm-card{grid-template-columns:1fr;grid-template-rows:auto auto auto;gap:.3mm;align-items:start}
+.f5 .mm-fig{grid-column:1;grid-row:1;width:100%;height:14.2mm;align-self:stretch}
+.f5 .mm-meta{grid-column:1;grid-row:2}
+.f5 .mm-txt{grid-column:1;grid-row:3}
+.mm-foot{flex:none;display:grid;grid-template-columns:1.25fr 1fr;gap:2mm}
+.mm-foot .box{background:#fffaf0;border:2.3px solid #b07d2c;border-radius:9px;padding:1.6mm 3mm 1.7mm}
+.mm-foot h2{margin:0 0 1mm;font:800 10pt/1 Outfit,Georgia,serif;color:#5c3c10}
+.mm-steps{display:flex;flex-wrap:wrap;gap:1.2mm 2.2mm;font:750 8.6pt/1.25 Nunito,sans-serif}
+.mm-steps span{background:#fff;border:1.3px solid #e2c58a;border-radius:999px;padding:.5mm 2.2mm}
+.mm-redac{display:grid;grid-template-columns:auto 1fr;gap:.5mm 2mm;font:750 8.3pt/1.25 Nunito,sans-serif;align-items:baseline}
+.mm-redac b.js{color:#1d4fd1}.mm-redac b.or{color:#c0271b}.mm-redac b.dc{color:#167a2a}
+.mm-redac b{font:800 8.6pt Outfit,sans-serif}
+
 </style>
 </head>
 <body>
@@ -369,6 +490,7 @@ svg .flash{animation:flash .6s 2}
  <div class="homebar">
   <button class="brass" id="btnAtelier">⚙️ Mon atelier <span id="dueCount"></span></button>
   <button class="brass" id="btnCarte2">🗺️ Carte</button>
+  <button class="brass" id="btnMemoHome">📋 Mémo</button>
   <button class="brass" id="btnHowto">❓ Comment jouer</button>
   <button class="brass" id="btnSound1">🔊</button>
  </div>
@@ -381,6 +503,7 @@ svg .flash{animation:flash .6s 2}
   <div class="t" id="lvlTitle">Usine</div>
   <div class="stars" id="lvlStars"></div>
   <button class="brass hbtn" id="btnCarte" aria-label="Carte">🗺️</button>
+  <button class="brass hbtn memobtn" id="btnMemoLvl" aria-label="Mémo" title="Mémo">📋</button>
   <button class="brass hbtn" id="btnHelp">?</button>
   <button class="brass hbtn" id="btnSound2">🔊</button>
  </header>
@@ -393,7 +516,7 @@ svg .flash{animation:flash .6s 2}
    <div class="mappanel" id="mapPanel"></div>
    <div class="panel tray" id="tray"><span class="lab">📦 Produits :</span><span id="trayItems" style="opacity:.6">aucun pour l'instant</span></div>
    <div class="panel machine" id="machine">
-    <div class="mtitle" id="mTitle">Machine</div>
+    <div class="mtitle-row"><div class="mtitle" id="mTitle">Machine</div><button class="brass hbtn" id="btnMemoMachine">📋 Mémo</button></div>
     <div id="hopper" data-drop="hopper"><span class="plate">ENTRÉE · JE SAIS QUE</span><div class="empty">Glisse ici les indices de l'énoncé et de la figure</div></div>
     <div class="body">
      <div class="gears"><svg id="gearsSvg" viewBox="0 0 290 160"></svg></div>
@@ -416,6 +539,7 @@ svg .flash{animation:flash .6s 2}
  <header>
   <button class="brass hbtn" id="btnBack2">⬅</button>
   <div class="t">Mon atelier<small>Les engrenages que tu as forgés</small></div>
+  <button class="brass hbtn" id="btnMemoAtelier">📋 Mémo</button>
   <button class="brass hbtn" id="btnCarte3">🗺️ Carte</button>
   <button class="brass hbtn" id="btnParent">👨 Parent</button>
  </header>
@@ -432,6 +556,7 @@ svg .flash{animation:flash .6s 2}
  <div id="fgSch" class="schslot schhide"></div>
  <div class="hintbox" id="fgHint" role="status"></div>
  <textarea id="fgText" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Écris la phrase ici…"></textarea>
+ <button type="button" class="brass" id="fgBag">🎒 Je ne sais pas : ouvrir le sac</button>
  <div id="fgOut"></div>
  <div class="row"><button class="brass hintbtn" id="fgHintBtn">💡 Indice</button><button class="brass" id="fgClose">Fermer</button><button class="brass" id="fgGo">🔥 Forger</button></div>
 </div></div>
@@ -465,6 +590,436 @@ svg .flash{animation:flash .6s 2}
  <div id="infoBody"></div>
  <div class="row" id="infoRow"></div>
 </div></div>
+
+<div class="modal" id="mBag" aria-label="Sac des fiches">
+ <div class="panel mbox bagbox">
+  <h2>🎒 Le sac des fiches</h2>
+  <p class="baglead">Glisse la bonne fiche dans l'emplacement. Ou touche-la, puis confirme.</p>
+  <div class="bag-slot" id="bagSlot" data-drop="bag">Emplacement de la loi</div>
+  <div class="bagfams" id="bagFams"></div>
+  <p id="bagMsg"></p>
+  <div class="row">
+    <button class="brass" id="bagConfirm" disabled>Confirmer cette fiche</button>
+    <button class="brass" id="btnMemoBag">📋 Mémo</button>
+    <button class="brass" id="bagClose">Fermer le sac</button>
+  </div>
+ </div>
+</div>
+
+<div id="mMemo" aria-label="Mémo des angles">
+  <div class="memo-bar">
+    <div class="t">Mémo des angles</div>
+    <div class="memo-zoom">
+      <button type="button" class="brass hbtn" id="memoMinus" aria-label="Réduire">−</button>
+      <button type="button" class="brass hbtn" id="memoFit">Ajuster</button>
+      <button type="button" class="brass hbtn" id="memoPlus" aria-label="Agrandir">+</button>
+    </div>
+    <button type="button" class="brass" id="memoClose">Fermer</button>
+  </div>
+  <div class="memo-scroll" id="memoScroll">
+    <div id="memoScale">
+<div class="mm">
+<div class="mm-head">
+  <div class="mm-brand">L'Atelier des angles · à garder dans le cahier</div>
+  <h1>Mémo des 20 fiches</h1>
+  <div class="mm-q">Qu'est-ce que je vois sur la figure ?</div>
+  <div class="mm-leg">
+    <span class="mm-pill"><span class="mm-sw d">D</span> Bleu : définition, ce que c'est.</span>
+    <span class="mm-pill"><span class="mm-sw p">P</span> Orange : propriété, pour calculer ou prouver.</span>
+  </div>
+</div>
+
+<div class="mm-top">
+<section class="mm-fam f1" style="--c:#c45c2c">
+  <div class="mm-fh">
+    <div class="ico">
+      <svg viewBox="0 0 120 80" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path d="M60 70 L10 70 A50 50 0 0 1 28 26 Z" fill="#f3b15a" stroke="#2b1906" stroke-width="1.2"/>
+        <path d="M60 70 L28 26 A50 50 0 0 1 78 24 Z" fill="#f08a24" stroke="#2b1906" stroke-width="1.2"/>
+        <line x1="4" y1="70" x2="116" y2="70" stroke="#2b1906" stroke-width="2.6" stroke-linecap="round"/>
+        <line x1="60" y1="70" x2="28" y2="10" stroke="#2b1906" stroke-width="2.6" stroke-linecap="round"/>
+        <circle cx="60" cy="70" r="2.6" fill="#2b1906"/>
+      </svg>
+    </div>
+    <div>
+      <div class="ttl">1. La part de gâteau</div>
+      <div class="see">Je vois : des angles collés l'un à l'autre.</div>
+    </div>
+  </div>
+  <div class="mm-cards">
+    <article class="mm-card d">
+      <div class="mm-fig"><svg viewBox="0 0 120 80" xmlns="http://www.w3.org/2000/svg">
+        <path d="M48 68 L12 50 A42 42 0 0 1 48 26 Z" fill="#6aa4e0" fill-opacity=".9"/>
+        <path d="M48 68 L48 26 A48 48 0 0 1 100 44 Z" fill="#f08a24" fill-opacity=".9"/>
+        <line x1="6" y1="52" x2="48" y2="68" stroke="#2b1906" stroke-width="2.4" stroke-linecap="round"/>
+        <line x1="48" y1="8" x2="48" y2="68" stroke="#2b1906" stroke-width="2.4" stroke-linecap="round"/>
+        <line x1="48" y1="68" x2="116" y2="38" stroke="#2b1906" stroke-width="2.4" stroke-linecap="round"/>
+        <circle cx="48" cy="68" r="2.6" fill="#2b1906"/>
+        <text x="86" y="72" text-anchor="middle" font-size="9" font-weight="800" font-family="Nunito,Trebuchet MS,Arial,sans-serif" fill="#2b1906">côté commun</text>
+      </svg></div>
+      <div class="mm-meta"><span class="mm-no">1</span><span class="mm-ti">Angles adjacents</span></div>
+      <div class="mm-txt">Même sommet, un côté commun, de part et d'autre de ce côté.</div>
+    </article>
+    <article class="mm-card p">
+      <div class="mm-fig"><svg viewBox="0 0 120 80" xmlns="http://www.w3.org/2000/svg">
+        <path d="M44 70 L8 54 A40 40 0 0 1 44 28 Z" fill="#6aa4e0" fill-opacity=".85"/>
+        <path d="M44 70 L44 28 A50 50 0 0 1 104 48 Z" fill="#f08a24" fill-opacity=".85"/>
+        <path d="M44 70 L14 42 A52 52 0 0 1 96 36" fill="none" stroke="#1f5fb8" stroke-width="2" stroke-dasharray="3 2"/>
+        <line x1="4" y1="56" x2="44" y2="70" stroke="#2b1906" stroke-width="2.4" stroke-linecap="round"/>
+        <line x1="44" y1="8" x2="44" y2="70" stroke="#2b1906" stroke-width="2.4" stroke-linecap="round"/>
+        <line x1="44" y1="70" x2="116" y2="42" stroke="#2b1906" stroke-width="2.4" stroke-linecap="round"/>
+        <circle cx="44" cy="70" r="2.6" fill="#2b1906"/>
+        <text x="20" y="50" font-size="10" font-weight="800" fill="#1a4a86" font-family="Nunito,Trebuchet MS,Arial,sans-serif">+</text>
+        <text x="68" y="18" font-size="11" font-weight="800" fill="#d4650a" font-family="Nunito,Trebuchet MS,Arial,sans-serif">AÔC</text>
+      </svg></div>
+      <div class="mm-meta"><span class="mm-no">2</span><span class="mm-ti">On additionne</span></div>
+      <div class="mm-txt">Si AÔB et BÔC sont adjacents, alors AÔC = AÔB + BÔC.</div>
+    </article>
+    <article class="mm-card d">
+      <div class="mm-fig"><svg viewBox="0 0 120 80" xmlns="http://www.w3.org/2000/svg">
+        <path d="M24 70 L64 12 A68 68 0 0 1 112 70 Z" fill="#ffe2b0" stroke="#e0b15a" stroke-width="1"/>
+        <line x1="8" y1="70" x2="112" y2="70" stroke="#2b1906" stroke-width="2.4" stroke-linecap="round"/>
+        <line x1="24" y1="70" x2="64" y2="12" stroke="#2b1906" stroke-width="2.4" stroke-linecap="round"/>
+        <line x1="24" y1="70" x2="88" y2="16" stroke="#1f5fb8" stroke-width="2.6" stroke-linecap="round"/>
+        <circle cx="24" cy="70" r="2.6" fill="#2b1906"/>
+        <text x="86" y="14" font-size="10" font-weight="800" fill="#1f5fb8" font-family="Nunito,Trebuchet MS,Arial,sans-serif">[OV)</text>
+      </svg></div>
+      <div class="mm-meta"><span class="mm-no">3</span><span class="mm-ti">Bissectrice</span></div>
+      <div class="mm-txt">Demi-droite qui partage un angle en 2 angles adjacents égaux.</div>
+    </article>
+    <article class="mm-card p">
+      <div class="mm-fig"><svg viewBox="0 0 120 80" xmlns="http://www.w3.org/2000/svg">
+        <path d="M24 70 L64 12 A68 68 0 0 1 88 16 Z" fill="#6aa4e0" fill-opacity=".85"/>
+        <path d="M24 70 L88 16 A68 68 0 0 1 112 70 Z" fill="#f08a24" fill-opacity=".85"/>
+        <line x1="8" y1="70" x2="112" y2="70" stroke="#2b1906" stroke-width="2.4" stroke-linecap="round"/>
+        <line x1="24" y1="70" x2="64" y2="12" stroke="#2b1906" stroke-width="2.4" stroke-linecap="round"/>
+        <line x1="24" y1="70" x2="88" y2="16" stroke="#2b1906" stroke-width="2.4" stroke-linecap="round"/>
+        <path d="M40 58 L44 52 L48 58" fill="none" stroke="#1a4a86" stroke-width="1.6"/>
+        <path d="M52 58 L56 52 L60 58" fill="none" stroke="#9a4a00" stroke-width="1.6"/>
+        <circle cx="24" cy="70" r="2.6" fill="#2b1906"/>
+        <text x="58" y="44" font-size="11" font-weight="800" fill="#2b1906" font-family="Nunito,Trebuchet MS,Arial,sans-serif">= ÷ 2</text>
+      </svg></div>
+      <div class="mm-meta"><span class="mm-no">4</span><span class="mm-ti">Les deux moitiés</span></div>
+      <div class="mm-txt">Si [OV) est la bissectrice de UÔW : UÔV = VÔW = UÔW ÷ 2.</div>
+    </article>
+  </div>
+</section>
+
+<section class="mm-fam f2" style="--c:#2a6d8f">
+  <div class="mm-fh">
+    <div class="ico">
+      <svg viewBox="0 0 120 80" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <line x1="8" y1="70" x2="112" y2="10" stroke="#2b1906" stroke-width="2.6" stroke-linecap="round"/>
+        <line x1="8" y1="10" x2="112" y2="70" stroke="#2b1906" stroke-width="2.6" stroke-linecap="round"/>
+        <path d="M60 40 L86 26 A30 30 0 0 1 86 54 Z" fill="#f08a24"/>
+        <path d="M60 40 L34 54 A30 30 0 0 1 34 26 Z" fill="#f08a24"/>
+        <circle cx="60" cy="40" r="2.6" fill="#2b1906"/>
+      </svg>
+    </div>
+    <div>
+      <div class="ttl">2. Le X</div>
+      <div class="see">Je vois : deux droites qui se croisent.</div>
+    </div>
+  </div>
+  <div class="mm-cards">
+    <article class="mm-card d">
+      <div class="mm-fig"><svg viewBox="0 0 120 80" xmlns="http://www.w3.org/2000/svg">
+        <line x1="6" y1="70" x2="114" y2="10" stroke="#2b1906" stroke-width="2.4" stroke-linecap="round"/>
+        <line x1="6" y1="10" x2="114" y2="70" stroke="#2b1906" stroke-width="2.4" stroke-linecap="round"/>
+        <path d="M60 40 L84 27 A28 28 0 0 1 84 53 Z" fill="#6aa4e0" fill-opacity=".9"/>
+        <circle cx="60" cy="40" r="2.6" fill="#2b1906"/>
+        <text x="60" y="78" text-anchor="middle" font-size="10" font-weight="800" fill="#2b1906" font-family="Nunito,Trebuchet MS,Arial,sans-serif">même sommet</text>
+      </svg></div>
+      <div class="mm-meta"><span class="mm-no">5</span><span class="mm-ti">Opposés par le sommet</span></div>
+      <div class="mm-txt">Même sommet, et les côtés sont des demi-droites dans le prolongement l'une de l'autre.</div>
+    </article>
+    <article class="mm-card p">
+      <div class="mm-fig"><svg viewBox="0 0 120 80" xmlns="http://www.w3.org/2000/svg">
+        <line x1="6" y1="70" x2="114" y2="10" stroke="#2b1906" stroke-width="2.4" stroke-linecap="round"/>
+        <line x1="6" y1="10" x2="114" y2="70" stroke="#2b1906" stroke-width="2.4" stroke-linecap="round"/>
+        <path d="M60 40 L86 26 A30 30 0 0 1 86 54 Z" fill="#f08a24" fill-opacity=".92"/>
+        <path d="M60 40 L34 54 A30 30 0 0 1 34 26 Z" fill="#f08a24" fill-opacity=".92"/>
+        <circle cx="60" cy="40" r="2.6" fill="#2b1906"/>
+        <text x="94" y="28" font-size="11" font-weight="800" fill="#9a4a00" font-family="Nunito,Trebuchet MS,Arial,sans-serif">=</text>
+        <text x="18" y="28" font-size="11" font-weight="800" fill="#9a4a00" font-family="Nunito,Trebuchet MS,Arial,sans-serif">=</text>
+      </svg></div>
+      <div class="mm-meta"><span class="mm-no">6</span><span class="mm-ti">Même mesure</span></div>
+      <div class="mm-txt">Deux angles opposés par le sommet ont la même mesure.</div>
+    </article>
+  </div>
+</section>
+
+<section class="mm-fam f4" style="--c:#b07a12">
+  <div class="mm-fh">
+    <div class="ico">
+      <svg viewBox="0 0 120 80" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path d="M18 62 L18 18 L62 18" fill="none" stroke="#2b1906" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+        <rect x="18" y="18" width="10" height="10" fill="none" stroke="#2b1906" stroke-width="1.8"/>
+        <text x="36" y="40" font-size="13" font-weight="800" fill="#2b1906" font-family="Nunito,Trebuchet MS,Arial,sans-serif">90°</text>
+        <line x1="78" y1="50" x2="116" y2="50" stroke="#2b1906" stroke-width="3" stroke-linecap="round"/>
+        <text x="82" y="44" font-size="12" font-weight="800" fill="#2b1906" font-family="Nunito,Trebuchet MS,Arial,sans-serif">180°</text>
+      </svg>
+    </div>
+    <div>
+      <div class="ttl">4. Le 90 et le 180</div>
+      <div class="see">Je vois : un coin de page, ou une droite plate.</div>
+    </div>
+  </div>
+  <div class="mm-cards">
+    <article class="mm-card d">
+      <div class="mm-fig"><svg viewBox="0 0 120 80" xmlns="http://www.w3.org/2000/svg">
+        <path d="M16 64 L16 16 L64 16" fill="none" stroke="#2b1906" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+        <rect x="16" y="16" width="11" height="11" fill="none" stroke="#2b1906" stroke-width="1.7"/>
+        <path d="M88 64 L72 28 L104 28 Z" fill="#ffe2b0" stroke="#2b1906" stroke-width="1.8" stroke-linejoin="round"/>
+        <text x="22" y="48" font-size="12" font-weight="800" fill="#1f5fb8" font-family="Nunito,Trebuchet MS,Arial,sans-serif">90°</text>
+        <text x="78" y="58" font-size="9" font-weight="800" fill="#2b1906" font-family="Nunito,Trebuchet MS,Arial,sans-serif">coin</text>
+      </svg></div>
+      <div class="mm-meta"><span class="mm-no">12</span><span class="mm-ti">Complémentaires</span></div>
+      <div class="mm-txt">Deux angles sont complémentaires si la somme de leurs mesures vaut 90°. Comme un coin de page.</div>
+    </article>
+    <article class="mm-card d">
+      <div class="mm-fig"><svg viewBox="0 0 120 80" xmlns="http://www.w3.org/2000/svg">
+        <line x1="6" y1="50" x2="114" y2="50" stroke="#2b1906" stroke-width="2.6" stroke-linecap="round"/>
+        <line x1="60" y1="50" x2="88" y2="14" stroke="#2b1906" stroke-width="2.4" stroke-linecap="round"/>
+        <path d="M60 50 L82 50 A22 22 0 0 0 74 32 Z" fill="#f08a24" fill-opacity=".9"/>
+        <path d="M60 50 L38 50 A22 22 0 0 1 74 32 Z" fill="#6aa4e0" fill-opacity=".55"/>
+        <circle cx="60" cy="50" r="2.5" fill="#2b1906"/>
+        <text x="60" y="72" text-anchor="middle" font-size="12" font-weight="800" fill="#1f5fb8" font-family="Nunito,Trebuchet MS,Arial,sans-serif">180°</text>
+      </svg></div>
+      <div class="mm-meta"><span class="mm-no">13</span><span class="mm-ti">Supplémentaires</span></div>
+      <div class="mm-txt">Deux angles sont supplémentaires si la somme de leurs mesures vaut 180°. Comme une droite plate.</div>
+    </article>
+  </div>
+</section>
+</div>
+
+<section class="mm-fam f3 mm-mid" style="--c:#2e8a4a">
+  <div class="mm-fh">
+    <div class="ico">
+      <svg viewBox="0 0 120 80" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <line x1="8" y1="22" x2="70" y2="22" stroke="#2b1906" stroke-width="2.5" stroke-linecap="round"/>
+        <line x1="8" y1="58" x2="70" y2="58" stroke="#2b1906" stroke-width="2.5" stroke-linecap="round"/>
+        <line x1="18" y1="74" x2="58" y2="8" stroke="#2b1906" stroke-width="2.5" stroke-linecap="round"/>
+        <text x="74" y="28" font-size="22" font-weight="800" fill="#2b1906" font-family="Outfit,Georgia,serif">Z</text>
+        <text x="96" y="62" font-size="22" font-weight="800" fill="#2b1906" font-family="Outfit,Georgia,serif">F</text>
+      </svg>
+    </div>
+    <div style="flex:1">
+      <div class="ttl">3. Le Z et le F</div>
+      <div class="see">Je vois : deux droites et une sécante. Le Z, ce sont les alternes-internes. Le F, ce sont les correspondants.</div>
+    </div>
+  </div>
+  <div class="mm-rule">
+    <div class="box know"><span class="lab">Je sais</span>Je sais que les droites sont parallèles, donc les angles sont égaux (fiches 10 et 11).</div>
+    <div class="box want"><span class="lab">Je veux</span>Je veux prouver qu'elles sont parallèles : réciproque (fiches 15 et 16).</div>
+    <div class="box rec">
+      <span class="mm-no">14</span>
+      <div>
+        <div class="rt">Réciproque</div>
+        <div class="rx">Si A est vrai, alors B est vrai. La réciproque échange : si B est vrai, alors A est vrai. Attention : elle n'est pas forcément vraie !</div>
+      </div>
+      <div class="mm-fig"><svg viewBox="0 0 120 80" xmlns="http://www.w3.org/2000/svg">
+        <rect x="6" y="18" width="44" height="30" rx="5" fill="#eaf3fc" stroke="#1f5fb8" stroke-width="1.8"/>
+        <text x="28" y="31" text-anchor="middle" font-size="11" font-weight="800" fill="#1f5fb8" font-family="Nunito,Trebuchet MS,Arial,sans-serif">Si A</text>
+        <text x="28" y="43" text-anchor="middle" font-size="11" font-weight="800" fill="#1f5fb8" font-family="Nunito,Trebuchet MS,Arial,sans-serif">alors B</text>
+        <path d="M54 33 L70 33" stroke="#2b1906" stroke-width="2"/>
+        <path d="M64 27 L72 33 L64 39" fill="none" stroke="#2b1906" stroke-width="2"/>
+        <rect x="74" y="18" width="40" height="30" rx="5" fill="#fff3e4" stroke="#d4650a" stroke-width="1.8"/>
+        <text x="94" y="31" text-anchor="middle" font-size="11" font-weight="800" fill="#d4650a" font-family="Nunito,Trebuchet MS,Arial,sans-serif">Si B</text>
+        <text x="94" y="43" text-anchor="middle" font-size="11" font-weight="800" fill="#d4650a" font-family="Nunito,Trebuchet MS,Arial,sans-serif">alors A</text>
+        <text x="60" y="68" text-anchor="middle" font-size="11" font-weight="800" fill="#7a3eb0" font-family="Nunito,Trebuchet MS,Arial,sans-serif">pas toujours vrai !</text>
+      </svg></div>
+    </div>
+  </div>
+  <div class="mm-cards">
+  <div class="row defs">
+    <article class="mm-card d">
+      <div class="mm-fig"><svg viewBox="0 0 120 80" xmlns="http://www.w3.org/2000/svg">
+        <line x1="6" y1="22" x2="114" y2="22" stroke="#2b1906" stroke-width="2.3" stroke-linecap="round"/>
+        <line x1="6" y1="62" x2="114" y2="62" stroke="#2b1906" stroke-width="2.3" stroke-linecap="round"/>
+        <line x1="36" y1="76" x2="84" y2="8" stroke="#1f5fb8" stroke-width="2.6" stroke-linecap="round"/>
+        <text x="88" y="16" font-size="11" font-weight="800" fill="#1f5fb8" font-family="Nunito,Trebuchet MS,Arial,sans-serif">(s)</text>
+        <text x="8" y="16" font-size="10" font-weight="800" fill="#2b1906" font-family="Nunito,Trebuchet MS,Arial,sans-serif">(d1)</text>
+        <text x="8" y="76" font-size="10" font-weight="800" fill="#2b1906" font-family="Nunito,Trebuchet MS,Arial,sans-serif">(d2)</text>
+      </svg></div>
+      <div class="mm-meta"><span class="mm-no">7</span><span class="mm-ti">Sécante</span></div>
+      <div class="mm-txt">Une droite qui coupe deux autres droites en deux points distincts.</div>
+    </article>
+    <article class="mm-card d">
+      <div class="mm-fig"><svg viewBox="0 0 120 80" xmlns="http://www.w3.org/2000/svg">
+        <line x1="6" y1="24" x2="114" y2="24" stroke="#2b1906" stroke-width="2.3" stroke-linecap="round"/>
+        <line x1="6" y1="60" x2="114" y2="60" stroke="#2b1906" stroke-width="2.3" stroke-linecap="round"/>
+        <line x1="34" y1="76" x2="86" y2="6" stroke="#2b1906" stroke-width="2.3" stroke-linecap="round"/>
+        <path d="M71.6 24 L71.6 40 L58 34 Z" fill="#6aa4e0" fill-opacity=".95"/>
+        <path d="M48.4 60 L48.4 44 L62 50 Z" fill="#6aa4e0" fill-opacity=".95"/>
+        <polyline points="86,24 48,24 48,60 14,60" fill="none" stroke="#c0271b" stroke-width="2.2"/>
+        <text x="92" y="20" font-size="16" font-weight="800" fill="#c0271b" font-family="Outfit,Georgia,serif">Z</text>
+      </svg></div>
+      <div class="mm-meta"><span class="mm-no">8</span><span class="mm-ti">Alternes-internes</span></div>
+      <div class="mm-txt">Deux sommets. Tous les deux à l'intérieur. De part et d'autre de la sécante.</div>
+    </article>
+    <article class="mm-card d">
+      <div class="mm-fig"><svg viewBox="0 0 120 80" xmlns="http://www.w3.org/2000/svg">
+        <line x1="6" y1="28" x2="114" y2="28" stroke="#2b1906" stroke-width="2.3" stroke-linecap="round"/>
+        <line x1="6" y1="60" x2="114" y2="60" stroke="#2b1906" stroke-width="2.3" stroke-linecap="round"/>
+        <line x1="40" y1="76" x2="80" y2="8" stroke="#2b1906" stroke-width="2.3" stroke-linecap="round"/>
+        <path d="M68.2 28 L86 28 L78 16 Z" fill="#f08a24" fill-opacity=".95"/>
+        <path d="M51.8 60 L70 60 L62 48 Z" fill="#f08a24" fill-opacity=".95"/>
+        <polyline points="92,16 68,28 52,60 70,60" fill="none" stroke="#c0271b" stroke-width="2.2"/>
+        <text x="94" y="28" font-size="16" font-weight="800" fill="#c0271b" font-family="Outfit,Georgia,serif">F</text>
+      </svg></div>
+      <div class="mm-meta"><span class="mm-no">9</span><span class="mm-ti">Correspondants</span></div>
+      <div class="mm-txt">Deux sommets. L'un dedans, l'autre dehors. Du même côté de la sécante.</div>
+    </article>
+  </div>
+  <div class="row props">
+    <article class="mm-card p">
+      <div class="mm-fig"><svg viewBox="0 0 120 80" xmlns="http://www.w3.org/2000/svg">
+        <line x1="6" y1="24" x2="114" y2="24" stroke="#2b1906" stroke-width="2.3" stroke-linecap="round"/>
+        <line x1="6" y1="60" x2="114" y2="60" stroke="#2b1906" stroke-width="2.3" stroke-linecap="round"/>
+        <path d="M18 20 L24 24 L18 28" fill="none" stroke="#2b1906" stroke-width="1.8"/>
+        <path d="M18 56 L24 60 L18 64" fill="none" stroke="#2b1906" stroke-width="1.8"/>
+        <line x1="34" y1="76" x2="86" y2="6" stroke="#2b1906" stroke-width="2.3" stroke-linecap="round"/>
+        <path d="M71.6 24 L71.6 40 L58 34 Z" fill="#f08a24" fill-opacity=".95"/>
+        <path d="M48.4 60 L48.4 44 L62 50 Z" fill="#f08a24" fill-opacity=".95"/>
+        <text x="88" y="44" font-size="12" font-weight="800" fill="#9a4a00" font-family="Nunito,Trebuchet MS,Arial,sans-serif">=</text>
+      </svg></div>
+      <div class="mm-meta"><span class="mm-no">10</span><span class="mm-ti">Parallèles, donc égaux</span></div>
+      <div class="mm-txt">Si deux droites parallèles sont coupées par une sécante, alors les angles alternes-internes ont la même mesure.</div>
+    </article>
+    <article class="mm-card p">
+      <div class="mm-fig"><svg viewBox="0 0 120 80" xmlns="http://www.w3.org/2000/svg">
+        <line x1="6" y1="28" x2="114" y2="28" stroke="#2b1906" stroke-width="2.3" stroke-linecap="round"/>
+        <line x1="6" y1="60" x2="114" y2="60" stroke="#2b1906" stroke-width="2.3" stroke-linecap="round"/>
+        <path d="M18 24 L24 28 L18 32" fill="none" stroke="#2b1906" stroke-width="1.8"/>
+        <path d="M18 56 L24 60 L18 64" fill="none" stroke="#2b1906" stroke-width="1.8"/>
+        <line x1="40" y1="76" x2="80" y2="8" stroke="#2b1906" stroke-width="2.3" stroke-linecap="round"/>
+        <path d="M68.2 28 L86 28 L78 16 Z" fill="#f08a24" fill-opacity=".95"/>
+        <path d="M51.8 60 L70 60 L62 48 Z" fill="#f08a24" fill-opacity=".95"/>
+        <text x="90" y="48" font-size="12" font-weight="800" fill="#9a4a00" font-family="Nunito,Trebuchet MS,Arial,sans-serif">=</text>
+      </svg></div>
+      <div class="mm-meta"><span class="mm-no">11</span><span class="mm-ti">Parallèles, donc égaux</span></div>
+      <div class="mm-txt">Si deux droites parallèles sont coupées par une sécante, alors les angles correspondants ont la même mesure.</div>
+    </article>
+    <article class="mm-card p">
+      <div class="mm-fig"><svg viewBox="0 0 120 80" xmlns="http://www.w3.org/2000/svg">
+        <line x1="6" y1="24" x2="114" y2="24" stroke="#2b1906" stroke-width="2.3" stroke-linecap="round"/>
+        <line x1="6" y1="60" x2="114" y2="60" stroke="#2b1906" stroke-width="2.3" stroke-linecap="round"/>
+        <line x1="34" y1="76" x2="86" y2="6" stroke="#2b1906" stroke-width="2.3" stroke-linecap="round"/>
+        <path d="M71.6 24 L71.6 40 L58 34 Z" fill="#f08a24" fill-opacity=".95"/>
+        <path d="M48.4 60 L48.4 44 L62 50 Z" fill="#f08a24" fill-opacity=".95"/>
+        <text x="88" y="44" font-size="11" font-weight="800" fill="#9a4a00" font-family="Nunito,Trebuchet MS,Arial,sans-serif">=</text>
+        <text x="8" y="16" font-size="12" font-weight="800" fill="#2e8a4a" font-family="Nunito,Trebuchet MS,Arial,sans-serif">// ?</text>
+      </svg></div>
+      <div class="mm-meta"><span class="mm-no">15</span><span class="mm-ti">Égaux, donc parallèles</span></div>
+      <div class="mm-txt">Si les angles alternes-internes ont la même mesure, alors les deux droites sont parallèles.</div>
+    </article>
+    <article class="mm-card p">
+      <div class="mm-fig"><svg viewBox="0 0 120 80" xmlns="http://www.w3.org/2000/svg">
+        <line x1="6" y1="28" x2="114" y2="28" stroke="#2b1906" stroke-width="2.3" stroke-linecap="round"/>
+        <line x1="6" y1="60" x2="114" y2="60" stroke="#2b1906" stroke-width="2.3" stroke-linecap="round"/>
+        <line x1="40" y1="76" x2="80" y2="8" stroke="#2b1906" stroke-width="2.3" stroke-linecap="round"/>
+        <path d="M68.2 28 L86 28 L78 16 Z" fill="#f08a24" fill-opacity=".95"/>
+        <path d="M51.8 60 L70 60 L62 48 Z" fill="#f08a24" fill-opacity=".95"/>
+        <text x="90" y="48" font-size="11" font-weight="800" fill="#9a4a00" font-family="Nunito,Trebuchet MS,Arial,sans-serif">=</text>
+        <text x="8" y="20" font-size="12" font-weight="800" fill="#2e8a4a" font-family="Nunito,Trebuchet MS,Arial,sans-serif">// ?</text>
+      </svg></div>
+      <div class="mm-meta"><span class="mm-no">16</span><span class="mm-ti">Égaux, donc parallèles</span></div>
+      <div class="mm-txt">Si les angles correspondants ont la même mesure, alors les deux droites sont parallèles.</div>
+    </article>
+  </div>
+</div>
+</section>
+
+<section class="mm-fam f5 mm-bot" style="--c:#7a3eb0">
+  <div class="mm-fh">
+    <div class="ico">
+      <svg viewBox="0 0 120 80" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path d="M16 70 L104 70 L52 10 Z" fill="#f3e9fb" stroke="#2b1906" stroke-width="2.6" stroke-linejoin="round"/>
+        <path d="M16 70 L28 70 A12 12 0 0 0 21 60 Z" fill="#f08a24"/>
+        <path d="M104 70 L94 62 A12 12 0 0 0 92 70 Z" fill="#6aa4e0"/>
+        <path d="M52 10 L46 22 A12 12 0 0 0 60 20 Z" fill="#9b59d0"/>
+      </svg>
+    </div>
+    <div>
+      <div class="ttl">5. Le triangle</div>
+      <div class="see">Je vois : une figure à trois côtés et trois angles.</div>
+    </div>
+  </div>
+  <div class="mm-cards">
+    <article class="mm-card p">
+      <div class="mm-fig"><svg viewBox="0 0 120 80" xmlns="http://www.w3.org/2000/svg">
+        <path d="M14 70 L108 70 L50 10 Z" fill="#fff" stroke="#2b1906" stroke-width="2.4" stroke-linejoin="round"/>
+        <path d="M14 70 L26 70 A12 12 0 0 0 20 60 Z" fill="#f08a24"/>
+        <path d="M108 70 L98 62 A12 12 0 0 0 96 70 Z" fill="#6aa4e0"/>
+        <path d="M50 10 L44 22 A12 12 0 0 0 58 20 Z" fill="#9b59d0"/>
+        <text x="62" y="52" text-anchor="middle" font-size="11" font-weight="800" fill="#2b1906" font-family="Nunito,Trebuchet MS,Arial,sans-serif">= 180°</text>
+      </svg></div>
+      <div class="mm-meta"><span class="mm-no">17</span><span class="mm-ti">Somme des angles</span></div>
+      <div class="mm-txt">Dans tout triangle, la somme des mesures des angles vaut 180°.</div>
+    </article>
+    <article class="mm-card p">
+      <div class="mm-fig"><svg viewBox="0 0 120 80" xmlns="http://www.w3.org/2000/svg">
+        <path d="M16 70 L110 70 L16 16 Z" fill="#fff" stroke="#2b1906" stroke-width="2.4" stroke-linejoin="round"/>
+        <rect x="16" y="59" width="11" height="11" fill="none" stroke="#2b1906" stroke-width="1.6"/>
+        <text x="36" y="66" font-size="11" font-weight="800" fill="#d4650a" font-family="Nunito,Trebuchet MS,Arial,sans-serif">90°</text>
+        <text x="62" y="42" font-size="10" font-weight="800" fill="#2b1906" font-family="Nunito,Trebuchet MS,Arial,sans-serif">les 2 autres</text>
+        <text x="62" y="54" font-size="11" font-weight="800" fill="#2b1906" font-family="Nunito,Trebuchet MS,Arial,sans-serif">= 90°</text>
+      </svg></div>
+      <div class="mm-meta"><span class="mm-no">18</span><span class="mm-ti">Triangle rectangle</span></div>
+      <div class="mm-txt">Un angle mesure 90°. Les deux autres font 90° ensemble.</div>
+    </article>
+    <article class="mm-card p">
+      <div class="mm-fig"><svg viewBox="0 0 120 80" xmlns="http://www.w3.org/2000/svg">
+        <path d="M20 70 L100 70 L60 12 Z" fill="#fff" stroke="#2b1906" stroke-width="2.4" stroke-linejoin="round"/>
+        <path d="M40 41 L44 48" stroke="#2b1906" stroke-width="2"/>
+        <path d="M80 41 L76 48" stroke="#2b1906" stroke-width="2"/>
+        <path d="M20 70 L31 70 A11 11 0 0 0 25 61 Z" fill="#f08a24"/>
+        <path d="M100 70 L89 70 A11 11 0 0 1 95 61 Z" fill="#f08a24"/>
+        <text x="60" y="64" text-anchor="middle" font-size="10" font-weight="800" fill="#9a4a00" font-family="Nunito,Trebuchet MS,Arial,sans-serif">base</text>
+      </svg></div>
+      <div class="mm-meta"><span class="mm-no">19</span><span class="mm-ti">Triangle isocèle</span></div>
+      <div class="mm-txt">Un triangle isocèle a ses deux angles à la base de même mesure.</div>
+    </article>
+    <article class="mm-card p">
+      <div class="mm-fig"><svg viewBox="0 0 120 80" xmlns="http://www.w3.org/2000/svg">
+        <path d="M22 70 L98 70 L60 12 Z" fill="#fff" stroke="#2b1906" stroke-width="2.4" stroke-linejoin="round"/>
+        <path d="M22 70 L33 70 A11 11 0 0 0 27 61 Z" fill="#f08a24"/>
+        <path d="M98 70 L87 70 A11 11 0 0 1 93 61 Z" fill="#f08a24"/>
+        <path d="M60 12 L54 23 A11 11 0 0 0 66 23 Z" fill="#f08a24"/>
+        <text x="36" y="58" font-size="10" font-weight="800" fill="#9a4a00" font-family="Nunito,Trebuchet MS,Arial,sans-serif">60°</text>
+        <text x="74" y="58" font-size="10" font-weight="800" fill="#9a4a00" font-family="Nunito,Trebuchet MS,Arial,sans-serif">60°</text>
+        <text x="54" y="36" font-size="10" font-weight="800" fill="#9a4a00" font-family="Nunito,Trebuchet MS,Arial,sans-serif">60°</text>
+      </svg></div>
+      <div class="mm-meta"><span class="mm-no">20</span><span class="mm-ti">Triangle équilatéral</span></div>
+      <div class="mm-txt">Les trois angles ont la même mesure. Chacun mesure 60°.</div>
+    </article>
+  </div>
+</section>
+
+<div class="mm-foot">
+  <div class="box">
+    <h2>Ma routine pour choisir</h2>
+    <div class="mm-steps">
+      <span>1. Je cherche quoi ?</span>
+      <span>2. Je vois quoi ?</span>
+      <span>3. Quelle propriété relie les deux ?</span>
+    </div>
+  </div>
+  <div class="box">
+    <h2>Ma rédaction</h2>
+    <div class="mm-redac">
+      <b class="js">Je sais que...</b><span>ce que dit l'énoncé, jamais ce que je cherche.</span>
+      <b class="or">Or...</b><span>la propriété, comme sur la fiche.</span>
+      <b class="dc">Donc...</b><span>la réponse à la question.</span>
+    </div>
+  </div>
+</div>
+</div>
+    </div>
+  </div>
+</div>
+
 <script>
 "use strict";
 /* ================= FICHES DU CAHIER (textes exacts) =================
@@ -1214,7 +1769,7 @@ function openForge(mode,fiche){
  else{const F=FICHES[fiche];$("fgTitle").textContent=`🔁 Refabrique la fiche ${fiche}`;
   $("fgIntro").innerHTML=`<b>${esc(F.title)}</b> · ${F.t==="P"?"Propriété (cadre rouge)":"Définition (cadre vert)"}<br><small>Écris-la de mémoire, mot à mot.</small>`;}
  if(mode==="level")fgLevelFig();else SCH.mount($("fgSch"),fiche);
- $("fgText").value="";$("fgOut").innerHTML="";$("mForge").classList.add("on");setTimeout(()=>$("fgText").focus(),80);
+ $("fgText").value="";$("fgOut").innerHTML="";if($("fgBag"))$("fgBag").style.display="";if(typeof closeBag==="function")closeBag();$("mForge").classList.add("on");setTimeout(()=>$("fgText").focus(),80);
 }
 function forgeGo(){
  if(FG.done)return;const pr=VOIX.take();const txt=$("fgText").value.trim();if(!txt&&!pr)return;
@@ -1229,7 +1784,7 @@ function forgeGo(){
   $("fgOut").innerHTML=`<p>${d.papa?`<b>${papaMsg(d)}</b><br>`:""}${d.swapped?`<b>${SWAP_MSG}</b><br>`:""}Le métal se fend : il y a des erreurs. ${FG.mode==="level"?`Tu as écrit la fiche <b>${d.f}</b>, « ${esc(F.title)} ».`:""} Corrige et forge à nouveau.</p>
    <div class="diff">${diffHTML(d)}</div><div class="legend"><span class="ex">rouge barré</span> : mot faux ou en trop · <span class="mi" style="color:#1b7b22">vert</span> : mot oublié · <span class="ne" style="color:#333;background:#fff0a0">jaune</span> : petite faute acceptée · <span class="soft">gris</span> : petit mot à revoir, ça ne bloque pas</div>`;
   return}
- FG.done=true;const usedH3=FG.mode==="level"?G.forgeH3.has(d.f):FG.h3;const firstOk=!FG.fails.has(d.f)&&!usedH3;closeHint();recordForge(d.f,firstOk);SND.forge();
+ FG.done=true;if($("fgBag"))$("fgBag").style.display="none";const usedH3=FG.mode==="level"?G.forgeH3.has(d.f):FG.h3;const firstOk=!FG.fails.has(d.f)&&!usedH3;closeHint();recordForge(d.f,firstOk);SND.forge();
  const col=F.t==="P"?"#d8584a":"#5fae55";
  $("fgOut").innerHTML=`<div class="forgeanim"><svg viewBox="-70 -70 140 140"><g>${gearSVG(16,62,col,16)}</g></svg></div>
   <p style="text-align:center"><b>Engrenage forgé !</b> Fiche ${d.f} : « ${esc(F.title)} ». ${d.papa?`<br><span class="presque">${papaMsg(d)}</span>`:""}${d.near&&d.near.length?`<br><span class="presque">Presque parfait ! Il manquait juste ${esc(nearText(d))}. Ça compte quand même.</span><div class="diff">${diffHTML(d)}</div>`:""}${d.soft&&d.soft.length&&!(d.near&&d.near.length)?`<br><span class="cj">C'est juste ! Petits mots différents :</span> ${softHTML(d)}`:""}${d.ops.some(o=>o.k==="mn")?"<br><small>(petite faute d'orthographe acceptée)</small>":""}
@@ -1256,7 +1811,7 @@ function wrongMsg(got,need){
   return `Cette loi parle d'angles <b>${got===10||got===15?"alternes-internes":"correspondants"}</b>. Mais tes angles sont <b>${CFG[pc]}</b> : regarde ton étiquette.`;
  return `Cette loi parle de <b>${TOPIC[got]||FICHES[got].title.toLowerCase()}</b>. Est-ce que tes indices parlent de ça ? Regarde ce qu'il y a dans l'ENTRÉE.`;
 }
-$("fgGo").onclick=forgeGo;$("fgClose").onclick=()=>{$("mForge").classList.remove("on");closeHint();if(FG&&FG.mode!=="level")renderAtelier();};
+$("fgGo").onclick=forgeGo;$("fgClose").onclick=()=>{if(typeof closeBag==="function")closeBag();$("mForge").classList.remove("on");closeHint();if(FG&&FG.mode!=="level")renderAtelier();};
 
 /* ================= LANCEMENT ================= */
 async function launch(){
@@ -1855,7 +2410,135 @@ $("launch").onclick=launch;$("btnBack").onclick=goHome;$("btnBack2").onclick=goH
 $("btnAtelier").onclick=renderAtelier;$("btnParent").onclick=parent;$("btnSound1").onclick=toggleSound;$("btnSound2").onclick=toggleSound;
 document.querySelector("#logoGear").setAttribute("d",gearPath(12,46,36));
 soundBtns();goHome();
-window.__game={LEVELS,FICHES,recognise,tokenize,diff,get G(){return G},get L(){return L},startLevel,dropHopper,pairAttempt,placeGear,SAVE,hintPress,hintCtx,HINTS,HINT_IDLE,closeHint,openForge,reciteFlow,rateFiche,get RC(){return RC},mapChoose,mapAnswer,openCarte,openMap,ATL,FATL,MAPH};
+
+/* ===== MÉMO + SAC ===== */
+const MEMO_FAM=[
+ {name:"La part de gâteau",c:"#c45c2c",fiches:[1,2,3,4]},
+ {name:"Le X",c:"#2a6d8f",fiches:[5,6]},
+ {name:"Le Z et le F",c:"#2e8a4a",fiches:[7,8,9,10,11,14,15,16]},
+ {name:"Le 90 et le 180",c:"#b07a12",fiches:[12,13]},
+ {name:"Le triangle",c:"#7a3eb0",fiches:[17,18,19,20]}
+];
+let MEMO={z:1,fit:1};
+function memoFit(){
+ const sc=$("memoScroll"),page=$("memoScale");if(!sc||!page)return;
+ const w=sc.clientWidth-16;MEMO.fit=Math.max(.45,Math.min(1.15,w/794));MEMO.z=MEMO.fit;memoApply();
+ sc.scrollTop=0;sc.scrollLeft=0;
+}
+function memoApply(){const p=$("memoScale");if(p)p.style.transform="scale("+MEMO.z+")";}
+function openMemo(){$("mMemo").classList.add("on");setTimeout(memoFit,30);}
+function closeMemo(){$("mMemo").classList.remove("on");}
+function memoZoom(d){MEMO.z=Math.max(.45,Math.min(2.2,MEMO.z+d));memoApply();}
+$("btnMemoHome").onclick=openMemo;$("btnMemoLvl").onclick=openMemo;
+$("btnMemoMachine").onclick=openMemo;$("btnMemoAtelier").onclick=openMemo;
+$("memoClose").onclick=closeMemo;$("memoMinus").onclick=()=>memoZoom(-.15);
+$("memoPlus").onclick=()=>memoZoom(.15);$("memoFit").onclick=memoFit;
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&$("mMemo").classList.contains("on")){closeMemo();e.preventDefault();}});
+
+let BAG={sel:null,drag:null};
+function bagTarget(){if(!FG)return null;return FG.mode==="level"?mach().fiche:FG.fiche;}
+function bagWhy(got,need){
+ const Go=FICHES[got],Ne=FICHES[need];
+ if(Go.t==="D"&&Ne.t==="P")return "C'est une définition, il faut une propriété pour calculer ou prouver.";
+ if(Go.t==="P"&&Ne.t==="D")return "C'est une propriété. Ici, on attend la définition : ce que c'est.";
+ if([15,16].includes(got)&&[10,11].includes(need))return "C'est la réciproque : ici on sait déjà que les droites sont parallèles.";
+ if([10,11].includes(got)&&[15,16].includes(need))return "Cette fiche part des droites parallèles. Ici, tu veux prouver qu'elles sont parallèles : il te faut la réciproque.";
+ if(([10,11].includes(got)&&[10,11].includes(need))||([15,16].includes(got)&&[15,16].includes(need)))
+  return "Cette fiche parle des angles "+(got===10||got===15?"alternes-internes":"correspondants")+". Ce n'est pas la bonne paire d'angles.";
+ if((got===2&&need===6)||(got===6&&need===2))
+  return got===2?"Cette fiche additionne des angles adjacents. Ici, ce sont des angles opposés par le sommet.":"Cette fiche concerne les angles opposés par le sommet. Ici, on additionne des angles adjacents.";
+ if((got===12&&need===13)||(got===13&&need===12))
+  return got===12?"Complémentaires, c'est 90°. Ici, il s'agit de 180° : les supplémentaires.":"Supplémentaires, c'est 180°. Ici, il s'agit de 90° : les complémentaires.";
+ if([17,18,19,20].includes(got)&&[17,18,19,20].includes(need))
+  return "Cette fiche parle de « "+FICHES[got].title.toLowerCase()+" ». Ce n'est pas le bon cas de triangle.";
+ if((got===4&&need===2)||(got===2&&need===4))
+  return got===4?"Cette fiche sert quand il y a une bissectrice. Ici, on additionne des angles adjacents.":"Cette fiche additionne des angles adjacents. Ici, il s'agit d'une bissectrice.";
+ return "Cette fiche parle de « "+FICHES[got].title.toLowerCase()+" ». Ça ne correspond pas à cette situation.";
+}
+function bagMsg(html,kind){const el=$("bagMsg");el.className=kind||"";el.innerHTML=html||"";}
+function bagRender(){
+ const box=$("bagFams");box.innerHTML="";
+ for(const fam of MEMO_FAM){
+  const sec=document.createElement("section");sec.className="bagfam";sec.style.setProperty("--c",fam.c);
+  sec.innerHTML=`<h3>${fam.name}</h3><div class="baggrid"></div>`;
+  const g=sec.querySelector(".baggrid");
+  for(const f of fam.fiches){
+   const F=FICHES[f],b=document.createElement("button");
+   b.type="button";b.className="bagcard "+(F.t==="D"?"d":"p");b.dataset.f=f;
+   b.innerHTML=`<span class="bno">${f}</span><span>${esc(F.title)}</span>`;
+   b.addEventListener("pointerdown",bagPointerDown);
+   b.addEventListener("click",e=>{if(BAG._didDrag){BAG._didDrag=false;return;}bagSelect(f);});
+   g.appendChild(b);
+  }
+  box.appendChild(sec);
+ }
+ bagSelect(null);$("bagSlot").classList.remove("over");
+ $("bagSlot").innerHTML="Emplacement de la loi";bagMsg("");
+}
+function bagSelect(f){
+ BAG.sel=f;
+ $("bagFams").querySelectorAll(".bagcard").forEach(c=>c.classList.toggle("on",+c.dataset.f===f));
+ $("bagConfirm").disabled=!f;
+ if(f) bagMsg("Fiche "+f+" : « "+esc(FICHES[f].title)+" ». Confirme, ou glisse-la dans l'emplacement.");
+}
+function openBag(){
+ if(!FG||FG.done)return;
+ bagRender();$("mBag").classList.add("on");
+}
+function closeBag(){$("mBag").classList.remove("on");BAG.sel=null;BAG.drag=null;}
+function bagTry(f){
+ const need=bagTarget();if(!need)return;
+ f=+f;
+ if(f!==need){SND.bad();bagMsg(bagWhy(f,need),"bad");bagSelect(null);save();return;}
+ bagAccept(f);
+}
+function bagAccept(f){
+ if(FG.done)return;
+ FG.bagHelp=true;FG.done=true;closeHint();
+ recordForge(f,false);
+ const g=SAVE.forged[f]||{count:0};g.help=(g.help||0)+1;SAVE.forged[f]=g;save();
+ if(FG.mode==="level"){G.errors++;updStars();}
+ SND.forge();
+ $("bagSlot").innerHTML=`<span class="chip ${FICHES[f].t==="D"?"":"prod"}">Fiche ${f} · ${esc(FICHES[f].title)}</span>`;
+ bagMsg("<b>Trouvé avec le sac.</b> Ça compte moins que de mémoire. Cette fiche reviendra demain, à forger de mémoire.","good");
+ $("bagConfirm").disabled=true;
+ setTimeout(()=>{
+  closeBag();$("mForge").classList.remove("on");
+  if(FG.mode==="level")placeGear(f);
+  else renderAtelier();
+ },1400);
+}
+$("fgBag").onclick=openBag;$("bagClose").onclick=closeBag;$("btnMemoBag").onclick=openMemo;
+$("bagConfirm").onclick=()=>{if(BAG.sel)bagTry(BAG.sel);};
+function bagPointerDown(e){
+ if(e.button!==undefined&&e.button!==0)return;
+ const card=e.currentTarget,f=+card.dataset.f;
+ BAG._sx=e.clientX;BAG._sy=e.clientY;BAG._didDrag=false;
+ const ghost=card.cloneNode(true);ghost.classList.add("ghost");ghost.style.position="fixed";ghost.style.left=e.clientX+"px";ghost.style.top=e.clientY+"px";ghost.style.pointerEvents="none";ghost.style.zIndex=30000;ghost.style.transform="translate(-50%,-120%) rotate(-3deg) scale(1.05)";
+ document.body.appendChild(ghost);
+ BAG.drag={f,ghost};
+ const move=ev=>{
+  if(!BAG.drag)return;
+  if(!BAG._didDrag&&Math.hypot(ev.clientX-BAG._sx,ev.clientY-BAG._sy)>8)BAG._didDrag=true;
+  ghost.style.left=ev.clientX+"px";ghost.style.top=ev.clientY+"px";
+  const el=document.elementFromPoint(ev.clientX,ev.clientY);
+  $("bagSlot").classList.toggle("over",!!(el&&el.closest&&el.closest("#bagSlot")));
+ };
+ const up=ev=>{
+  document.removeEventListener("pointermove",move);document.removeEventListener("pointerup",up);document.removeEventListener("pointercancel",up);
+  const el=document.elementFromPoint(ev.clientX,ev.clientY);
+  const drop=el&&el.closest&&el.closest("#bagSlot");
+  if(BAG.drag&&BAG.drag.ghost)BAG.drag.ghost.remove();
+  $("bagSlot").classList.remove("over");
+  const df=BAG.drag&&BAG.drag.f;BAG.drag=null;
+  if(drop&&df)bagTry(df);
+  else if(!BAG._didDrag&&df)bagSelect(df);
+ };
+ document.addEventListener("pointermove",move);document.addEventListener("pointerup",up);document.addEventListener("pointercancel",up);
+ e.preventDefault();
+}
+
+window.__game={LEVELS,FICHES,recognise,tokenize,diff,get G(){return G},get L(){return L},startLevel,dropHopper,pairAttempt,placeGear,SAVE,hintPress,hintCtx,HINTS,HINT_IDLE,closeHint,openForge,reciteFlow,rateFiche,get RC(){return RC},mapChoose,mapAnswer,openCarte,openMap,ATL,FATL,MAPH,openMemo,closeMemo,openBag,closeBag,bagTry,bagWhy,bagTarget,MEMO_FAM};
 
 /*SCH-START*/
 /* ================= SCHÉMAS : la figure de chaque fiche, visible pendant la récitation (partagé entre les jeux) =================
