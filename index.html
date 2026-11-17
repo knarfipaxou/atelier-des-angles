@@ -1497,7 +1497,7 @@ function renderTray(){
 }
 function setupMachine(){
  const m=mach();
- const letters="abc";
+ const letters="abcdefgh";
  const tgt=m.type==="par"?"(d₁) // (d₂) ?":m.sought.slice(4)+" = ?";
  $("mTitle").textContent=(L.machines.length>1?`Machine ${letters[G.mi]} sur ${L.machines.length} · `:"Machine · ")+"on cherche : "+tgt;
  $("doorTarget").textContent=tgt;$("doorTarget").style.fontSize=tgt.length>9?"16px":"21px";
@@ -1796,7 +1796,7 @@ function renderAtelier(){
  db.querySelectorAll("[data-redo]").forEach(b=>b.onclick=()=>openForge("redo",+b.dataset.redo));
  db.querySelectorAll("[data-rec]").forEach(b=>b.onclick=()=>reciteFlow([+b.dataset.rec],"atelier",renderAtelier));
  const g=$("atelGrid");g.innerHTML="";
- for(let f=1;f<=20;f++){const F=FICHES[f],s=SAVE.forged[f],col=F.t==="P"?"#d8584a":"#5fae55";const red=SAVE.redo[f];
+ for(const f of [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,23,24]){const F=FICHES[f],s=SAVE.forged[f],col=F.t==="P"?"#d8584a":"#5fae55";const red=SAVE.redo[f];
   const c=document.createElement("div");c.className="panel gcell"+(s?"":" no");
   c.innerHTML=`<svg viewBox="-70 -70 140 140">${gearSVG(16,62,s?col:"#555",16)}</svg><div class="n">Fiche ${f}</div><div>${esc(F.title)}</div><div class="gst fft" data-ff="${f}">${ficheHTML(f)}</div><div style="opacity:.8">${F.t==="P"?"Propriété":"Définition"}${s?` · forgé ${s.count}×`:""}</div>${red?`<div style="color:#ffb27a">🔁 ${red<=today()?"aujourd'hui":"le "+red.split("-").reverse().join("/")}</div>`:""}`
    +((SAVE.recite[f]||SAVE.reciteTodo[f])?`<div>${rbadge((SAVE.recite[f]||{}).last)}</div>`:"")+((s||SAVE.recite[f])?`<button class="brass rec" data-rc="${f}">🎤 Réciter</button>`:"");
@@ -2190,13 +2190,13 @@ function mapPanelHTML(){
 function openMap(){
  G.mapOpen=true;G.mapTries=0;G.mapWrong=[];
  const p=$("mapPanel");p.innerHTML=mapPanelHTML();p.classList.add("on");p.classList.remove("leaving");
- $("mapFor").textContent=L.machines.length>1?` · Machine ${"abc"[G.mi]} sur ${L.machines.length}`:"";
- $("mapTokLbl").textContent=L.machines.length>1?`Machine ${"abc"[G.mi]}`:"Machine";
+ $("mapFor").textContent=L.machines.length>1?` · Machine ${"abcdefgh"[G.mi]} sur ${L.machines.length}`:"";
+ $("mapTokLbl").textContent=L.machines.length>1?`Machine ${"abcdefgh"[G.mi]}`:"Machine";
  tokenHome();bindMap();
  setTimeout(()=>{if(!G.mapOpen)return;
   const f=$("foreman");G.afterMap=[$("fmsg").innerHTML,f.classList.contains("good")?"good":f.classList.contains("bad")?"bad":undefined];
   say(L.tuto&&G.mi===0?"Bienvenue à l'usine, apprenti ! <b>D'abord : quelle forme vois-tu ?</b> Regarde la figure, puis glisse ta machine dans le bon atelier de la carte."
-   :G.mi>0?`Machine suivante ! <b>Quelle forme vois-tu</b> pour la question ${"abc"[G.mi]} ? Glisse la machine dans son atelier.`
+   :G.mi>0?`Machine suivante ! <b>Quelle forme vois-tu</b> pour la question ${"abcdefgh"[G.mi]} ? Glisse la machine dans son atelier.`
    :`Usine ${L.id}. <b>Quelle forme vois-tu ?</b> Regarde la figure, puis glisse ta machine dans le bon atelier.`);},0);
 }
 function tokenHome(anim){const t=$("mapToken");if(!t)return;t.classList.toggle("anim",!!anim);t.style.left="";t.style.top="";t.style.margin="";}
@@ -2669,6 +2669,38 @@ g.evnum{cursor:pointer}g.evnum.on circle{fill:#1f6fd1}g.evnum.on text{fill:#fff}
 .rvev .itm .qt{font-weight:bold;margin-bottom:4px}
 .rvnote20{font:bold 44px "Trebuchet MS",sans-serif;color:#ffd98a;text-align:center;margin:10px 0}
 .rvhide{display:none!important}
+/* ===== NOUVELLES USINES ===== */
+.mxidx{margin-top:8px;padding-top:6px;border-top:2px dashed #c9a35a;line-height:2.1}
+.mxil{font:bold 14px "Trebuchet MS",sans-serif;color:#7a5418;margin-right:4px}
+.enonce .frag.mxfrag{display:inline-block;background:linear-gradient(#fff6d8,#f0d792);border:2px solid #b8913f;border-radius:8px;padding:0 8px;margin:2px 2px;text-decoration:none;line-height:1.6;cursor:grab;touch-action:none}
+.enonce .frag.mxpair{background:linear-gradient(#e3f3ff,#b3d8f3);border-color:#2d5e86}
+.zoneh{grid-column:1/-1;display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin:10px 0 -4px;padding:6px 12px;border-left:6px solid var(--c);background:linear-gradient(90deg,rgba(0,0,0,.35),transparent);border-radius:6px;color:#ffd77a;font:bold 19px "Trebuchet MS",sans-serif}
+.zoneh small{font-weight:normal;font-size:13px;color:#f6e7c8;opacity:.85}
+.mxrank{grid-column:1/-1;display:flex;flex-wrap:wrap;align-items:center;gap:8px 18px;padding:10px 16px 10px 26px;color:#f6e7c8;font-size:15px}
+.mxrank .rk{font-size:18px;color:#ffd77a}.mxrank .sm{opacity:.75;font-size:13px}
+.mxrank .medals{margin-left:auto;display:flex;gap:4px}.mxrank .md{font-size:22px;filter:grayscale(1) brightness(.5)}.mxrank .md.on{filter:none}
+.lvl.boss{border-color:#e2b35a;box-shadow:0 0 0 2px #e2b35a,0 0 18px rgba(226,179,90,.5)}
+.lvl .mxres{font-size:12px;color:#9dff7a}
+.mxreward{text-align:center;font-size:19px;color:#ffd77a;margin:6px 0}
+.mxbox{background:#fffdf4!important;color:#2b1906!important;font:17px/1.45 Georgia,serif}
+.mxbox h2{color:#8a5d1c!important}.mxbox h2 small{font:14px "Trebuchet MS",sans-serif;color:#8a5d1c;margin-left:8px}
+.mxbox .rdq,.mxbox .ctq{font-weight:bold;font-size:18px}
+.mxbox .rdlab{font:15px "Trebuchet MS",sans-serif;color:#7a5418}
+.mxbox textarea{background:#fff!important;min-height:130px}
+.mxbox .row{display:flex;flex-wrap:wrap;gap:8px;justify-content:flex-end;margin-top:8px}
+.mxbox .row .brass{font-size:17px;padding:10px 16px;min-height:46px}
+.mxbox .ctfig svg{max-height:38vh}
+.mxbox .ctin textarea{width:100%;box-sizing:border-box;min-height:90px;font:18px/1.4 Georgia,serif;padding:8px;border:2px solid #8a5d1c;border-radius:10px}
+.mxbox input.rvnum{width:110px;font:20px Georgia,serif;padding:6px 8px;border:2px solid #8a5d1c;border-radius:10px}
+.mxbox .orstrip{max-height:none;margin:6px 0}
+.mxcopy{padding-left:24px!important;font-size:16px!important;line-height:24px!important}
+.mxcopy .mxmod{font:15px/1.4 Georgia,serif;color:#1e6b32;background:#eef7ee;border-left:4px solid #239150;padding:4px 8px;margin:2px 0 10px}
+#infoBody .copy.mxcopy .qq{margin-top:8px}
+@media (min-width:980px) and (orientation:landscape){
+ #mCtl,#mRedac{justify-content:flex-end;padding-right:1.5vw;background:rgba(10,5,2,.4)}
+ #mCtl .mxbox,#mRedac .mxbox{width:min(600px,49vw)}
+}
+.ctfig:empty{display:none}
 </style><script>
 /* ================= TOUR DES RÉVISIONS : FIGURES =================
    Toutes les figures des exercices, calculées à partir des données (les mesures de l'énoncé). */
@@ -3572,14 +3604,14 @@ const REV=(()=>{
   sec.innerHTML=`<header><button class="brass hbtn" id="rvBack">⬅</button><div class="t" id="rvTitle">Tour des révisions<small>Interro du vendredi 20 novembre · angles et parallélisme</small></div><span class="rvtimer rvhide" id="rvTimer"></span><button class="brass hbtn memobtn" id="rvMemo" title="Mémo">📋 Mémo</button></header><div class="rvbody" id="rvBody"></div>`;
   document.body.insertBefore(sec,document.getElementById("home").nextSibling);
   $$("rvBack").onclick=back;$$("rvMemo").onclick=()=>{if(typeof openMemo==="function")openMemo();};
-  const hb=document.querySelector("#home .homebar");const b=document.createElement("button");b.className="brass";b.id="btnRevis";b.innerHTML="📚 Tour des révisions";b.style.cssText="font-size:18px;background:linear-gradient(180deg,#f2cf7c,#c48f33 50%,#93621d)";b.onclick=hub;hb.insertBefore(b,hb.firstChild);
+  
   const box=document.createElement("div");box.id="rvTAbox";box.innerHTML=`<textarea id="rvText" rows="4" autocomplete="off" autocorrect="off" autocapitalize="sentences" spellcheck="false" placeholder="Écris ta réponse ici (Je sais que… Or… Donc…)"></textarea>`;
   document.body.appendChild(box);box.style.display="none";TA=$$("rvText");
   try{VB=VOIX.attach("rev",{field:TA,fiche:()=>cur&&cur.it&&cur.it.k==="fiche"?cur.it.f:null,papaOK:()=>!!(cur&&cur.it&&cur.it.k==="fiche"&&cur.mode!=="eval"),canRedo:()=>false,retry:()=>{},
    papa:(g)=>{if(!cur||!cur.it)return;const p=cur.it.pts||1;validate({got:g==="coeur"?p:g==="presque"?p/2:0,max:p,com:[g==="coeur"?"Papa a validé : par cœur !":g==="presque"?"Papa a écouté : presque.":"Papa a écouté : à revoir."]});}});}catch(e){}
  }
  function back(){if(cur&&cur.mode==="eval"&&!cur.done){if(!confirm("Quitter l'évaluation ? Ta copie est gardée, tu pourras la reprendre."))return;}
-  if(cur&&cur.mode!=="hub"){hub();return;}stopTimer();show("home");}
+  stopTimer();park();cur=null;if(typeof goHome==="function")goHome();else show("home");}
  function title(t,s){$$("rvTitle").innerHTML=E(t)+(s?`<small>${E(s)}</small>`:"");}
  function park(){const b=$$("rvTAbox");if(b&&b.parentElement!==document.body){document.body.appendChild(b);}if(b)b.style.display="none";}
  /* ---------- le hub ---------- */
@@ -3697,14 +3729,448 @@ const REV=(()=>{
    const fb=document.querySelector(`#evI${k}_${j} .rvfb`),cls=r.got>=r.max-1e-9?"":r.got>0?"mid":"bad";
    fb.innerHTML=`<span class="rvscore ${cls}">${fmt(r.got)} / ${fmt(r.max)}</span>`+(r.com&&r.com.length?`<ul class="rvcom">${r.com.map(c=>`<li>${E(c)}</li>`).join("")}</ul>`:"")+`<div class="rvmodel"><b>Correction :</b> ${E(modelText(it))}</div>`;}
   const note=Math.round(tot*4)/4;cur.done=true;
-  if(!ec.done){ec.done=true;ec.note=note;R.evals=R.evals||[];R.evals.push({sub:ec.sub,note,d:Date.now(),min:Math.round((Date.now()-ec.start)/60000)});save();}
-  $$("evDone").remove();$$("evRes").innerHTML=`<div class="rvnote20">${fmt(ec.note!=null?ec.note:note)} / 20</div><div class="rvintro" style="text-align:center"><b>Appréciation :</b> ${E(EVX.appr(note))}</div><div class="rvgo" style="justify-content:center"><button class="brass" id="evAgain">📝 Nouveau sujet ${ec.sub==="A"?"B":"A"}</button><button class="rvsec" id="evHub">⬅ Retour au tour</button></div>`;
-  $$("evAgain").onclick=()=>evalStart(ec.sub==="A"?"B":"A");$$("evHub").onclick=hub;
+  if(!ec.done){ec.done=true;ec.note=note;R.evals=R.evals||[];R.evals.push({sub:ec.sub,note,d:Date.now(),min:Math.round((Date.now()-ec.start)/60000)});save();if(window.onEvalGraded)window.onEvalGraded(ec);}
+  $$("evDone").remove();$$("evRes").innerHTML=`<div class="rvnote20">${fmt(ec.note!=null?ec.note:note)} / 20</div><div class="rvintro" style="text-align:center"><b>Appréciation :</b> ${E(EVX.appr(note))}</div><div class="rvgo" style="justify-content:center"><button class="brass" id="evAgain">📝 Nouveau sujet ${ec.sub==="A"?"B":"A"}</button><button class="rvsec" id="evHub">🏭 Retour aux usines</button></div>`;
+  $$("evAgain").onclick=()=>evalStart(ec.sub==="A"?"B":"A");$$("evHub").onclick=back;
   if(!already)$$("evRes").scrollIntoView({block:"start"});}
  if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",build);else build();
- return {hub,openEx,evalStart,get cur(){return cur;},ALL,modelText,fichesOf};
+ return {hub,openEx,evalStart,evalOpen,widget,get cur(){return cur;},ALL,modelText,fichesOf,st};
 })();
 window.__rev=REV;
+
+/* ================= LES NOUVELLES USINES : DONNÉES =================
+   NC : exercices ajoutés pour les notions sans exercice dans la batterie (complémentaires, trois triangles).
+   OVR : pour les questions à plusieurs étapes, les indices de l'ENTRÉE et les étiquettes sont écrits à la main.
+   DEFS : la liste des usines, dans l'ordre du cours et de la difficulté. */
+const MXD=(()=>{
+ const {mk,P,dir,C}=EVF;const rnd=(r,a,b)=>a+Math.floor(r()*(b-a+1));
+ const R=(id,q,s,model,pts)=>({id,q,k:"redac",s,model,pts:pts||1});
+ const K=(id,q,s,model,pts)=>({id,q,k:"kw",s,model,pts:pts||1});
+ const FI=(id,q,f,asked,model)=>({id,q,k:"fiche",f,asked,model,pts:1});
+ const plain=f=>FICHES[f].txt.replace(/\{[^}]*\}/g,"").replace(/\s+/g," ").replace(/\s+([.,])/g,"$1").trim();
+ /* ---- complémentaires : un angle droit coupé en deux ---- */
+ function nc1(a){const b=90-a;
+  const fig=()=>{const f=mk(),O=[110,300],A=P(O,0,340),B=P(O,90,260),Cc=P(O,a,300);
+   f.L(O,A).L(O,B).L(O,Cc).right(O,A,B,18).arc(O,A,Cc,78,C.BLUE,a+"°").arc(O,Cc,B,56,C.ORANGE,"?");
+   return f.pt(O,"O",225,18).pt(A,"A",270,18).pt(B,"B",180,18).pt(Cc,"C",a+90,18).out();};
+  return {id:"NC1",part:"N",src:"Nouveau : angles complémentaires",n:"Angle droit",title:"L'angle droit et les complémentaires",fig,variant:1,
+   st:`<p>L'angle AOB est droit. La demi-droite [OC) est entre [OA) et [OB).</p><p>On donne AOC = ${a}°.</p>`,
+   items:[R("NC1a","a) Calculer COB en justifiant.",{hyp:[["droit|90","AOB est un angle droit : AOB = 90°."],["adjacent","Pourquoi pouvez-vous dire cela ? (je sais que les angles AOC et COB sont adjacents donc...)"]],prop:[2],res:[["COB",b]],calc:1},
+     `Je sais que AOB est un angle droit, donc AOB = 90°, et que AOC et COB sont adjacents. Or AOC + COB = AOB. Donc COB = 90° − ${a}° = ${b}°.`),
+    K("NC1b","b) Les angles AOC et COB sont-ils complémentaires ? Justifier.",{kw:[{re:"90|"+a+" ?\\+ ?"+b,miss:`${a} + ${b} = 90 : la somme de leurs mesures vaut 90°.`}],yn:true},`Oui : ${a}° + ${b}° = 90°, la somme de leurs mesures vaut 90°.`),
+    FI("NC1c","c) Donner la définition de deux angles complémentaires.",12,"D",plain(12)),
+    K("NC1d","d) Un angle de 35° et un angle de 55° sont dans deux coins différents d'une figure. Sont-ils complémentaires ?",{kw:[{re:"90|35 ?\\+ ?55",miss:"35 + 55 = 90."}],yn:true},"Oui : 35° + 55° = 90°. La définition ne parle pas de position : ils n'ont pas besoin d'être adjacents."),
+    K("NC1e","e) Un angle de 125° et un angle de 55° sont-ils supplémentaires ?",{kw:[{re:"180|125 ?\\+ ?55",miss:"125 + 55 = 180."}],yn:true},"Oui : 125° + 55° = 180°.")],
+   cor:`<p>a) Je sais que AOB est un angle droit, donc AOB = 90°, et que AOC et COB sont adjacents. Or AOC + COB = AOB. Donc COB = 90° − ${a}° = <b>${b}°</b>.</p><p>b) Oui : ${a} + ${b} = 90.</p><p>c) ${plain(12)}</p><p>d) Oui : 35 + 55 = 90. Complémentaires ne veut pas dire adjacents.</p><p>e) Oui : 125 + 55 = 180.</p>`,
+   gen:r=>nc1(rnd(r,22,68))};}
+ /* ---- triangle à partir de deux angles à la base ---- */
+ function tri(b,c,names,opt){opt=opt||{};const f=mk(),B=[90,300],Cc=[410,300],h=320/(1/Math.tan(b*Math.PI/180)+1/Math.tan(c*Math.PI/180)),A=[90+h/Math.tan(b*Math.PI/180),300-h];
+  const [na,nb,nc]=names;f.L(A,B).L(B,Cc).L(Cc,A);
+  if(opt.right==="B")f.right(B,A,Cc,16);
+  (opt.arcs||[]).forEach(([v,lab,col])=>{const V={A,B,C:Cc}[v],o=v==="A"?[B,Cc]:v==="B"?[Cc,A]:[A,B];f.arc(V,o[0],o[1],40,col||C.BLUE,lab);});
+  (opt.ticks||[]).forEach(([p,q])=>{const X={A,B,C:Cc};f.segT(X[p],X[q],1);});
+  return f.pt(A,na,90,18).pt(B,nb,225,18).pt(Cc,nc,315,18).out();}
+ function nc3a(x){const y=90-x;
+  return {id:"NC3a",part:"N",src:"Nouveau : triangle rectangle",n:"Triangle rectangle",title:"Le triangle rectangle",variant:1,
+   fig:()=>tri(90,x,["R","S","T"],{right:"B",arcs:[["C",x+"°",C.BLUE],["A","?",C.ORANGE]]}),
+   st:`<p>Le triangle RST est rectangle en S. On donne STR = ${x}°.</p>`,
+   items:[R("NC3a1","Calculer SRT en justifiant.",{hyp:[["rectangle|angle droit","RST est rectangle en S."]],prop:[18],res:[["SRT",y]],calc:1},
+    `Je sais que le triangle RST est rectangle en S et que STR = ${x}°. Or dans un triangle rectangle, la somme des mesures des deux autres angles vaut 90°. Donc SRT = 90° − ${x}° = ${y}°.`)],
+   cor:`<p>Je sais que RST est rectangle en S et que STR = ${x}°. Or dans un triangle rectangle, la somme des mesures des deux angles aigus vaut 90°. Donc SRT = 90° − ${x}° = <b>${y}°</b>.</p>`,gen:r=>nc3a(rnd(r,25,65))};}
+ function nc3b(y){const z=180-2*y;
+  return {id:"NC3b",part:"N",src:"Nouveau : triangle isocèle",n:"Triangle isocèle",title:"Le triangle isocèle",variant:1,
+   fig:()=>tri(y,y,["D","E","F"],{ticks:[["A","B"],["A","C"]],arcs:[["B",y+"°",C.BLUE],["C","?",C.ORANGE],["A","?",C.GREEN]]}),
+   st:`<p>Le triangle DEF est isocèle en D. On donne DEF = ${y}°.</p>`,
+   items:[R("NC3b1","a) Calculer DFE en justifiant.",{hyp:[["isocele","DEF est isocèle en D."]],prop:[19],res:[["DFE",y]]},
+     `Je sais que le triangle DEF est isocèle en D. Or un triangle isocèle a ses angles à la base de même mesure. Donc DFE = DEF = ${y}°.`),
+    R("NC3b2","b) Calculer EDF en justifiant.",{hyp:[["triangle","DEF est un triangle."]],prop:[17],res:[["EDF",z]],calc:1},
+     `Je sais que DEF est un triangle avec DEF = ${y}° et DFE = ${y}°. Or dans tout triangle, la somme des mesures des angles vaut 180°. Donc EDF = 180° − ${y}° − ${y}° = ${z}°.`)],
+   cor:`<p>a) DEF est isocèle en D : ses angles à la base ont la même mesure. DFE = DEF = <b>${y}°</b>.</p><p>b) EDF = 180° − ${y}° − ${y}° = <b>${z}°</b>.</p>`,gen:r=>nc3b(rnd(r,35,75))};}
+ function nc3c(){
+  return {id:"NC3c",part:"N",src:"Nouveau : triangle équilatéral",n:"Triangle équilatéral",title:"Le triangle équilatéral",
+   fig:()=>tri(60,60,["G","H","I"],{ticks:[["A","B"],["A","C"],["B","C"]],arcs:[["B","?",C.ORANGE]]}),
+   st:`<p>Le triangle GHI est équilatéral.</p>`,
+   items:[R("NC3c1","Calculer GHI en justifiant.",{hyp:[["equilateral","GHI est équilatéral."]],prop:[20],res:[["GHI",60]],calc:1},
+     `Je sais que le triangle GHI est équilatéral. Or un triangle équilatéral a ses angles de même mesure, et leur somme vaut 180°. Donc GHI = 180° ÷ 3 = 60°.`),
+    K("NC3c2","Un triangle a deux angles de 60°. Est-il équilatéral ? Justifier.",{kw:[{re:"60|180 ?- ?120",miss:"Le troisième angle mesure 180 − 60 − 60 = 60°."}],yn:true},"Oui : le troisième angle mesure 180° − 60° − 60° = 60°. Ses trois angles ont la même mesure.")],
+   cor:`<p>GHI = 180° ÷ 3 = <b>60°</b>.</p><p>Deux angles de 60° : le troisième mesure 180 − 120 = 60°, donc oui.</p>`};}
+ const NC={NC1:nc1(35),NC3a:nc3a(35),NC3b:nc3b(70),NC3c:nc3c()};
+ /* ---- ENTRÉE écrite à la main : k = indices à mettre, p = étiquettes [angle, angle, configuration], o = ce que la machine fabrique ---- */
+ const OVR={
+  E13a:{k:["M, E, N alignés : MEN = 180° (angle plat)","NEF = 106°","EFJ = 74°","MEF = 180° − 106° = 74°"],p:[["MEF","NEF","adj"],["MEF","EFJ","alt"]],o:{t:"par",tg:"(MN) // (KJ)"}},
+  E14a:{k:["Les angles colorés mesurent 58° et 61°","58° ≠ 61°"],p:[["l'angle de 58°","l'angle de 61°","cor"]],o:{t:"npar",tg:"(d₁) et (d₂) ne sont pas parallèles"},f:[24,11,16]},
+  E15a:{k:["Les angles colorés mesurent 89° et 91°","89° ≠ 91°"],p:[["l'angle de 89°","l'angle de 91°","alt"]],o:{t:"npar",tg:"(d₁) et (d₂) ne sont pas parallèles"},f:[23,10,15]},
+  "E25-5":{k:["MEF = 74°","EFJ = 74°"],p:[["MEF","EFJ","alt"]],o:{t:"par",tg:"(MN) // (KJ)"}},
+  B16a:{k:["FBG = 48°","CDE = 48°"],p:[["ABD","FBG","opp"],["ABD","CDE","cor"]],o:{t:"par",tg:"(AG) // (CH)"}},
+  B17a:{k:["ABF = 36°","GCD = 36°"],p:[["ABF","HBC","opp"],["HBC","GCD","cor"]],o:{t:"par",tg:"(FH) // (EG)"}},
+  B18a:{k:["K, I, L alignés : KIL = 180°","KIJ = 133°","MLI = 47°","HIK = 180° − 133° = 47°"],p:[["KIJ","HIK","adj"],["HIK","MLI","cor"]],o:{t:"par",tg:"(HJ) // (MN)"}},
+  B46a:{k:["ABC = 90° et BCE = 90° (angles droits)"],p:[["ABC","BCE","alt"]],o:{t:"par",tg:"(AB) // (DE)"}},
+  B47a:{k:["[OJ) est la bissectrice de AOB","AOJ = JOB = 25°"],p:[],o:{t:"num",n:"AOB",v:50,calc:"2 × 25°"}},
+  B47b:{k:["IAO = 50°","AOB = 50° (question a)"],p:[["IAO","AOB","alt"]],o:{t:"par",tg:"(AI) // (OB)"}},
+  B48c:{k:["BRS = 43° (question a)","RSC = 43° (question b)"],p:[["BRS","RSC","alt"]],o:{t:"par",tg:"(AB) // (CD)"}},
+  B49a:{k:["vBs = 90° (angle droit)","u, B, v alignés : uBs = 180° − 90° = 90°","zBs = 37°"],p:[["uBz","zBs","adj"]],o:{t:"num",n:"uBz",v:53,calc:"90° − 37°"}},
+  B50a:{k:["IAC = 130°","BAC = 90° (angle droit)"],p:[["BAI","BAC","adj"]],o:{t:"num",n:"BAI",v:40,calc:"130° − 90°"}},
+  B50b:{k:["BAI = 40° (question a)","ABC = 50°","40° ≠ 50°"],p:[["BAI","ABC","alt"]],o:{t:"npar",tg:"(AI) et (BC) ne sont pas parallèles"},f:[23,10,15]},
+  B51a:{k:["C, M, A alignés : CMA = 180°","NMA = 133°","CAB = 47°","CMN = 180° − 133° = 47°"],p:[["CMN","NMA","adj"],["CMN","CAB","cor"]],o:{t:"par",tg:"(MN) // (AB)"}},
+  B52a:{k:["I, J, K alignés : IJK = 180°","MJI = 125°","KLN = 55°","MJK = 180° − 125° = 55°"],p:[["MJI","MJK","adj"],["MJK","KLN","alt"]],o:{t:"par",tg:"(MJ) // (LN)"}},
+  B69c:{k:["E, D, J alignés : CDE = 180° − 48° = 132°","(BE) // (CD)"],p:[["BEF","CDE","cor"]],o:{t:"num",n:"BEF",v:132}},
+  B70c:{k:["yMN = 61°","zNt = 61°"],p:[["yMN","zNt","cor"]],o:{t:"par",tg:"(My) // (uz)"}},
+  B74c:{k:["AOO' = 60° ÷ 2 = 30° ([OA) bissectrice de MOO')","OO'N = 2 × 15° = 30° ([O'B) bissectrice de OO'N)"],p:[["AOO'","OO'N","alt"]],o:{t:"par",tg:"(OA) // (O'N)"}},
+  B75c:{k:["xAu = 35° + 35° + 35° = 105° (bissectrices)","A, B, u alignés : zBu = 180° − 75° = 105°"],p:[["xAu","zBu","cor"]],o:{t:"par",tg:"[Ax) // [Bz)"}},
+  E21c:{k:["DOC = 32° ([OD) bissectrice de AOC)","COB = 64° ([OC) bissectrice de AOB)"],p:[["DOC","COB","adj"]],o:{t:"num",n:"DOB",v:96,calc:"32° + 64°"}},
+  B13a:{k:["(HI) // (JK) (HIKJ est un rectangle)","IJK = 31°"],p:[["HIJ","IJK","alt"]],o:{t:"num",n:"HIJ",v:31}}
+ };
+ /* ---- les usines ---- */
+ const ZONES=[
+  {z:1,name:"Les premières usines",ico:"🏭",col:"#c48f33"},
+  {z:2,name:"Le bureau du cours",ico:"📜",col:"#b07a12"},
+  {z:3,name:"Atelier Ligne et Croix",ico:"📐",col:"#2f7fc1"},
+  {z:4,name:"Atelier Rails",ico:"🛤️",col:"#2e9a52"},
+  {z:5,name:"Parallèles ou pas ?",ico:"⚖️",col:"#1f8a8a"},
+  {z:6,name:"Atelier Triangle",ico:"🔺",col:"#8e4fc4"},
+  {z:7,name:"Les grands problèmes",ico:"🏆",col:"#c0392b"},
+  {z:8,name:"Bonus livre : symétrie centrale",ico:"🔄",col:"#7a5418"}];
+ const U=(id,z,name,src,ex,write,o)=>Object.assign({id,zone:z,name,src,ex,write:write||null},o||{});
+ const DEFS=[
+  U(8,2,"La règle d'or","Batterie §0, ex. 1 et 2",["E0","E1","E2"]),
+  U(9,2,"La forge des définitions","Batterie ex. 3",["E3"]),
+  U(10,2,"La forge des propriétés","Batterie ex. 4",["E4"]),
+  U(11,2,"Réciproques et vrai ou faux","Batterie ex. 5 et 6 bis",["E5","E6b"]),
+  U(12,3,"Côte à côte","Batterie ex. 6",["E6"],"guide"),
+  U(13,3,"L'angle droit","Nouveau : angles complémentaires",["NC1"],"guide"),
+  U(14,3,"La bissectrice","Batterie ex. 21",["E21"],"guide"),
+  U(15,3,"Deux droites qui se coupent","Batterie ex. 7",["E7"],"guide"),
+  U(16,4,"Les 8 angles","Batterie ex. 8 et 9, défi cite sans justifier",["E8","E9","DCITE"]),
+  U(17,4,"La revanche","Batterie ex. 10",["E10"],"guide"),
+  U(18,4,"Les alternes-internes","Batterie ex. 11",["E11"],"trous"),
+  U(19,4,"Le trapèze","Batterie ex. 12",["E12"],"trous"),
+  U(20,4,"Livre p. 161 : calculer","Livre p. 161, ex. 13, 14, 15",["B13","B14","B15"],"trous"),
+  U(21,4,"Livre : questions flash","Livre p. 163, ex. 38, 39, 40",["B38","B39","B40"],"trous"),
+  U(22,5,"Livre p. 161 : prouver","Livre p. 161, ex. 16, 17, 18",["B16","B17","B18"],"trous"),
+  U(23,5,"Parallèles malgré tout","Batterie ex. 13",["E13"],"trous"),
+  U(24,5,"Pas parallèles","Batterie ex. 14",["E14"],"trous"),
+  U(25,5,"Le piège de l'œil","Batterie ex. 15 et 15 bis",["E15","E15x"],"trous"),
+  U(26,5,"Livre : parallèles ?","Livre p. 164, ex. 45 et 46",["B45","B46"],"trous"),
+  U(27,5,"Livre automatismes (1)","Livre, mes automatismes, ex. 47, 48, 49",["B47","B48","B49"],"trous"),
+  U(28,5,"Livre automatismes (2)","Livre, mes automatismes, ex. 50, 51, 52",["B50","B51","B52"],"libre"),
+  U(29,5,"Livre : bissectrices et parallèles","Livre, je m'entraîne, ex. 70, 74, 75",["B70","B74","B75"],"libre"),
+  U(30,6,"Les trois triangles","Nouveau : triangle rectangle, isocèle, équilatéral",["NC3a","NC3b","NC3c"],"trous"),
+  U(31,6,"La preuve des 180°","Batterie ex. 16 (cours p. 12)",["E16"],"trous"),
+  U(32,6,"Calculs express","Batterie ex. 17",["E17"]),
+  U(33,6,"Pièges des triangles","Batterie ex. 18",["E18"]),
+  U(34,6,"L'angle extérieur","Batterie ex. 19",["E19"],"libre"),
+  U(35,6,"Triangle coupé par une parallèle","Batterie ex. 20",["E20"],"libre"),
+  U(36,6,"Livre : triangles (1)","Livre, je m'entraîne, ex. 66, 67, 68",["B66","B67","B68"],"libre"),
+  U(37,6,"Livre : triangles (2)","Livre, je m'entraîne, ex. 69 et 71",["B69","B71"],"libre"),
+  U(38,7,"Problème de synthèse","Batterie ex. 22",["E22"],"libre"),
+  U(39,7,"Le chevron","Batterie ex. 23",["E23"]),
+  U(40,7,"Sans figure","Batterie ex. 24",["E24"]),
+  U(41,7,"Rédiger à fond","Batterie ex. 25 (cours p. 11)",["E25"],"libre"),
+  U(42,7,"Trouve l'erreur","Les erreurs de l'interro flash et les pièges",["ERR"]),
+  U(43,7,"Chaînes de propriétés","Défi : 3 ou 4 propriétés à la suite",["CH"]),
+  U(44,7,"La check-list de vendredi","Batterie, check-list",["ECK"]),
+  U(45,7,"Évaluation blanche","Le boss final : 55 min, sur 20, sujets A et B",[],null,{kind:"boss"}),
+  U(46,8,"Symétrie centrale","Livre, je m'entraîne, ex. 72 et 73",["B72","B73"],"trous",{req:7})];
+ return {NC,OVR,ZONES,DEFS};
+})();
+
+/* ================= LES NOUVELLES USINES (8 et plus) =================
+   Chaque usine reprend la vraie usine du jeu : carte « quelle forme ? », ENTRÉE (Je sais que), étiqueteuse,
+   forge de l'engrenage (de mémoire ou avec le sac), bandeau OR avec la fiche entière, levier, SORTIE (Donc).
+   En plus : après chaque machine, la copie à rédiger (aide qui diminue : guide, trous, libre),
+   et des postes de contrôle pour les questions sans machine (définitions forgées, tris, vrai ou faux…).
+   Une usine peut avoir plusieurs plans (plusieurs figures) à la suite. Les nombres changent quand on rejoue. */
+const MX=(()=>{
+ const $$=id=>document.getElementById(id);
+ const E=s=>String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+ const fmt=v=>String(Math.round(v*100)/100).replace(".",",");
+ const strip=h=>String(h||"").replace(/<br\s*\/?>/g," ").replace(/<\/p>\s*<p>/g," ").replace(/<[^>]+>/g,"").replace(/&nbsp;/g," ").replace(/&lt;/g,"<").replace(/&gt;/g,">").replace(/&amp;/g,"&").replace(/\s+/g," ").trim();
+ const cap=s=>s?s[0].toUpperCase()+s.slice(1):s;
+ /* ---------- petits compléments aux données du jeu ---------- */
+ ATL.rails.fiches.push(23,24);FATL[23]="rails";FATL[24]="rails";
+ Object.assign(FAM,{
+  4:"Cherche la <b>propriété</b> (cadre rouge) sur <b>les mesures des angles formés par une bissectrice</b>.",
+  11:"Cherche la <b>propriété</b> (cadre rouge) sur <b>les droites parallèles et les angles correspondants</b>.",
+  18:"Cherche la <b>propriété</b> (cadre rouge) sur <b>le triangle rectangle</b>.",
+  19:"Cherche la <b>propriété</b> (cadre rouge) sur <b>le triangle isocèle</b>.",
+  20:"Cherche la <b>propriété</b> (cadre rouge) sur <b>le triangle équilatéral</b>.",
+  23:"Les angles alternes-internes <b>n'ont pas</b> la même mesure. Cherche la propriété (cadre rouge) qui dit que les droites <b>ne sont pas</b> parallèles.",
+  24:"Les angles correspondants <b>n'ont pas</b> la même mesure. Cherche la propriété (cadre rouge) qui dit que les droites <b>ne sont pas</b> parallèles."});
+ for(let f=1;f<=24;f++)if(FICHES[f]&&!FAM[f])FAM[f]=`Cherche la fiche « ${esc(FICHES[f].title)} ».`;
+ /* ---------- les exercices sources ---------- */
+ const ALLX=()=>[...EVD.EX,...EVB.EX];
+ function exList(code,seed,replay){const r=EVX.seeded(seed);
+  if(code==="DCITE")return [EVX.citeEx(seed)];
+  if(code==="CH")return EVX.chains(seed);
+  if(code==="ERR")return [{id:"ERR",n:"Trouve l'erreur",title:"Trouve l'erreur dans la copie",src:"Les erreurs de l'interro flash et les pièges classiques",st:"<p>Chaque copie contient une erreur. Touche la ligne fausse, puis écris la correction.</p>",items:EVX.ERR}];
+  let e=MXD.NC[code]||ALLX().find(x=>x.id===code);if(!e)return [];
+  if(replay&&e.gen)e=e.gen(r);return [e];}
+ /* ---------- une question rédigée devient une machine ---------- */
+ const CFGW=[["alt",/alternes?.?internes?/i],["cor",/correspondants?/i],["opp",/oppos[ée]s? par le sommet/i],["adj",/adjacents?/i]];
+ const ANG=/(?:^|[^A-Za-z'])([A-Za-z][A-Z]'?[A-Za-z]'?)(?=$|[^A-Za-z'])/g;
+ function knowsOf(m){m=String(m);let s=m.replace(/^.*?Je sais que\s*/i,"");const j=s.search(/(?:^|[.,;]\s*)(Or|Par propriété|D'après)\b/);if(j>=0)s=s.slice(0,j);return s.trim();}
+ function autoMachine(it){const k=knowsOf(it.model);const chips=[],pairs=[];
+  k.replace(/\.\s*De plus,?\s*/g," ; ").replace(/,?\s+et que\s+/g," ; ").replace(/,\s+que\s+/g," ; ").replace(/\.\s+/g," ; ").split(/\s*;\s*/).map(s=>s.trim().replace(/^que\s+/,"").replace(/[.,]$/,"")).filter(Boolean).forEach(t=>{
+   let c=null;for(const [kk,re] of CFGW)if(re.test(t)){c=kk;break;}
+   if(c){const ns=[];let m;ANG.lastIndex=0;while((m=ANG.exec(t))){if(/^[A-Za-z][A-Z]'?[A-Za-z]'?$/.test(m[1])&&!/^[A-Z][a-z]+$/.test(m[1]))ns.push(m[1]);}
+    if(ns.length>=2){pairs.push([ns[0],ns[1],c]);return;}}
+   chips.push(cap(t.replace(/^les angles\s+/i,"")));});
+  return {k:chips,p:pairs};}
+ function outOf(it){const s=it.s||{};
+  if(s.res&&s.res.length)return {t:"num",n:s.res[0][0],v:s.res[0][1]};
+  if(s.par){const d=String(it.model).split(/\bDonc\b/).pop().trim().replace(/\.$/,"");return {t:s.par==="non"?"npar":"par",tg:d};}
+  if(s.eq)return {t:"eq",tg:s.eq.map(e=>e.join(" = ")).join(" et ")};
+  return null;}
+ function machineSpec(it){const o=MXD.OVR[it.id]||{};const a=o.k?{k:o.k,p:o.p||[]}:autoMachine(it);
+  const out=o.o||outOf(it);if(!out||!(it.s&&it.s.prop&&it.s.prop.length))return null;
+  const model=String(it.model);const donc=model.split(/\bDonc\b/).pop().trim();
+  return {chips:a.k,pairs:a.p,out,fiches:o.f||it.s.prop,knows:knowsOf(model),donc:cap(donc)};}
+ /* ---------- un plan de l'usine (une figure) ---------- */
+ function buildStage(U,e,si){
+  const L2={id:U.id,kind:"mx",U,name:U.name,src:U.src,ex:e,si,write:U.write,tuto:false,
+   fig:()=>({pts:{},lab:{},lines:[],arcs:[]}),svg:e.fig?e.fig():null,enonce:[strip(e.st||"")],questions:[],lineFacts:{},facts:{},pairs:[],machines:[],seq:[]};
+  const chipId={};let nc=0;
+  const addChip=(t,given)=>{if(chipId[t])return chipId[t];const id="c"+(nc++);chipId[t]=id;L2.facts[id]={chip:t,given:given?1:0};return id;};
+  // les mesures données par l'énoncé : on peut s'en servir
+  const st=strip(e.st||"");let m;const re=/\b([A-Za-z][A-Z]'?[A-Za-z]'?)\s*=\s*(\d+(?:,\d+)?)\s?°/g;
+  while((m=re.exec(st)))addChip(`${m[1]} = ${m[2]}°`,1);
+  e.items.forEach((it,k)=>{
+   const sp=it.k==="redac"?machineSpec(it):null;
+   if(!sp){L2.seq.push({c:it});return;}
+   const needs=[];sp.chips.forEach(t=>needs.push(addChip(t,1)));
+   for(const [a,b,c] of sp.pairs){if(!L2.pairs.find(p=>pairKey(p[0],p[1])===pairKey(a,b)))L2.pairs.push([a,b,c]);needs.push("pair:"+pairKey(a,b));
+    L2.facts["pairq:"+a+"|"+b]={chip:`${a} et ${b}`,given:1};}
+   let sought,type=sp.out.t,ans=null,tgt;
+   if(type==="num"){sought="ang:"+sp.out.n;L2.facts[sought]={v:sp.out.v};ans=sp.out.v;tgt=sp.out.n+" = ?";}
+   else if(type==="par"){sought="par"+k;L2.facts[sought]={chip:sp.out.tg};tgt=sp.out.tg.replace(/^(Les droites |les droites )/,"")+" ?";}
+   else if(type==="npar"){sought="npar"+k;L2.facts[sought]={chip:sp.out.tg};tgt="parallèles ?";
+    const lines=(sp.out.tg.match(/[(\[][^)]+\)/g)||["(d₁)","(d₂)"]).slice(0,2);L2.facts["faux"+k]={chip:`${lines[0]} // ${lines[1]}`,trap:1};}
+   else {sought="eq"+k;L2.facts[sought]={chip:sp.out.tg};tgt=sp.out.tg+" ?";}
+   const mi=L2.machines.length;
+   L2.machines.push({q:mi,qt:it.q,it,sought,needs,fiche:sp.fiches[0],fiches:sp.fiches,type,ans,calc:sp.out.calc||(it.s.calc?"calc":null),tgt,knows:sp.knows,donc:sp.donc});
+   L2.questions.push({t:it.q,f:sought});L2.seq.push({m:mi});});
+  // indices proposés : ceux des machines, les mesures de l'énoncé, et les pièges (ce qu'on cherche, un parallélisme non donné)
+  const frags=[];for(const id in L2.facts){const f=L2.facts[id];if(id.startsWith("pairq:")||f.given||f.trap)frags.push(id);}
+  for(const mm of L2.machines)if(!frags.includes(mm.sought))frags.push(mm.sought);
+  const r=EVX.seeded(U.id*97+si);for(let i=frags.length-1;i>0;i--){const j=Math.floor(r()*(i+1));[frags[i],frags[j]]=[frags[j],frags[i]];}
+  L2.frags=frags;
+  // indices et cartes pour chaque machine
+  L2.hints={};L2.maph={};
+  L2.machines.forEach((mm,i)=>{const at=FATL[mm.fiche]||"ligne",keep=AT4.find(a=>a!==at);
+   const chipsT=mm.needs.filter(n=>!n.startsWith("pair:")).map(n=>"« "+L2.facts[n].chip+" »");
+   const prs=mm.needs.filter(n=>n.startsWith("pair:")).map(n=>n.slice(5).split("|").join(" et "));
+   L2.hints[i]={entree:{t:["Lis l'énoncé et la question. Qu'est-ce que tu <b>sais</b> vraiment ? Ce que tu cherches n'y va jamais.",
+     `Il te faut ${chipsT.length} indice${chipsT.length>1?"s":""} écrit${chipsT.length>1?"s":""}${prs.length?` et ${prs.length} étiquette${prs.length>1?"s":""}`:""}. Les mots qui brillent sont des pistes.`,
+     chipsT.length?"Glisse dans l'ENTRÉE : "+chipsT.join(", ")+".":"Pas d'indice écrit ici : il faut seulement l'étiquette des angles."],
+     g:mm.needs.filter(n=>!n.startsWith("pair:")).map(n=>"f:"+n)},
+    etiq:{t:[`Glisse les angles ${prs.join(", puis ")} dans l'ENTRÉE : l'étiqueteuse te demandera leur nom.`,"Regarde la figure : même sommet ? entre les deux droites ? du même côté de la sécante ?",`Leur configuration : ${mm.needs.filter(n=>n.startsWith("pair:")).map(n=>{const p=L2.pairs.find(q=>"pair:"+pairKey(q[0],q[1])===n);return p?CFG[p[2]]:"";}).join(", ")}.`],
+     g:mm.needs.filter(n=>n.startsWith("pair:")).map(n=>{const p=L2.pairs.find(q=>"pair:"+pairKey(q[0],q[1])===n);return p?"f:pairq:"+p[0]+"|"+p[1]:"";})},
+    forge:fg(mm.qt,mm.fiche),
+    donc:{t:["La loi est écrite en entier sous les engrenages. Applique-la avec tes indices.",
+     mm.type==="num"?"Regarde les mesures dans l'ENTRÉE : faut-il recopier, additionner ou soustraire ?":mm.type==="npar"?"Les mesures ne sont pas égales : que peux-tu dire des droites ?":"Les mesures sont égales : que peux-tu dire des droites ?",
+     mm.type==="num"?(mm.calc?`Écris le calcul ainsi : … = ${BL}`:`Écris : ${BL} °`):mm.type==="npar"?"Écris : les droites ne sont pas parallèles.":mm.type==="eq"?`Écris : ${E(mm.tgt.replace(/ \?$/,""))}.`:"Écris : (…) // (…)."],g:[]}};
+   L2.maph[i]={t:["Regarde la figure en entier. Combien de droites ? Où sont les angles de la question ?",ATL[at].see],g:[],keep};});
+  return L2;}
+ /* ---------- état ---------- */
+ const S=()=>{SAVE.mx=SAVE.mx||{};return SAVE.mx;};
+ let U=null,ST=null,RUN=null,inSetup=false;
+ function curU(){return U;}
+ function persist(){if(!U||!RUN)return;const s=S();s[U.id]=Object.assign(s[U.id]||{},{seed:RUN.seed,replay:RUN.replay,si:RUN.si,pos:RUN.pos,err:G.errors,h3:G.h3,ctl:RUN.ctl,copies:RUN.copies,done:false,d:today()});save();}
+ /* ---------- démarrer une usine ---------- */
+ function start(Ux,opt){opt=opt||{};U=Ux;const sv=S()[U.id];
+  if(!opt.fresh&&sv&&!sv.done&&(sv.pos>0||sv.si>0)){
+   info(`<h2>🏭 Usine ${U.id} : ${E(U.name)}</h2><p>Tu t'étais arrêté au plan ${sv.si+1}, question ${sv.pos+1}. Ta progression est gardée.</p>`,
+    [["▶ Reprendre",()=>run(sv)],["🔁 Recommencer",()=>start(Ux,{fresh:true})]]);return;}
+  const replay=!!SAVE.stars[U.id];
+  run({seed:replay?Math.floor(Math.random()*1e9):2026,replay,si:0,pos:0,err:0,h3:0,ctl:{got:0,max:0},copies:[]});}
+ function run(sv){SND.start();
+  const stages=[];for(const code of U.ex)for(const e of exList(code,sv.seed,sv.replay))stages.push(e);
+  RUN={seed:sv.seed,replay:sv.replay,stages,si:sv.si||0,pos:sv.pos||0,ctl:sv.ctl||{got:0,max:0},copies:sv.copies||[]};
+  G={mi:0,known:new Set(),hopper:[],gear:null,errors:sv.err||0,products:[],busy:false,solvedCopy:[],firstFail:new Set(),pairsDone:{},hl:{},hc:{},h3:sv.h3||0,forgeH3:new Set(),lastErr:sv.err||0};
+  if(typeof closeHint==="function"){closeHint();stopNudge();}
+  loadStage(RUN.si,RUN.pos);}
+ function loadStage(si,pos){
+  RUN.si=si;RUN.pos=pos||0;const e=RUN.stages[si];ST=buildStage(U,e,si);L=ST;FIG=L.fig();
+  G.mi=0;G.known=new Set();G.hopper=[];G.gear=null;G.products=[];G.pairsDone={};G.busy=false;G.mapOpen=false;
+  for(const k in L.facts)if(L.facts[k].given)G.known.add(k);
+  // reprise : les machines déjà faites
+  for(let i=0;i<RUN.pos;i++){const q=L.seq[i];if(q.m!=null){const mm=L.machines[q.m];G.known.add(mm.sought);G.products.push(mm.sought);G.mi=q.m+1;}}
+  for(let i=0;i<L.machines.length;i++){HINTS[L.id+"-"+i]=L.hints[i];MAPH[L.id+"-"+i]=L.maph[i];}
+  const n=RUN.stages.length;
+  $("lvlTitle").innerHTML=`Usine ${U.id} : ${E(U.name)}<small>${E(e.src||U.src)}${n>1?` · plan ${si+1} sur ${n}`:""}</small>`;
+  $("hopper").style.display="";$("mapPanel").classList.remove("on");$("mapPanel").innerHTML="";
+  $("door").classList.remove("open","win");$("doorInside").innerHTML="";G.gear=null;renderGears();
+  renderEnonce();renderFig();renderTray();updStars();show("level");
+  say(`Usine ${U.id}${n>1?`, plan ${si+1} sur ${n}`:""}. Lis l'énoncé et regarde le plan.`);
+  setTimeout(step,250);}
+ /* ---------- avancer dans le plan ---------- */
+ function step(){
+  if(RUN.pos>=L.seq.length){nextStage();return;}
+  const q=L.seq[RUN.pos];
+  if(q.m!=null){G.mi=q.m;renderEnonce();renderFig();inSetup=true;try{setupMachine();}finally{inSetup=false;}fixTitle();}
+  else{noMachine();ctlOpen(q.c);}}
+ function noMachine(){$("mTitle").textContent="🔧 Poste de contrôle";$("doorTarget").textContent="";G.hopper=[];renderHopper();$("launch").disabled=true;}
+ function fixTitle(){const m=mach();if(!m)return;const lt="abcdefgh",nm=L.machines.length;
+  const tg=m.tgt;$("doorTarget").textContent=tg;$("doorTarget").style.fontSize=tg.length>9?"15px":"21px";
+  const t=(nm>1?`Machine ${lt[G.mi]} sur ${nm} · `:"Machine · ")+"on cherche : "+tg;const mt=$("mTitle");const tag=mt.querySelector(".attag");mt.textContent=t;if(tag)mt.prepend(tag," ");}
+ function afterItem(){RUN.pos++;persist();step();}
+ function nextStage(){if(RUN.si+1<RUN.stages.length){RUN.pos=0;RUN.si++;persist();
+   info(`<h2>✅ Plan ${RUN.si} terminé</h2><p>Plan suivant : <b>${E(RUN.stages[RUN.si].n||"")} · ${E(RUN.stages[RUN.si].title||"")}</b>.</p>`,[["➡ Plan suivant",()=>loadStage(RUN.si,0)]]);return;}
+  finish();}
+ /* ---------- fin d'une machine : la copie ---------- */
+ function machineDone(){const m=L.machines[G.mi-(inFinish?0:1)];inFinish=false;
+  const tpl=U.write;if(!tpl){RUN.copies.push({q:m.qt,model:m.it.model});afterItem();return;}
+  redac(m,()=>afterItem());}
+ let inFinish=false;
+ /* ---------- la copie à rédiger ---------- */
+ let RDM=null;
+ function redac(m,done){RDM=m;
+  const it=m.it,box=$$("mRedac");let tries=0;
+  const hop=G.solvedCopy.length?G.solvedCopy[G.solvedCopy.length-1]:null;
+  const chips=m.needs.map(n=>n.startsWith("pair:")?(()=>{const [a,b]=n.slice(5).split("|");const p=findPair(a,b);return p?`${p[0]} et ${p[1]} sont ${CFG[p[2]]}`:"";})():(L.facts[n]||{}).chip).filter(Boolean);
+  const gear=hop?hop.gear:m.fiche;
+  const help=U.write==="guide"?`Je sais que ${chips.join(" et que ")}.\nOr \nDonc `:U.write==="trous"?"Je sais que \nOr \nDonc ":"";
+  const lab={guide:"Aide : « Je sais que » est déjà écrit avec ton ENTRÉE. Écris la loi après « Or » et le résultat après « Donc ».",trous:"Aide : les trois mots sont là. Complète chaque ligne.",libre:"Rédaction libre : écris toute la réponse, comme sur ta copie."}[U.write];
+  box.querySelector(".rdq").textContent=m.qt;box.querySelector(".rdlab").textContent=lab;
+  const ta=$$("mxRdText");ta.value=help;ta.readOnly=false;ta.placeholder=U.write==="libre"?"Je sais que…\nOr…\nDonc…":"";
+  const rf=box.querySelector(".rdfig");if(rf)rf.innerHTML=(L.svg&&(innerWidth<980||innerHeight>innerWidth))?L.svg:"";
+  box.querySelector(".rdor").innerHTML=U.write==="libre"?"":`<div class="orstrip on ${FICHES[gear].t}"><span class="ok">Ton engrenage · Fiche ${gear} · ${E(FICHES[gear].title)} :</span><span class="fft" data-ff="${gear}">${ficheHTML(gear)}</span></div>`;
+  const out=box.querySelector(".rdout");out.innerHTML="";const go=$$("mxRdGo");go.style.display="";
+  $$("mRedac").classList.add("on");setTimeout(()=>{ta.focus();try{ta.setSelectionRange(ta.value.length,ta.value.length);}catch(_){}},80);
+  go.onclick=()=>{const txt=ta.value.trim();if(txt.length<6){SND.nudge();return;}
+   const r=EVG.gradeRedac(txt,it.s,1);tries++;const ok=r.got>=0.75;
+   if(!ok){G.errors++;updStars();SND.bad();}else SND.win();
+   ta.readOnly=true;go.style.display="none";
+   const cls=r.got>=r.max-1e-9?"":r.got>0?"mid":"bad";
+   out.innerHTML=`<span class="rvscore ${cls}">${fmt(r.got)} / 1</span>`+(r.com&&r.com.length?`<ul class="rvcom">${r.com.map(c=>`<li>${E(c)}</li>`).join("")}</ul>`:` <b style="color:#239150">Parfait !</b>`)
+    +(r.lines&&r.lines.length?`<table class="rvlines">${r.lines.map(l=>`<tr><td class="${l.ok?"ok":"ko"}">${l.ok?"✔":"✘"}</td><td>${E(l.t)}${l.why?` <i>(${E(l.why)})</i>`:""}</td></tr>`).join("")}</table>`:"")
+    +`<div class="rvmodel"><b>Copie modèle :</b> ${E(it.model)}</div>`+ffull(gear,"📜")
+    +`<div class="row">${!ok&&tries<3?`<button class="brass" id="mxRdAgain">↺ Corriger ma copie</button>`:""}<button class="brass" id="mxRdNext">Continuer ➡</button></div>`;
+   RUN.copies.push({q:m.qt,txt,got:r.got,model:it.model});persist();
+   if($$("mxRdAgain"))$$("mxRdAgain").onclick=()=>{RUN.copies.pop();ta.readOnly=false;go.style.display="";out.innerHTML="";ta.focus();};
+   $$("mxRdNext").onclick=()=>{$$("mRedac").classList.remove("on");done();};
+   setTimeout(()=>{try{out.scrollIntoView({block:"start",behavior:"smooth"});}catch(_){}},40);};}
+ /* ---------- le poste de contrôle (questions sans machine) ---------- */
+ let CT=null;
+ function ctlOpen(it){const box=$$("mCtl");CT={it,w:null};
+  const n=L.seq.length,k=RUN.pos+1;
+  const narrow=innerWidth<980||innerHeight>innerWidth;const figH=it.fig?it.fig():(L.svg&&(it.k==="pairs"||narrow))?L.svg:"";
+  box.querySelector(".cth").innerHTML=`🔧 Poste de contrôle <small>question ${k} sur ${n}</small>`;
+  box.querySelector(".ctq").textContent=it.q;box.querySelector(".ctfig").innerHTML=figH;
+  const inb=box.querySelector(".ctin");inb.innerHTML="";const out=box.querySelector(".ctout");out.innerHTML="";
+  const row=box.querySelector(".ctrow");
+  if(it.k==="fiche"){inb.innerHTML=`<p>Forge cette fiche <b>de mémoire</b>, mot à mot. Si tu bloques, ouvre le sac dans la forge.</p><button class="brass" id="ctForge">🔥 Forger la fiche</button>`;
+   row.innerHTML=`<button class="brass" id="ctDunno">Je ne sais pas</button>`;
+   $$("ctForge").onclick=()=>{$$("mCtl").classList.remove("on");openForge("ctl",it.f);};}
+  else{CT.w=REV.widget(inb,it,{figHost:box.querySelector(".ctfig")});
+   row.innerHTML=`<button class="brass" id="ctDunno">Je ne sais pas</button><button class="brass" id="ctOk">✔ Valider</button>`;
+   $$("ctOk").onclick=()=>ctlGrade(evGrade(it,CT.w.get()));}
+  $$("ctDunno").onclick=()=>ctlGrade({got:0,max:it.pts||1,com:["Pas grave : lis la correction, puis refais-la de mémoire."]});
+  $$("mCtl").classList.add("on");say("Poste de contrôle : réponds à la question.");}
+ function ctlGrade(r){const it=CT.it;if(CT.done)return;CT.done=true;CT.w&&CT.w.lock&&CT.w.lock();
+  RUN.ctl.got+=r.got;RUN.ctl.max+=r.max;updStars();
+  const ok=r.got>=r.max-1e-9;ok?SND.win():SND.bad();
+  const box=$$("mCtl"),out=box.querySelector(".ctout");box.querySelector(".ctrow").innerHTML="";
+  const cls=ok?"":r.got>0?"mid":"bad";
+  out.innerHTML=`<span class="rvscore ${cls}">${fmt(r.got)} / ${fmt(r.max)}</span>`+(r.com&&r.com.length?`<ul class="rvcom">${r.com.map(c=>`<li>${E(c)}</li>`).join("")}</ul>`:` <b style="color:#239150">Parfait !</b>`)
+   +(it.k==="fiche"?"":`<div class="rvmodel"><b>Réponse modèle :</b> ${E(REV.modelText(it))}</div>`)+REV.fichesOf(it).map(f=>ffull(f,"📜")).join("")
+   +(it.k==="self"&&L.ex.figCor?L.ex.figCor():"")+`<div class="row"><button class="brass" id="ctNext">Continuer ➡</button></div>`;
+  $$("mCtl").classList.add("on");
+  $$("ctNext").onclick=()=>{$$("mCtl").classList.remove("on");CT=null;afterItem();};
+  setTimeout(()=>{try{out.scrollIntoView({block:"start",behavior:"smooth"});}catch(_){}},40);}
+ function ctlForged(f,firstOk,bag){const pts=CT.it.pts||1;
+  ctlGrade({got:pts*(bag?0.25:firstOk?1:0.5),max:pts,com:bag?["Trouvée avec le sac : elle reviendra demain dans ton atelier."]:firstOk?[]:["Forgée après correction : elle reviendra demain dans ton atelier."]});}
+ /* ---------- fin de l'usine ---------- */
+ const RANKS=[[0,"Apprenti"],[15,"Ouvrier"],[35,"Compagnon"],[60,"Contremaître"],[90,"Ingénieur"],[120,"Maître des angles"]];
+ function totalStars(){return LEVELS.reduce((a,l)=>a+(SAVE.stars[l.id]||0),0);}
+ function rankOf(n){let r=RANKS[0];for(const x of RANKS)if(n>=x[0])r=x;return r;}
+ function zoneDone(z){return LEVELS.filter(l=>l.zone===z).every(l=>SAVE.stars[l.id]);}
+ function finish(){const st=curStars();const before=totalStars(),zb=zoneDone(U.zone);
+  SAVE.stars[U.id]=Math.max(SAVE.stars[U.id]||0,st);const s=S();s[U.id]={done:true,last:st,d:today(),copies:RUN.copies};
+  const hs=SAVE.hints[U.id]=SAVE.hints[U.id]||{tot:{},last:{}};hs.last=Object.assign({},G.hc);hs.lastDay=today();save();
+  const after=totalStars(),rk0=rankOf(before),rk1=rankOf(after),medal=!zb&&zoneDone(U.zone);
+  const fiches=[...new Set(G.solvedCopy.map(x=>x.gear))];
+  const end=res=>{SND.level();const next=LEVELS.find(l=>l.id===U.id+1&&!l.req);const Z=MXD.ZONES.find(z=>z.z===U.zone);
+   const rl=(res||[]).map(x=>`Fiche ${x.f} ${x.r?rbadge(x.r):'<span class="rb k-none">Plus tard</span>'}`).join(" · ");
+   info(`<h2>🏭 Usine ${U.id} terminée !</h2>${rl?`<p class="endrec">👨 Note de papa : ${rl}</p>`:""}<div class="stars big" style="text-align:center;font-size:40px">${starsHTML(st)}</div>
+    ${medal?`<p class="mxreward">🏅 Médaille gagnée : <b>${E(Z.ico+" "+Z.name)}</b> !</p>`:""}${rk1!==rk0?`<p class="mxreward">⬆️ Nouveau rang : <b>${rk1[1]}</b> !</p>`:""}
+    <p style="text-align:center">${RUN.ctl.max?`Postes de contrôle : <b>${fmt(RUN.ctl.got)} / ${fmt(RUN.ctl.max)}</b>. `:""}${G.solvedCopy.length?`Machines construites : <b>${G.solvedCopy.length}</b>.`:""}</p>
+    ${RUN.copies.length?`<p>Tes copies :</p><div class="copy mxcopy">${RUN.copies.map(c=>`<div class="qq">${E(c.q)}</div>${c.txt?`<div class="js" style="white-space:pre-wrap">${E(c.txt)}</div>`:""}<div class="mxmod"><b>Modèle :</b> ${E(c.model)}</div>`).join("")}</div>`:""}`,
+    [["🔁 Rejouer (nouveaux nombres)",()=>startLevel(U.id)],["🏠 Usines",goHome]].concat(next?[["➡ Usine suivante",()=>startLevel(next.id)]]:[]));};
+  if(fiches.length)reciteFlow(fiches,"usine",end);else end();}
+ /* ---------- branchements sur le moteur du jeu ---------- */
+ const _setup=setupMachine;setupMachine=function(){if(L&&L.kind==="mx"&&!inSetup){machineDone();return;}return _setup.apply(this,arguments);};
+ const _finish=finishLevel;finishLevel=function(){if(L&&L.kind==="mx"){inFinish=true;machineDone();return;}return _finish.apply(this,arguments);};
+ const _rf=renderFig;renderFig=function(){_rf.apply(this,arguments);if(L&&L.kind==="mx"){const f=$("fig");
+   if(L.svg){const m=L.svg.match(/viewBox="([^"]+)"/);f.setAttribute("viewBox",m?m[1]:"0 0 500 360");f.innerHTML=L.svg.replace(/^<svg[^>]*>/,"").replace(/<\/svg>\s*$/,"");}
+   else{f.setAttribute("viewBox","0 0 500 380");f.innerHTML=`<text x="250" y="170" text-anchor="middle" fill="#bcd6f0" font-family="Georgia,serif" font-size="22">Pas de figure dans l'énoncé.</text><text x="250" y="205" text-anchor="middle" fill="#bcd6f0" font-family="Georgia,serif" font-size="18">Fais une figure à main levée, codée, sur ton cahier.</text>`;}}};
+ const _re=renderEnonce;renderEnonce=function(){_re.apply(this,arguments);if(L&&L.kind==="mx"){const el=$("enonce");
+   if(L.frags.length)el.insertAdjacentHTML("beforeend",`<div class="mxidx"><span class="mxil">🧩 Indices à glisser :</span> ${L.frags.map(id=>{const pq=id.startsWith("pairq:");const t=pq?L.facts[id].chip:factChip(id);return `<span class="frag mxfrag${pq?" mxpair":""}" data-src="${E(id)}">${E(t)}${pq?" : …":""}</span>`;}).join(" ")}</div>`);
+   if(typeof applyGlow==="function")applyGlow();}};
+ const _fc=factChip;factChip=function(id){if(L&&L.kind==="mx"){const f=L.facts[id];if(f&&f.chip&&!id.startsWith("ang:"))return f.chip;}return _fc.apply(this,arguments);};
+ const _dh=dropHopper;dropHopper=function(f){if(L&&L.kind==="mx"){
+   if(f.startsWith("pairq:")){if(G.mapOpen)return _dh(f);const [a,b]=f.slice(6).split("|");return pairAttempt(a,b);}
+   if(L.facts[f]&&L.facts[f].trap&&!G.mapOpen){grip("<b>La machine grippe !</b> L'énoncé ne dit pas que ces droites sont parallèles. Elles en ont l'air, mais on ne démontre pas à l'œil.");return;}
+   if(!G.mapOpen&&!G.known.has(f)&&f!==mach().sought&&(f.startsWith("par")||f.startsWith("npar")||f.startsWith("eq"))){grip("<b>La machine grippe !</b> Ça, c'est la conclusion d'une autre question. Tu ne le sais pas encore.");return;}}
+  return _dh(f);};
+ const _launch=launch;launch=async function(){if(L&&L.kind==="mx"&&G.gear){const m=mach();if(m&&m.fiches&&m.fiches.includes(G.gear.f))m.fiche=G.gear.f;}return _launch.apply(this,arguments);};
+ $("launch").onclick=launch;
+ const _od=openDoor;openDoor=function(){_od.apply(this,arguments);const m=mach();if(L&&L.kind==="mx"&&(m.type==="npar"||m.type==="eq")){
+   $("doorInside").querySelector(".dk").textContent="Donc…";$("ans").placeholder="ta conclusion";
+   say(m.type==="npar"?"La machine a tourné. Que peux-tu conclure pour les droites ? Écris-le dans la SORTIE.":"La machine a tourné. Écris l'égalité démontrée dans la SORTIE.","good");}};
+ const _ca=checkAns;checkAns=function(){if(L&&L.kind==="mx"){const m=mach(),v=$("ans").value.trim();if(!v)return;const n=stripAcc(v.toLowerCase());
+   if(m.type==="npar"){if(/pas parall|ne sont pas|non parall|pas \/\/|∦/.test(n))return solved();G.errors++;updStars();SND.bad();say("Ta conclusion doit dire ce que tu as démontré : les droites sont-elles parallèles, ou pas ?","bad");return;}
+   if(m.type==="par"){if((/\/\/|parall/.test(n))&&!/\bpas\b|\bne\b|\bnon\b/.test(n))return solved();G.errors++;updStars();SND.bad();say("Ta conclusion doit répondre à la question : que peux-tu dire des droites ?","bad");return;}
+   if(m.type==="eq"){const [a,b]=m.tgt.replace(/ \?$/,"").split(" = ");if(v.toUpperCase().includes(a.toUpperCase())&&v.toUpperCase().includes(b.toUpperCase())&&/=/.test(v))return solved();G.errors++;updStars();SND.bad();say(`Écris l'égalité démontrée : ${E(m.tgt.replace(/ \?$/,""))}.`,"bad");return;}}
+  return _ca.apply(this,arguments);};
+ const _cs=curStars;curStars=function(){const s=_cs.apply(this,arguments);if(L&&L.kind==="mx"&&RUN&&RUN.ctl.max){const r=RUN.ctl.got/RUN.ctl.max;return Math.min(s,r>=0.85?3:r>=0.6?2:1);}return s;};
+ const _fgo=forgeGo;forgeGo=function(){const r=_fgo.apply(this,arguments);if(FG&&FG.mode==="ctl"&&FG.after){const f=FG.fiche,firstOk=!FG.fails.has(f)&&!FG.h3;FG.after=()=>{FG.after=null;$("mForge").classList.remove("on");ctlForged(f,firstOk,false);};}return r;};
+ $("fgGo").onclick=forgeGo;
+ const _fgc=$("fgClose").onclick;$("fgClose").onclick=function(){if(FG&&FG.mode==="ctl"&&!FG.after){if(typeof closeBag==="function")closeBag();$("mForge").classList.remove("on");closeHint();$$("mCtl").classList.add("on");return;}return _fgc.apply(this,arguments);};
+ const _ba=bagAccept;bagAccept=function(f){const r=_ba.apply(this,arguments);if(FG&&FG.mode==="ctl"){BAG.after=()=>{BAG.after=null;closeBag();$("mForge").classList.remove("on");ctlForged(f,false,true);};}return r;};
+ const _hc=hintCtx;hintCtx=function(){if(L&&L.kind==="mx"&&$("level").classList.contains("on")&&!$("mForge").classList.contains("on")&&!$("mLabel").classList.contains("on")&&(!mach()||$$("mCtl").classList.contains("on")||$$("mRedac").classList.contains("on")))return null;return _hc.apply(this,arguments);};
+ const _bt=bagTarget;bagTarget=function(){if(FG&&FG.mode==="level"&&L&&L.kind==="mx")return mach().fiche;return _bt.apply(this,arguments);};
+ /* ---------- les usines dans la liste du jeu ---------- */
+ for(const d of MXD.DEFS)LEVELS.push(Object.assign({machines:[1],kind:d.kind||"mx",fig:()=>({pts:{},lab:{},lines:[],arcs:[]})},d));
+ LEVELS.forEach(l=>{if(!l.zone)l.zone=1;});
+ const _ul=unlocked;unlocked=function(id){const l=LEVELS.find(x=>x.id===id);if(l&&l.req)return !!(SAVE.all||SAVE.stars[l.req]);return _ul.apply(this,arguments);};
+ const _sl=startLevel;startLevel=function(id){const l=LEVELS.find(x=>x.id===id);
+  if(l&&l.kind==="mx"){start(l);return;}
+  if(l&&l.kind==="boss"){boss();return;}
+  U=null;return _sl.apply(this,arguments);};
+ function boss(){const R=REV.st(),ec=R.evalCur;if(ec&&!ec.done){REV.evalOpen();return;}
+  const done=(R.evals||[]).map(x=>x.sub);const sub=!done.includes("A")?"A":!done.includes("B")?"B":(Math.random()<.5?"A":"B");
+  info(`<h2>👑 Le boss final : l'évaluation blanche</h2><p>Sujet <b>${sub}</b>. 55 minutes, noté sur 20, comme vendredi. Pas de mémo, pas d'indice.</p><p>Tes réponses sont gardées au fur et à mesure.</p>`,[["⏱ Commencer",()=>REV.evalStart(sub)],["Plus tard"]]);}
+ window.onEvalGraded=ec=>{const n=ec.note||0;const st=n>=16?3:n>=12?2:1;SAVE.stars[45]=Math.max(SAVE.stars[45]||0,st);save();};
+ /* ---------- l'accueil : les zones, le rang, les médailles ---------- */
+ goHome=function(){const box=$("levels");box.innerHTML="";const tot=totalStars(),rk=rankOf(tot),nx=RANKS.find(x=>x[0]>tot);
+  box.insertAdjacentHTML("beforeend",`<div class="mxrank panel"><span class="rk">🎖️ Rang : <b>${rk[1]}</b></span><span>${tot} ★ sur ${LEVELS.length*3}</span>${nx?`<span class="sm">Prochain rang : ${nx[1]} à ${nx[0]} ★</span>`:""}<span class="medals">${MXD.ZONES.map(z=>`<span class="md ${zoneDone(z.z)?"on":""}" title="${E(z.name)}">${z.ico}</span>`).join("")}</span></div>`);
+  for(const Z of MXD.ZONES){const ls=LEVELS.filter(l=>l.zone===Z.z);if(!ls.length)continue;const got=ls.filter(l=>SAVE.stars[l.id]).length;
+   box.insertAdjacentHTML("beforeend",`<div class="zoneh" style="--c:${Z.col}"><span>${Z.ico} Zone ${Z.z} · ${E(Z.name)}</span><small>${got} / ${ls.length} usines${zoneDone(Z.z)?" · 🏅 médaille":""}</small></div>`);
+   for(const l of ls){const ok=unlocked(l.id),s=SAVE.stars[l.id]||0;const b=document.createElement("button");const sv=(SAVE.mx||{})[l.id];
+    b.className="panel lvl"+(ok?"":" locked")+(l.kind==="boss"?" boss":"");
+    const badge=l.kind==="boss"?"👑 boss":l.kind==="mx"?(l.ex.length>1||l.ex[0]==="CH"?"plusieurs plans":"1 plan"):(l.machines.length>1?l.machines.length+" machines":"1 machine");
+    b.innerHTML=`<span class="badge">${badge}</span><b>Usine ${l.id}</b><span>${E(l.name)}</span><span class="src">${E(l.src)}</span><span class="stars">${ok?starsHTML(s):"🔒"}${sv&&!sv.done&&(sv.pos||sv.si)?' <span class="mxres">⏸ en cours</span>':""}</span>`;
+    b.onclick=()=>{if(ok)startLevel(l.id);else{SND.locked();info(`<h2>🔒 Usine fermée</h2><p>${l.req?`Termine l'usine ${l.req} pour ouvrir ce bonus.`:"Termine l'usine précédente pour ouvrir celle-ci."}</p>`,[["OK"]])}};box.appendChild(b);}}
+  const n=dueList().length,nr=Object.keys(SAVE.reciteTodo).length;$("dueCount").textContent=[n?`${n} à refabriquer`:"",nr?`${nr} à réciter`:""].filter(Boolean).join(", ").replace(/^(.+)$/,"($1)");
+  show("home");};
+ $("btnBack").onclick=goHome;$("btnBack2").onclick=goHome;
+ /* ---------- les fenêtres : copie et poste de contrôle ---------- */
+ function buildDom(){const ref=$("mForge");
+  const m1=document.createElement("div");m1.className="modal";m1.id="mRedac";
+  m1.innerHTML=`<div class="panel mbox mxbox"><h2>✍️ Ta copie</h2><div class="rdfig ctfig"></div><p class="rdq"></p><p class="rdlab"></p><div class="rdor"></div><textarea id="mxRdText" rows="5" autocomplete="off" autocorrect="off" autocapitalize="sentences" spellcheck="false"></textarea><div class="row"><button class="brass" id="mxRdMemo">📋 Mémo</button><button class="brass" id="mxRdGo">✔ Valider ma copie</button></div><div class="rdout"></div></div>`;
+  const m2=document.createElement("div");m2.className="modal";m2.id="mCtl";
+  m2.innerHTML=`<div class="panel mbox mxbox"><h2 class="cth"></h2><p class="ctq"></p><div class="ctfig"></div><div class="ctin"></div><div class="row ctrow"></div><div class="ctout"></div></div>`;
+  ref.parentNode.insertBefore(m1,ref);ref.parentNode.insertBefore(m2,ref);
+  $$("mxRdMemo").onclick=openMemo;
+  try{VOIX.attach("mxr",{field:$$("mxRdText"),fiche:()=>null,papaOK:()=>false,canRedo:()=>false,retry:()=>{}});}catch(e){}
+  const hb=document.querySelector("#home .homebar");
+  const b1=document.createElement("button");b1.className="brass";b1.id="btnBoss";b1.innerHTML="👑 Évaluation blanche";b1.onclick=boss;hb.insertBefore(b1,hb.firstChild);
+  const a=document.createElement("a");a.className="brass";a.id="btnPrint";a.href="imprimer/";a.target="_blank";a.rel="noopener";a.innerHTML="🖨️ Fiches";a.style.cssText="text-decoration:none;display:inline-flex;align-items:center";hb.insertBefore(a,b1.nextSibling);}
+ buildDom();
+ if($("home").classList.contains("on"))goHome();
+ return {start,get U(){return U;},get RUN(){return RUN;},get ST(){return ST;},buildStage,machineSpec,exList,totalStars,rankOf,boss,ctlGrade,get CT(){return CT;},get RDM(){return RDM;}};
+})();
 
 </script><!--/EVAL--><!--CLAVIER--><style>/* CLAVIER iPad : mode « clavier ouvert » */
 html.kb-on,html.kb-on body{overflow:hidden!important;overscroll-behavior:none}
