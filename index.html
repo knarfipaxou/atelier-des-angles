@@ -401,6 +401,58 @@ svg .flash{animation:flash .6s 2}
   #fgBag{font-size:16px;min-height:48px}
   .baggrid{grid-template-columns:repeat(auto-fill,minmax(140px,1fr))}
 }
+/* fiche écrite en entier, mot à mot */
+.ffull{border:3px solid;border-radius:12px;padding:9px 12px;margin:8px 0;text-align:left;color:#2b1906;font:17px/1.45 Georgia,serif;font-weight:normal}
+.ffull.D{background:#eaf3fc;border-color:#1f5fb8}
+.ffull.P{background:#fff3e4;border-color:#d4650a}
+.ffull .ffh{font:bold 16px/1.3 "Trebuchet MS",sans-serif;margin-bottom:4px}
+.ffull.D .ffh{color:#1f5fb8}.ffull.P .ffh{color:#a9480a}
+.ffull .fft .kw{color:#c0271b}.ffull .fft .opt{color:#55628f}
+.ffull.bad{box-shadow:0 0 0 3px #e0533e}.ffull.ok{box-shadow:0 0 0 3px #4fbf4a}
+.foreman .ffull{margin:6px 0 2px;padding:6px 10px;font-size:16px;max-height:34vh;overflow:auto}
+#fgOut .ffull{font-size:18px}
+.fgcont{display:flex;justify-content:center;margin:10px 0 2px}
+.fgcont button{min-height:52px;font-size:18px;padding:0 22px}
+.copy .orref{font:16px/1.4 Georgia,serif;color:#7a2a1b;background:#fff3e4;border-left:4px solid #d4650a;padding:4px 8px;margin:2px 0 8px}
+.gcell .gst{font:16px/1.35 Georgia,serif;text-align:left;margin:6px 2px 2px;color:#f6e7c8}
+.gcell .gst .kw{color:#ffb27a}.gcell .gst .opt{color:#b9c4e8}
+.bagcard{flex-direction:row}
+.bagcard .bct{display:flex;flex-direction:column;gap:4px;min-width:0}
+.bagcard .btl{font:bold 16px/1.25 "Trebuchet MS",sans-serif}
+.bagcard .bst{font:normal 16px/1.35 Georgia,serif;color:#2b1906}
+.bagcard .bst .kw{color:#c0271b}.bagcard .bst .opt{color:#55628f}
+.bagcard.ghost .bst{display:none}
+.baggrid{grid-template-columns:repeat(auto-fill,minmax(250px,1fr))}
+.bagbox>*{flex:none}
+.bagbox>.bagfams{flex:1 1 auto;min-height:110px}
+.bag-slot.full{display:block;text-align:left;max-height:50vh;overflow:auto;cursor:default}
+.bag-slot.full .ffull{margin:4px 0}
+.bag-slot .slab{font:bold 16px "Trebuchet MS",sans-serif;color:#ffe9b0;margin:6px 0 2px}
+.bag-slot .swhy{font:16px/1.4 "Trebuchet MS",sans-serif;color:#ffc2b5;margin:6px 0}
+#bagMsg{flex:none;position:relative;z-index:1}
+.bagbox .row{flex:none;flex-wrap:wrap;gap:8px;position:relative;z-index:0}
+.bagbox.done .bagfams{display:none}
+.bagbox.done .bag-slot.full{max-height:none}
+#bagCont{display:none;min-height:52px;font-size:18px}
+.bagbox.done #bagCont{display:inline-block}
+.bagbox.done #bagConfirm{display:none}
+@media (max-width:600px){
+  .bagbox{padding:12px 10px 10px}
+  .bagbox h2{font-size:20px}
+  .baggrid{grid-template-columns:1fr}
+  .bagbox .row button{flex:1 1 40%;min-height:48px;font-size:16px}
+  .bag-slot.full{max-height:56vh}
+  .bagbox>.bagfams{min-height:90px}
+  .baglead{font-size:15px;margin-bottom:6px}
+}
+.orstrip{display:none;flex:none;border:3px solid;border-radius:10px;padding:5px 9px;font:16px/1.35 Georgia,serif;color:#2b1906;max-height:30vh;overflow:auto}
+.orstrip.on{display:block}
+.orstrip.D{background:#eaf3fc;border-color:#1f5fb8}.orstrip.P{background:#fff3e4;border-color:#d4650a}
+.orstrip .ok{font:bold 15px "Trebuchet MS",sans-serif;margin-right:6px}
+.orstrip.D .ok{color:#1f5fb8}.orstrip.P .ok{color:#a9480a}
+.orstrip .kw{color:#c0271b}.orstrip .opt{color:#55628f}
+.gcell.no{opacity:1}.gcell.no svg,.gcell.no .n{opacity:.55}
+.atel{grid-template-columns:repeat(auto-fill,minmax(190px,1fr))}
 /*MEMO-CSS-END*/
 
 /* ===== MÉMO PAGE ===== */
@@ -528,6 +580,7 @@ svg .flash{animation:flash .6s 2}
       <div class="leaves"><div class="leaf"></div><div class="leaf"></div></div>
      </div>
     </div>
+    <div class="orstrip" id="orStrip"></div>
     <div class="lever"><button class="brass" id="launch"><span class="lv"></span>Tirer le levier</button></div>
    </div>
   </div>
@@ -601,6 +654,7 @@ svg .flash{animation:flash .6s 2}
   <p id="bagMsg"></p>
   <div class="row">
     <button class="brass" id="bagConfirm" disabled>Confirmer cette fiche</button>
+    <button class="brass" id="bagCont">Continuer ➡</button>
     <button class="brass" id="btnMemoBag">📋 Mémo</button>
     <button class="brass" id="bagClose">Fermer le sac</button>
   </div>
@@ -856,6 +910,8 @@ const FICHES={
 22:{t:"D",title:"Droite graduée, origine, abscisse d'un point",txt:"Une droite graduée est un axe muni : • d'une origine (le point O) ; • d'une unité (pour les graduations) ; • d'un sens (dans lequel les nombres grandissent). L'abscisse d'un point est le nombre relatif qui repère sa position sur la droite graduée : si le point H a pour abscisse −3, on le note H(−3)."}
 };
 const plainFiche=n=>FICHES[n].txt.replace(/[{}]/g,"").replace(/\s+/g," ").trim();
+/* la fiche écrite en entier, mot à mot (bleu = définition, orange = propriété) */
+function ffull(f,lab,cls){const F=FICHES[f];return `<div class="ffull ${F.t}${cls?" "+cls:""}" data-ff="${f}"><div class="ffh">${lab?lab+" ":""}Fiche ${f} · ${esc(F.title)} · ${F.t==="P"?"Propriété":"Définition"}</div><div class="fft">${ficheHTML(f)}</div></div>`;}
 const TOPIC={2:"l'addition de deux angles adjacents",4:"la bissectrice",6:"les angles opposés par le sommet",10:"les droites parallèles et les angles alternes-internes",
 11:"les droites parallèles et les angles correspondants",15:"les angles alternes-internes de même mesure, pour prouver un parallélisme",
 16:"les angles correspondants de même mesure, pour prouver un parallélisme",17:"la somme des angles d'un triangle",18:"le triangle rectangle",19:"le triangle isocèle",20:"le triangle équilatéral"};
@@ -1460,6 +1516,7 @@ function renderGears(state){
   <text class="gtxt" y="-6" text-anchor="middle" fill="#ffd77a" style="fill:#ffd77a">LOI · OR</text><text class="gtxt" y="14" text-anchor="middle" style="fill:#f6e7c8;font-weight:normal">Touche pour</text><text class="gtxt" y="30" text-anchor="middle" style="fill:#f6e7c8;font-weight:normal">forger</text></g>`;}
  else{const col=g.t==="P"?"#d8584a":"#5fae55";
   law=`<g id="lawslot"><g class="sg ${g.t==="D"?"loose":""}">${gearSVG(16,62,col,16)}<text class="gtxt" y="-24" text-anchor="middle">${g.t==="P"?"PROPRIÉTÉ":"DÉFINITION"}</text><text class="gtxt" y="36" text-anchor="middle" style="font-size:15px">Fiche ${g.f}</text></g></g>`;}
+ const os=$("orStrip");if(os){if(g){os.className="orstrip on "+g.t;os.innerHTML=`<span class="ok">OR · Fiche ${g.f} · ${esc(FICHES[g.f].title)} :</span><span class="fft" data-ff="${g.f}">${ficheHTML(g.f)}</span>`;}else{os.className="orstrip";os.innerHTML="";}}
  const small=(cx,cls)=>`<g transform="translate(${cx},80)"><g class="sg ${cls||""}">${gearSVG(10,38,"#c9973f",9)}</g></g>`;
  $("gearsSvg").innerHTML=`<rect x="0" y="74" width="290" height="12" fill="#2a190b"/>`+small(44,state==="spin"?"spinr":"")+
   `<g transform="translate(145,80)" id="lawpos"><g id="lawInner" class="${g&&g.t==="D"?"":""}">${law}</g></g>`+small(246,state==="spin"?"spinr":"");
@@ -1594,21 +1651,24 @@ function forgeGo(){
  FG.done=true;if($("fgBag"))$("fgBag").style.display="none";const usedH3=FG.mode==="level"?G.forgeH3.has(d.f):FG.h3;const firstOk=!FG.fails.has(d.f)&&!usedH3;closeHint();recordForge(d.f,firstOk);SND.forge();
  const col=F.t==="P"?"#d8584a":"#5fae55";
  $("fgOut").innerHTML=`<div class="forgeanim"><svg viewBox="-70 -70 140 140"><g>${gearSVG(16,62,col,16)}</g></svg></div>
-  <p style="text-align:center"><b>Engrenage forgé !</b> Fiche ${d.f} : « ${esc(F.title)} ». ${d.papa?`<br><span class="presque">${papaMsg(d)}</span>`:""}${d.near&&d.near.length?`<br><span class="presque">Presque parfait ! Il manquait juste ${esc(nearText(d))}. Ça compte quand même.</span><div class="diff">${diffHTML(d)}</div>`:""}${d.soft&&d.soft.length&&!(d.near&&d.near.length)?`<br><span class="cj">C'est juste ! Petits mots différents :</span> ${softHTML(d)}`:""}${d.ops.some(o=>o.k==="mn")?"<br><small>(petite faute d'orthographe acceptée)</small>":""}
+  <p style="text-align:center;margin-bottom:0"><b>Engrenage forgé !</b> Voici ta fiche, mot à mot :</p>${ffull(d.f)}<p style="text-align:center">${d.papa?`<br><span class="presque">${papaMsg(d)}</span>`:""}${d.near&&d.near.length?`<br><span class="presque">Presque parfait ! Il manquait juste ${esc(nearText(d))}. Ça compte quand même.</span><div class="diff">${diffHTML(d)}</div>`:""}${d.soft&&d.soft.length&&!(d.near&&d.near.length)?`<br><span class="cj">C'est juste ! Petits mots différents :</span> ${softHTML(d)}`:""}${d.ops.some(o=>o.k==="mn")?"<br><small>(petite faute d'orthographe acceptée)</small>":""}
   ${firstOk?"":`<br><small>${FG.fails.has(d.f)?"Tu as dû corriger":"Tu as utilisé le grand indice"} : cette fiche reviendra demain dans ton atelier.</small>`}</p>`;
- setTimeout(()=>{$("mForge").classList.remove("on");
-  if(FG.mode==="level")placeGear(d.f);else{const f=d.f;renderAtelier();if(!d.papa)reciteFlow([f],"atelier",renderAtelier);}},firstOk&&!(d.near&&d.near.length)?1300:2600);
+ FG.after=()=>{FG.after=null;$("mForge").classList.remove("on");
+  if(FG.mode==="level")placeGear(d.f);else{const f=d.f;renderAtelier();if(!d.papa)reciteFlow([f],"atelier",renderAtelier);}};
+ $("fgOut").insertAdjacentHTML("beforeend",`<div class="fgcont"><button class="brass" id="fgCont">Continuer ➡</button></div>`);
+ $("fgCont").onclick=()=>{if(FG&&FG.after)FG.after();};
+ setTimeout(()=>{const o=$("fgOut").querySelector(".ffull");if(o&&o.scrollIntoView)o.scrollIntoView({block:"nearest"});},30);
 }
 function placeGear(f){
  const F=FICHES[f];G.gear={f,t:F.t};SND.clank();
  if(F.t==="D"){renderGears("wobble");G.errors++;updStars();
   say(defMsg(f),"bad");}
- else{renderGears();anim($("gearsSvg"),"shake",300);say(`Engrenage de la fiche ${f} en place. ${L.tuto?"<b>4.</b> ":""}Quand l'ENTRÉE est prête, <b>tire le levier</b>.`,"good");}
+ else{renderGears();anim($("gearsSvg"),"shake",300);say(`Engrenage de la fiche ${f} en place. ${L.tuto?"<b>4.</b> ":""}Quand l'ENTRÉE est prête, <b>tire le levier</b>. Ta propriété est écrite en entier sous les engrenages.`,"good");}
 }
 function defMsg(f){
  const F=FICHES[f];
- if(f===8||f===9)return `Ta fiche ${f} est juste, mais l'engrenage <b>ne s'emboîte pas</b>. C'est une <b>définition</b> (cadre vert) : elle dit <b>où</b> sont les angles ${f===8?"alternes-internes":"correspondants"}. Elle ne dit pas qu'ils ont la même mesure. Une machine tourne avec une <b>propriété</b> (cadre rouge), une phrase en « si… alors… ». Touche l'engrenage pour en forger un autre.`;
- return `Ta fiche ${f} est juste, mais l'engrenage <b>ne s'emboîte pas</b>. C'est une <b>définition</b> (cadre vert) : elle explique le mot « ${esc(F.title.toLowerCase())} ». Elle ne donne aucun résultat. Une machine tourne avec une <b>propriété</b> (cadre rouge). Touche l'engrenage pour en forger un autre.`;
+ if(f===8||f===9)return `Ta fiche ${f} est juste, mais l'engrenage <b>ne s'emboîte pas</b>. C'est une <b>définition</b> (cadre vert) : elle dit <b>où</b> sont les angles ${f===8?"alternes-internes":"correspondants"}. Elle ne dit pas qu'ils ont la même mesure. Une machine tourne avec une <b>propriété</b> (cadre rouge), une phrase en « si… alors… ». Touche l'engrenage pour en forger un autre.`+ffull(f,"Ton engrenage :");
+ return `Ta fiche ${f} est juste, mais l'engrenage <b>ne s'emboîte pas</b>. C'est une <b>définition</b> (cadre vert) : elle explique le mot « ${esc(F.title.toLowerCase())} ». Elle ne donne aucun résultat. Une machine tourne avec une <b>propriété</b> (cadre rouge). Touche l'engrenage pour en forger un autre.`+ffull(f,"Ton engrenage :");
 }
 function wrongMsg(got,need){
  const pk=mach().needs.find(n=>n.startsWith("pair:"));const pc=pk?findPair(...pk.slice(5).split("|"))[2]:null;
@@ -1618,7 +1678,7 @@ function wrongMsg(got,need){
   return `Cette loi parle d'angles <b>${got===10||got===15?"alternes-internes":"correspondants"}</b>. Mais tes angles sont <b>${CFG[pc]}</b> : regarde ton étiquette.`;
  return `Cette loi parle de <b>${TOPIC[got]||FICHES[got].title.toLowerCase()}</b>. Est-ce que tes indices parlent de ça ? Regarde ce qu'il y a dans l'ENTRÉE.`;
 }
-$("fgGo").onclick=forgeGo;$("fgClose").onclick=()=>{if(typeof closeBag==="function")closeBag();$("mForge").classList.remove("on");closeHint();if(FG&&FG.mode!=="level")renderAtelier();};
+$("fgGo").onclick=forgeGo;$("fgClose").onclick=()=>{if(FG&&FG.after){if(typeof closeBag==="function")closeBag();FG.after();return;}if(typeof closeBag==="function")closeBag();$("mForge").classList.remove("on");closeHint();if(FG&&FG.mode!=="level")renderAtelier();};
 
 /* ================= LANCEMENT ================= */
 async function launch(){
@@ -1631,7 +1691,7 @@ async function launch(){
   await breakAt("hopper",`<b>Ça casse à l'ENTRÉE.</b> ${h}`+(missing.length>1?` <small>(il manque ${missing.length} indices)</small>`:""));return}
  if(!G.gear){await breakAt("gear","<b>Ça casse au milieu :</b> il n'y a pas de loi. Touche l'engrenage vide pour la forger.",true);return}
  if(G.gear.t==="D"){await breakAt("gear","<b>Ça casse à l'engrenage.</b> "+defMsg(G.gear.f));return}
- if(G.gear.f!==m.fiche){await breakAt("gear","<b>Ça casse à l'engrenage.</b> "+wrongMsg(G.gear.f,m.fiche));return}
+ if(G.gear.f!==m.fiche){await breakAt("gear","<b>Ça casse à l'engrenage.</b> "+wrongMsg(G.gear.f,m.fiche)+ffull(G.gear.f,"Ton engrenage :"));return}
  // ça tourne
  renderGears("spin");SND.spin();say("Ça tourne ! Les indices passent par la loi…","good");
  document.querySelectorAll("#hopper .chip").forEach((c,i)=>c.animate([{transform:"none"},{transform:"translateY(8px) scale(.9)",opacity:.6},{transform:"none"}],{duration:700,delay:i*120}));
@@ -1690,6 +1750,7 @@ function copyHTML(){
   <div class="qq">${esc(L.questions[m.q].t)}</div>
   <div class="js"><span class="k">Je sais que</span> ${esc(m.knows)}<span class="ico">⟵ ENTRÉE</span></div>
   <div class="or"><span class="k">Or</span> ${esc(m.or||orText(gear))}<span class="ico">⟵ ENGRENAGE</span></div>
+  <div class="orref" data-ff="${gear}">📜 Fiche ${gear} mot à mot : <span class="fft">${ficheHTML(gear)}</span></div>
   <div class="dc"><span class="k">Donc</span> ${esc(m.donc)}<span class="ico">⟵ SORTIE</span></div>`).join("")+`</div>`;
 }
 function orText(f){let s=FICHES[f].txt.replace(/\{[^}]*\}/g,"").replace(/\s+/g," ").replace(/\s+([.,])/g,"$1").trim();s=s.replace(/^Soit deux droites coupées par une sécante\. /,"");return lowerFirst(s);}
@@ -1735,7 +1796,7 @@ function renderAtelier(){
  const g=$("atelGrid");g.innerHTML="";
  for(let f=1;f<=20;f++){const F=FICHES[f],s=SAVE.forged[f],col=F.t==="P"?"#d8584a":"#5fae55";const red=SAVE.redo[f];
   const c=document.createElement("div");c.className="panel gcell"+(s?"":" no");
-  c.innerHTML=`<svg viewBox="-70 -70 140 140">${gearSVG(16,62,s?col:"#555",16)}</svg><div class="n">Fiche ${f}</div><div>${esc(F.title)}</div><div style="opacity:.8">${F.t==="P"?"Propriété":"Définition"}${s?` · forgé ${s.count}×`:""}</div>${red?`<div style="color:#ffb27a">🔁 ${red<=today()?"aujourd'hui":"le "+red.split("-").reverse().join("/")}</div>`:""}`
+  c.innerHTML=`<svg viewBox="-70 -70 140 140">${gearSVG(16,62,s?col:"#555",16)}</svg><div class="n">Fiche ${f}</div><div>${esc(F.title)}</div><div class="gst fft" data-ff="${f}">${ficheHTML(f)}</div><div style="opacity:.8">${F.t==="P"?"Propriété":"Définition"}${s?` · forgé ${s.count}×`:""}</div>${red?`<div style="color:#ffb27a">🔁 ${red<=today()?"aujourd'hui":"le "+red.split("-").reverse().join("/")}</div>`:""}`
    +((SAVE.recite[f]||SAVE.reciteTodo[f])?`<div>${rbadge((SAVE.recite[f]||{}).last)}</div>`:"")+((s||SAVE.recite[f])?`<button class="brass rec" data-rc="${f}">🎤 Réciter</button>`:"");
   const rb=c.querySelector("[data-rc]");if(rb)rb.onclick=()=>reciteFlow([f],"atelier",renderAtelier);
   g.appendChild(c);}
@@ -2026,7 +2087,7 @@ function rcCard(){
  $("rcTitle").textContent="📜 Fiche à retenir"+(RC.list.length>1?` · ${RC.i+1} sur ${RC.list.length}`:"");
  $("rcSub").innerHTML=RC.from==="atelier"?"Récite cette fiche à papa.":`Pour réussir cette usine, tu as eu besoin de cette ${F.t==="P"?"propriété":"définition"}. Apprends-la par cœur.`;
  $("rcHead").innerHTML=`<span class="rcnum">Fiche ${f}</span> ${esc(F.title)} <span class="rctype ${F.t}">${F.t==="P"?"Propriété":"Définition"}</span>${atTag(f)}`;
- $("rcText").innerHTML=ficheHTML(f)+(SIALORS[f]?`<div class="rcsa">En « Si… alors… » : ${esc(SIALORS[f]).replace(/\b(Si|alors)\b/g,'<b class="kw">$1</b>')}</div>`:"");
+ $("rcText").innerHTML=`<span class="fft" data-ff="${f}">${ficheHTML(f)}</span>`+(SIALORS[f]?`<div class="rcsa">En « Si… alors… » : ${esc(SIALORS[f]).replace(/\b(Si|alors)\b/g,'<b class="kw">$1</b>')}</div>`:"");
  SCH.mount($("rcSch"),f);
  $("rcCard").classList.remove("hid");$("rcStamp").className="rcstamp";$("rcStamp").textContent="";
  rcState();
@@ -2263,6 +2324,9 @@ function bagWhy(got,need){
  return "Cette fiche parle de « "+FICHES[got].title.toLowerCase()+" ». Ça ne correspond pas à cette situation.";
 }
 function bagMsg(html,kind){const el=$("bagMsg");el.className=kind||"";el.innerHTML=html||"";}
+function bagSlotShow(html){const s=$("bagSlot");s.classList.add("full");s.innerHTML=html;s.scrollTop=0;
+ requestAnimationFrame(()=>{try{s.scrollIntoView({block:"nearest"});}catch(_){}});}
+function bagSlotReset(){const s=$("bagSlot");s.classList.remove("full");s.innerHTML="Emplacement de la loi";}
 function bagRender(){
  const box=$("bagFams");box.innerHTML="";
  for(const fam of MEMO_FAM){
@@ -2272,31 +2336,33 @@ function bagRender(){
   for(const f of fam.fiches){
    const F=FICHES[f],b=document.createElement("button");
    b.type="button";b.className="bagcard "+(F.t==="D"?"d":"p");b.dataset.f=f;
-   b.innerHTML=`<span class="bno">${f}</span><span>${esc(F.title)}</span>`;
+   b.innerHTML=`<span class="bno">${f}</span><span class="bct"><span class="btl">${esc(F.title)}</span><span class="bst fft" data-ff="${f}">${ficheHTML(f)}</span></span>`;
    b.addEventListener("pointerdown",bagPointerDown);
    b.addEventListener("click",e=>{if(BAG._didDrag){BAG._didDrag=false;return;}bagSelect(f);});
    g.appendChild(b);
   }
   box.appendChild(sec);
  }
- bagSelect(null);$("bagSlot").classList.remove("over");
- $("bagSlot").innerHTML="Emplacement de la loi";bagMsg("");
+ bagSelect(null);$("bagSlot").classList.remove("over");$("mBag").querySelector(".bagbox").classList.remove("done");
+ bagSlotReset();bagMsg("");
 }
 function bagSelect(f){
  BAG.sel=f;
  $("bagFams").querySelectorAll(".bagcard").forEach(c=>c.classList.toggle("on",+c.dataset.f===f));
  $("bagConfirm").disabled=!f;
- if(f) bagMsg("Fiche "+f+" : « "+esc(FICHES[f].title)+" ». Confirme, ou glisse-la dans l'emplacement.");
+ if(f){bagSlotShow(`<div class="slab">Ta fiche choisie :</div>`+ffull(f));bagMsg("Lis-la en entier. Confirme, ou choisis une autre fiche.");}
 }
 function openBag(){
  if(!FG||FG.done)return;
  bagRender();$("mBag").classList.add("on");
 }
-function closeBag(){$("mBag").classList.remove("on");BAG.sel=null;BAG.drag=null;}
+function closeBag(){$("mBag").classList.remove("on");BAG.sel=null;BAG.drag=null;const bx=$("mBag").querySelector(".bagbox");if(bx)bx.classList.remove("done");}
 function bagTry(f){
- const need=bagTarget();if(!need)return;
+ const need=bagTarget();if(!need||(FG&&FG.done))return;
  f=+f;
- if(f!==need){SND.bad();bagMsg(bagWhy(f,need),"bad");bagSelect(null);save();return;}
+ if(f!==need){SND.bad();bagSelect(null);
+  bagSlotShow(`<div class="slab">❌ Ta fiche :</div>`+ffull(f,"","bad")+`<div class="swhy">${bagWhy(f,need)}</div><div class="slab">✅ La bonne fiche :</div>`+ffull(need,"","ok"));
+  bagMsg("Lis bien les deux fiches. Puis glisse la bonne dans l'emplacement.","bad");save();return;}
  bagAccept(f);
 }
 function bagAccept(f){
@@ -2306,22 +2372,23 @@ function bagAccept(f){
  const g=SAVE.forged[f]||{count:0};g.help=(g.help||0)+1;SAVE.forged[f]=g;save();
  if(FG.mode==="level"){G.errors++;updStars();}
  SND.forge();
- $("bagSlot").innerHTML=`<span class="chip ${FICHES[f].t==="D"?"":"prod"}">Fiche ${f} · ${esc(FICHES[f].title)}</span>`;
+ $("mBag").querySelector(".bagbox").classList.add("done");
+ bagSlotShow(`<div class="slab">✅ La bonne fiche, mot à mot :</div>`+ffull(f,"","ok"));
  bagMsg("<b>Trouvé avec le sac.</b> Ça compte moins que de mémoire. Cette fiche reviendra demain, à forger de mémoire.","good");
  $("bagConfirm").disabled=true;
- setTimeout(()=>{
+ BAG.after=()=>{BAG.after=null;
   closeBag();$("mForge").classList.remove("on");
   if(FG.mode==="level")placeGear(f);
   else renderAtelier();
- },1400);
+ };
 }
-$("fgBag").onclick=openBag;$("bagClose").onclick=closeBag;$("btnMemoBag").onclick=openMemo;
+$("fgBag").onclick=openBag;$("bagClose").onclick=()=>{if(BAG.after)BAG.after();else closeBag();};$("bagCont").onclick=()=>{if(BAG.after)BAG.after();};$("btnMemoBag").onclick=openMemo;
 $("bagConfirm").onclick=()=>{if(BAG.sel)bagTry(BAG.sel);};
 function bagPointerDown(e){
  if(e.button!==undefined&&e.button!==0)return;
  const card=e.currentTarget,f=+card.dataset.f;
  BAG._sx=e.clientX;BAG._sy=e.clientY;BAG._didDrag=false;
- const ghost=card.cloneNode(true);ghost.classList.add("ghost");ghost.style.position="fixed";ghost.style.left=e.clientX+"px";ghost.style.top=e.clientY+"px";ghost.style.pointerEvents="none";ghost.style.zIndex=30000;ghost.style.transform="translate(-50%,-120%) rotate(-3deg) scale(1.05)";
+ const ghost=card.cloneNode(true);ghost.classList.add("ghost");ghost.style.maxWidth="260px";ghost.style.position="fixed";ghost.style.left=e.clientX+"px";ghost.style.top=e.clientY+"px";ghost.style.pointerEvents="none";ghost.style.zIndex=30000;ghost.style.transform="translate(-50%,-120%) rotate(-3deg) scale(1.05)";
  document.body.appendChild(ghost);
  BAG.drag={f,ghost};
  const move=ev=>{
