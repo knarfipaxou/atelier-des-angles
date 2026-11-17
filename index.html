@@ -903,11 +903,13 @@ const FICHES={
 15:{t:"P",title:"Angles alternes-internes égaux et parallélisme",txt:"{Soit deux droites coupées par une sécante.} Si les angles alternes-internes formés sont de même mesure, alors les deux droites sont parallèles."},
 16:{t:"P",title:"Angles correspondants égaux et parallélisme",txt:"{Soit deux droites coupées par une sécante.} Si les angles correspondants formés sont de même mesure, alors les deux droites sont parallèles."},
 17:{t:"P",title:"Somme des angles d'un triangle",txt:"Dans tout triangle {ABC}, la somme des mesures des angles vaut 180°. {CAB + ABC + BCA = 180°}"},
-18:{t:"P",title:"Triangle rectangle",txt:"Un triangle rectangle possède un angle de mesure égale à 90° et la somme des mesures des deux autres angles vaut 90°."},
+18:{t:"P",title:"Triangle rectangle",txt:"Un triangle rectangle possède un angle de mesure égale à 90°. La somme des mesures des deux autres angles vaut 90°."},
 19:{t:"P",title:"Triangle isocèle",txt:"Un triangle isocèle a ses angles à la base de même mesure. {BAC = 180° − ABC × 2 et ABC = BCA = (180° − BAC) ÷ 2}"},
 20:{t:"P",title:"Triangle équilatéral",txt:"Un triangle équilatéral a ses angles de même mesure."},
 21:{t:"D",title:"Nombre relatif, signe et valeur absolue",txt:"Un nombre relatif est un nombre défini par : • un signe : « − » pour les nombres négatifs, « + » pour les nombres positifs ; • sa valeur absolue, qui donne sa distance par rapport au nombre 0. Zéro est à la fois positif et négatif."},
-22:{t:"D",title:"Droite graduée, origine, abscisse d'un point",txt:"Une droite graduée est un axe muni : • d'une origine (le point O) ; • d'une unité (pour les graduations) ; • d'un sens (dans lequel les nombres grandissent). L'abscisse d'un point est le nombre relatif qui repère sa position sur la droite graduée : si le point H a pour abscisse −3, on le note H(−3)."}
+22:{t:"D",title:"Droite graduée, origine, abscisse d'un point",txt:"Une droite graduée est un axe muni : • d'une origine (le point O) ; • d'une unité (pour les graduations) ; • d'un sens (dans lequel les nombres grandissent). L'abscisse d'un point est le nombre relatif qui repère sa position sur la droite graduée : si le point H a pour abscisse −3, on le note H(−3)."},
+23:{t:"P",title:"Angles alternes-internes de mesures différentes",txt:"{Soit deux droites coupées par une sécante.} Si les angles alternes-internes formés n'ont pas la même mesure, alors les deux droites ne sont pas parallèles."},
+24:{t:"P",title:"Angles correspondants de mesures différentes",txt:"{Soit deux droites coupées par une sécante.} Si les angles correspondants formés n'ont pas la même mesure, alors les deux droites ne sont pas parallèles."}
 };
 const plainFiche=n=>FICHES[n].txt.replace(/[{}]/g,"").replace(/\s+/g," ").trim();
 /* la fiche écrite en entier, mot à mot (bleu = définition, orange = propriété) */
@@ -2283,7 +2285,7 @@ soundBtns();goHome();
 const MEMO_FAM=[
  {name:"La part de gâteau",c:"#c45c2c",fiches:[1,2,3,4]},
  {name:"Le X",c:"#2a6d8f",fiches:[5,6]},
- {name:"Le Z et le F",c:"#2e8a4a",fiches:[7,8,9,10,11,14,15,16]},
+ {name:"Le Z et le F",c:"#2e8a4a",fiches:[7,8,9,10,11,14,15,16,23,24]},
  {name:"Le 90 et le 180",c:"#b07a12",fiches:[12,13]},
  {name:"Le triangle",c:"#7a3eb0",fiches:[17,18,19,20]}
 ];
@@ -2605,7 +2607,1106 @@ window.__voix=VOIX;
 
 
 
-<!--CLAVIER--><style>/* CLAVIER iPad : mode « clavier ouvert » */
+<!--EVAL--><style>/* ===== TOUR DES RÉVISIONS ===== */
+#revis{background:radial-gradient(ellipse at top,#4a3018,#1e130a 70%)}
+#revis .rvbody{flex:1;overflow:auto;-webkit-overflow-scrolling:touch;padding:12px 14px 40px}
+.rvintro{max-width:980px;margin:0 auto 10px;color:#f6e7c8;font-size:16px;line-height:1.4}
+.rvmodes{display:flex;flex-wrap:wrap;gap:10px;max-width:980px;margin:0 auto 14px}
+.rvmodes .brass{font-size:16px;padding:10px 14px;border-radius:12px;min-height:48px}
+.rvmodes .brass.big{font-size:18px;background:linear-gradient(180deg,#f2cf7c,#c48f33 50%,#93621d)}
+.rvpart{max-width:980px;margin:0 auto 14px}
+.rvpart h3{margin:6px 0;color:#ffd98a;font-size:17px}
+.rvgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:8px}
+.rvcard{text-align:left;background:#fffaf0;color:#2b1906;border:2px solid #8a5d1c;border-radius:12px;padding:8px 10px;font-size:14px;line-height:1.25;cursor:pointer;min-height:64px;position:relative}
+.rvcard b{display:block;font-size:13px;color:#8a5d1c}
+.rvcard .rvsc{position:absolute;right:8px;top:6px;font-weight:bold;font-size:13px}
+.rvcard.done{border-color:#239150;background:#f0fbf2}.rvcard.mid{border-color:#e0a21b;background:#fff8e6}
+.rvwrap{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px;max-width:1300px;margin:0 auto}
+@media (max-width:900px){.rvwrap{grid-template-columns:1fr}}
+.rvst,.rvq{background:#fffdf4;color:#2b1906;border-radius:14px;border:3px solid #8a5d1c;padding:10px 14px;font:17px/1.45 Georgia,serif}
+.rvst p{margin:6px 0}.rvst .evul li{margin:5px 0}
+.rvst .src,.rvq .src{font:13px "Trebuchet MS",sans-serif;color:#8a5d1c}
+.evsvg{width:100%;height:auto;max-height:46vh;display:block;margin:6px auto;border-radius:12px;border:1px solid #d8c7a0;touch-action:manipulation}
+.rvq h4{margin:0 0 6px;font:bold 15px "Trebuchet MS",sans-serif;color:#8a5d1c}
+.rvq .qt{font-size:18px;margin-bottom:8px}
+.rvq textarea,.rvev textarea{width:100%;box-sizing:border-box;min-height:110px;font:18px/1.4 Georgia,serif;padding:8px;border:2px solid #8a5d1c;border-radius:10px;background:#fff}
+.rvq input.rvnum,.rvev input.rvnum{width:110px;font:20px Georgia,serif;padding:6px 8px;border:2px solid #8a5d1c;border-radius:10px}
+.rvfield{display:inline-flex;align-items:center;gap:6px;margin:4px 12px 4px 0;font-size:18px}
+.rvgo{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.rvgo .brass{font-size:17px;padding:10px 16px;min-height:46px;border-radius:12px}
+.rvgo .rvsec{background:#efe3c8;border:2px solid #8a5d1c;color:#5c3c10;border-radius:12px;padding:10px 14px;font-size:15px}
+.rvfb{margin-top:10px}
+.rvscore{display:inline-block;font:bold 18px "Trebuchet MS",sans-serif;padding:4px 12px;border-radius:20px;color:#fff;background:#239150}
+.rvscore.mid{background:#d98a12}.rvscore.bad{background:#cf3434}
+.rvcom{margin:6px 0;padding-left:20px}.rvcom li{margin:3px 0;color:#7a1f12}
+.rvmodel{background:#eef7ee;border:2px solid #239150;border-radius:10px;padding:8px 10px;margin:8px 0;white-space:pre-wrap}
+.rvmodel b{font-family:"Trebuchet MS",sans-serif}
+.rvlines{margin:6px 0;border-collapse:collapse;width:100%;font-size:16px}
+.rvlines td{border-bottom:1px solid #e3d6b8;padding:3px 6px;vertical-align:top}
+.rvlines .ok{color:#239150;font-weight:bold}.rvlines .ko{color:#cf3434;font-weight:bold}
+.rvcor{background:#fff;border:2px dashed #8a5d1c;border-radius:12px;padding:8px 12px;margin-top:10px}
+.rvsort .card{background:#fff;border:2px solid #c8b48a;border-radius:10px;padding:6px 8px;margin:6px 0;font-size:16px}
+.rvsort .bins{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}
+.rvsort .bins button{font-size:14px;padding:6px 10px;border-radius:8px;border:2px solid #8a5d1c;background:#f6ecd6;color:#2b1906}
+.rvsort .bins button.on{background:#1f6fd1;color:#fff;border-color:#1f6fd1}
+.rvpairs .chips{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0;min-height:30px}
+.rvpairs .chip{background:#1f6fd1;color:#fff;border-radius:16px;padding:5px 12px;font:bold 16px "Trebuchet MS",sans-serif;border:0}
+.rvpairs .sel{font:15px "Trebuchet MS",sans-serif;color:#5c3c10}
+g.evnum{cursor:pointer}g.evnum.on circle{fill:#1f6fd1}g.evnum.on text{fill:#fff}
+.rverr .ln{display:block;width:100%;text-align:left;background:#fff;border:2px solid #c8b48a;border-radius:10px;padding:8px 10px;margin:6px 0;font:17px/1.4 Georgia,serif;color:#2b1906}
+.rverr .ln.on{border-color:#cf3434;background:#fde9e6;text-decoration:underline wavy #cf3434}
+.rvchain .step{border:2px solid #e3d6b8;border-radius:10px;padding:6px 8px;margin:6px 0}
+.rvchain select{font-size:16px;padding:6px;border-radius:8px;max-width:100%}
+.evgold{background:#fff1c2;border:2px solid #d4a017;border-radius:10px;padding:8px 10px;margin:8px 0}
+.evmodel{background:#eef3fb;border:2px solid #1f6fd1;border-radius:10px;padding:8px 10px;margin:8px 0}
+.evnote{font-size:15px;color:#7a5a20;font-style:italic}
+.rvtimer{font:bold 20px "Trebuchet MS",sans-serif;background:#1e130a;border:2px solid #e2b35a;border-radius:10px;padding:4px 10px;color:#ffd98a}
+.rvtimer.low{color:#ff8a7a;border-color:#ff8a7a}
+.rvev{max-width:1000px;margin:0 auto}
+.rvev .sec{background:#fffdf4;color:#2b1906;border-radius:14px;border:3px solid #8a5d1c;padding:10px 14px;margin:10px 0;font:17px/1.45 Georgia,serif}
+.rvev .sec h3{margin:2px 0 6px;font:bold 18px "Trebuchet MS",sans-serif;color:#8a5d1c}
+.rvev .itm{border-top:1px dashed #d8c7a0;padding:8px 0}
+.rvev .itm .qt{font-weight:bold;margin-bottom:4px}
+.rvnote20{font:bold 44px "Trebuchet MS",sans-serif;color:#ffd98a;text-align:center;margin:10px 0}
+.rvhide{display:none!important}
+</style><script>
+/* ================= TOUR DES RÉVISIONS : FIGURES =================
+   Toutes les figures des exercices, calculées à partir des données (les mesures de l'énoncé). */
+const EVF=(()=>{
+ const RD=Math.PI/180,INK="#222",BLUE="#1f6fd1",ORANGE="#e0761b",GREEN="#239150",RED="#cf3434",PURP="#8e4fc4";
+ const n=v=>(Math.round(v*10)/10).toString();
+ const P=(o,a,r)=>[o[0]+r*Math.cos(a*RD),o[1]-r*Math.sin(a*RD)];
+ const dir=(a,b)=>((Math.atan2(-(b[1]-a[1]),b[0]-a[0])/RD)+360)%360;
+ const inter=(a,b,c,d)=>{const x1=a[0],y1=a[1],x2=b[0],y2=b[1],x3=c[0],y3=c[1],x4=d[0],y4=d[1],den=(x1-x2)*(y3-y4)-(y1-y2)*(x3-x4),t=((x1-x3)*(y3-y4)-(y1-y3)*(x3-x4))/den;return [x1+t*(x2-x1),y1+t*(y2-y1)];};
+ const lerp=(a,b,t)=>[a[0]+(b[0]-a[0])*t,a[1]+(b[1]-a[1])*t];
+ function mk(vb){
+  const o={b:[],t:[],vb:vb||"0 0 500 360"};
+  const esc=s=>String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");
+  o.raw=s=>{o.b.push(s);return o;};
+  o.L=(a,b,opt)=>{opt=opt||{};o.b.push(`<line x1="${n(a[0])}" y1="${n(a[1])}" x2="${n(b[0])}" y2="${n(b[1])}" stroke="${opt.c||INK}" stroke-width="${opt.w||2.4}" stroke-linecap="round"${opt.dash?` stroke-dasharray="${opt.dash}"`:""}/>`);return o;};
+  o.line=(a,b,e1,e2,opt)=>{const d=dir(a,b);return o.L(P(a,d+180,e1==null?40:e1),P(b,d,e2==null?(e1==null?40:e1):e2),opt);};
+  o.dot=p=>{o.t.push(`<circle cx="${n(p[0])}" cy="${n(p[1])}" r="3.4" fill="${INK}"/>`);return o;};
+  o.txt=(p,s,opt)=>{opt=opt||{};o.t.push(`<text x="${n(p[0])}" y="${n(p[1])}" font-family="Georgia,serif" font-size="${opt.s||19}" font-weight="${opt.nb?"normal":"bold"}" ${opt.it?'font-style="italic" ':''}fill="${opt.c||INK}" text-anchor="middle" dominant-baseline="central">${esc(s)}</text>`);return o;};
+  o.pt=(p,name,ang,r)=>{o.dot(p);return o.txt(P(p,ang,r||16),name);};
+  o.lab=(p,name,ang,r)=>o.txt(P(p,ang,r||16),name);
+  /* arc de l'angle entre les directions d1 et d2 (sens direct), avec étiquette */
+  o.arcD=(V,d1,d2,r,col,label,opt)=>{opt=opt||{};let d=((d2-d1)%360+360)%360;const s=P(V,d1,r),e=P(V,d1+d,r);
+   o.b.push(`<path d="M${n(s[0])} ${n(s[1])} A${r} ${r} 0 ${d>180?1:0} 0 ${n(e[0])} ${n(e[1])}" fill="${opt.fill?col:"none"}" fill-opacity="${opt.fill?0.18:1}" stroke="${col||BLUE}" stroke-width="2.8"/>`);
+   if(opt.fill)o.b.push(`<path d="M${n(V[0])} ${n(V[1])} L${n(s[0])} ${n(s[1])} A${r} ${r} 0 ${d>180?1:0} 0 ${n(e[0])} ${n(e[1])} Z" fill="${col}" fill-opacity="0.16" stroke="none"/>`);
+   if(opt.ticks){const m=d1+d/2,st=6/r/RD;for(let k=0;k<opt.ticks;k++){const a=m+(k-(opt.ticks-1)/2)*st;o.L(P(V,a,r-6),P(V,a,r+6),{c:col,w:2});}}
+   if(label!=null&&label!=="")o.txt(P(V,d1+d/2,r+(opt.lr||20)),label,{c:col||BLUE,s:opt.s||17});return o;};
+  /* angle intérieur entre les demi-droites [VA) et [VB) */
+  o.arc=(V,A,B,r,col,label,opt)=>{const a=dir(V,A),b=dir(V,B);const d=((b-a)%360+360)%360;return d<=180?o.arcD(V,a,b,r,col,label,opt):o.arcD(V,b,a,r,col,label,opt);};
+  o.right=(V,A,B,z)=>{z=z||14;const a=dir(V,A),b=dir(V,B),p=P(V,a,z),q=P(V,b,z),m=[p[0]+q[0]-V[0],p[1]+q[1]-V[1]];o.b.push(`<path d="M${n(p[0])} ${n(p[1])} L${n(m[0])} ${n(m[1])} L${n(q[0])} ${n(q[1])}" fill="none" stroke="${RED}" stroke-width="2.4"/>`);return o;};
+  o.chev=(p,a,col)=>{for(const k of [0,9]){const q=P(p,a,k),t=P(q,a,5),l=P(q,a+150,8),r=P(q,a-150,8);o.b.push(`<path d="M${n(l[0])} ${n(l[1])} L${n(t[0])} ${n(t[1])} L${n(r[0])} ${n(r[1])}" fill="none" stroke="${col||RED}" stroke-width="2.4" stroke-linecap="round"/>`);}return o;};
+  o.segT=(A,B,k,col)=>{const m=lerp(A,B,.5),a=dir(A,B);for(let i=0;i<k;i++){const q=P(m,a,(i-(k-1)/2)*6);o.L(P(q,a+90,8),P(q,a-90,8),{c:col||RED,w:2.2});}return o;};
+  o.num=(V,d1,d2,k,r)=>{let d=((d2-d1)%360+360)%360;const p=P(V,d1+d/2,r||30);
+   o.t.push(`<g class="evnum" data-n="${k}" transform="translate(${n(p[0])},${n(p[1])})"><circle r="15" fill="#fff8d6" stroke="#8a5d1c" stroke-width="2"/><text y="1" font-family="Georgia,serif" font-size="17" font-weight="bold" fill="${INK}" text-anchor="middle" dominant-baseline="central">${k}</text></g>`);return o;};
+  o.out=()=>`<svg class="evsvg" viewBox="${o.vb}" xmlns="http://www.w3.org/2000/svg"><rect x="0" y="0" width="100%" height="100%" fill="#fffdf4" rx="12"/>${o.b.join("")}${o.t.join("")}</svg>`;
+  return o;}
+ const C={INK,BLUE,ORANGE,GREEN,RED,PURP};
+ /* ---------- figures à 8 angles numérotés (une ou deux sécantes) ----------
+    position des angles à chaque sommet : AR = au-dessus, à droite de la sécante ; AL = au-dessus, à gauche ;
+    BL = en dessous, à gauche ; BR = en dessous, à droite. Sommet du haut sur (d1), sommet du bas sur (d2). */
+ function sectors(th,de){return {AR:[de,th],AL:[th,de+180],BL:[de+180,th+180],BR:[th+180,de+360]};}
+ function rails(o){ // o: {secs:[{x,th,nums:{A:{AR:1..},B:{...}}}], delta, y1,y2, labels, par, chev, given:[{sec,v,pos,txt,col}], color:[{sec,v,pos,col}]}
+  const f=mk(),y1=o.y1||110,y2=o.y2||260,de=o.delta||0;
+  const d1a=[0,y1],d1b=[500,y1];const B0=[250,y2],d2a=P(B0,180+de,300),d2b=P(B0,de,300);
+  f.L(d1a,d1b);f.L(d2a,d2b);
+  f.txt([30,y1-16],"(d₁)",{it:1,s:18});f.txt([30,inter(d2a,d2b,[30,0],[30,400])[1]-16],"(d₂)",{it:1,s:18});
+  const V=[];
+  (o.secs||[]).forEach((s,i)=>{const A=[s.x,y1],far=P(A,s.th,100),B=inter(A,far,d2a,d2b);
+   f.line(A,B,95,95);const top=P(A,s.th,80);f.txt(P(top,s.th+90,16),o.secs.length>1?`(s${"₁₂"[i]})`:"(s)",{it:1,s:18});
+   V.push({A,B,th:s.th});
+   for(const vv of ["A","B"]){const X=vv==="A"?A:B,sec=sectors(s.th,vv==="A"?0:de);
+    for(const c of (o.color||[]))if(c.sec===i&&c.v===vv){const [a,b]=sec[c.pos];f.arcD(X,a,b,c.r||34,c.col||BLUE,c.txt,{fill:1});}
+    for(const pos in (s.nums&&s.nums[vv])||{}){const [a,b]=sec[pos];f.num(X,a,b,s.nums[vv][pos],o.nr||40);}
+    f.dot(X);}
+  });
+  if(o.par){const x=440;f.chev([x,y1],0);f.chev(inter(d2a,d2b,[x,0],[x,400]),de);}
+  return {f,V,y1,y2,de};}
+ return {mk,P,dir,inter,lerp,rails,sectors,C};
+})();
+
+/* ================= TOUR DES RÉVISIONS : CORRECTEUR (souple sur le sens) ================= */
+const EVG=(()=>{
+ const strip=s=>String(s||"").normalize("NFD").replace(/[\u0300-\u0302\u0304-\u036f]/g,"").replace(/\u0303/g,"");
+ function prep(t){let s=String(t||"").replace(/[’‘`´]/g,"'").replace(/\u00a0/g," ");
+  try{if(typeof dictNorm==="function")s=dictNorm(s);}catch(e){}
+  s=s.replace(/[\u0302\u0311]/g,""); s=s.replace(/≠/g," != ");               // AB̂C -> ABC
+  s=s.replace(/(\d),(\d)/g,"$1.$2").replace(/[–—−]/g,"-").replace(/\s+/g," ").trim();
+  return s;}
+ function low(t){return strip(prep(t)).toLowerCase().replace(/[«»"]/g," ").replace(/\s+/g," ");}
+ const RX=x=>x instanceof RegExp?x:new RegExp(x,"i");
+ const has=(s,x)=>RX(x).test(s);
+ const anyOf=(s,g)=>(Array.isArray(g)?g:[g]).some(x=>has(s,x));
+ const nums=s=>(String(s).match(/\d+(?:\.\d+)?/g)||[]).map(Number);
+ const fmt=v=>String(Math.round(v*100)/100).replace(".",",");
+ /* noms d'angles : ABQ ou QBA */
+ const nameRx=nm=>{const r=nm.length===3?nm[2]+nm[1]+nm[0]:nm;return new RegExp("(^|[^A-Za-z])("+nm+(r!==nm?"|"+r:"")+")(?![A-Za-z])");};
+ /* morceaux de la rédaction */
+ function parts(text){const raw=strip(prep(text)),lo=raw.toLowerCase();
+  let ks=lo.search(/je sais|on sait|on a (que )?|d'apres l'enonce/),ke=-1;
+  if(ks>=0){const rest=lo.slice(ks+4);const m=rest.search(/(^|[^a-z])(or|donc|par propriete|d'apres la propriete|d'apres le cours|car si)([^a-z]|$)/);ke=m<0?lo.length:ks+4+m;}
+  const knows=ks>=0?raw.slice(ks,ke):"";
+  const os=lo.search(/(^|[^a-z])(or|par propriete|d'apres|car si|propriete)([^a-z]|$)/);
+  const orSeg=os>=0?lo.slice(os):"";
+  return {raw,lo,knows,knowsLo:knows.toLowerCase(),orSeg,afterKnows:ks>=0?raw.slice(ke):raw};}
+ /* « NOM = valeur » : dans une même phrase, le nom puis la valeur comme dernier nombre */
+ function hasRes(raw,nm,v){const cl=raw.split(/[.;\n]|\bdonc\b|\bDonc\b|\bDONC\b/);
+  for(const c of cl){const m=c.match(nameRx(nm));if(!m)continue;const after=c.slice(m.index);const ns=nums(after.replace(/[A-Za-z]\d/g,""));if(ns.length&&Math.abs(ns[ns.length-1]-v)<0.01)return true;}
+  return false;}
+ /* propriétés : mots-clés obligatoires (sens), dans l'ordre si/alors quand il compte */
+ const EG="meme mesure|memes mesures|egaux|egales|egal|egale|=|ont la meme|de meme mesure";
+ const PK={
+  2:[["adjacent"],["somme|\\+|additionn|ajout|=.*\\+|total"]],
+  4:[["bissectrice"],["÷ ?2|/ ?2|divise par (2|deux)|moitie|en (2|deux) angles? (adjacents )?de meme mesure|partage"]],
+  6:[["oppose"],["sommet"],[EG]],
+  10:[["parall|//"],["alternes?.?internes?"],[EG]],
+  11:[["parall|//"],["correspondant"],[EG]],
+  15:[["alternes?.?internes?"],[EG],["parall|//"]],
+  16:[["correspondant"],[EG],["parall|//"]],
+  17:[["triangle"],["180"]],
+  18:[["rectangle|angle droit"],["90|complementaire"]],
+  19:[["isocele"],["base|meme mesure|egaux|egal"]],
+  20:[["equilateral"],["meme mesure|egaux|egal|60"]],
+  23:[["alternes?.?internes?"],["pas (de )?(la )?meme mesure|pas egaux|ne sont pas egaux|differ|≠|!="],["(pas|non) parall|ne sont pas parall"]],
+  24:[["correspondant"],["pas (de )?(la )?meme mesure|pas egaux|ne sont pas egaux|differ|≠|!="],["(pas|non) parall|ne sont pas parall"]]
+ };
+ const NAMEK={2:"adjacent",4:"bissectrice",6:"oppose",10:"alternes?.?internes?",11:"correspondant",15:"alternes?.?internes?",16:"correspondant",17:"triangle|180",18:"rectangle|complementaire",19:"isocele",20:"equilateral",23:"alternes?.?internes?",24:"correspondant"};
+ const ORDER={10:["parall|//",EG],11:["parall|//",EG],15:[EG,"parall|//"],16:[EG,"parall|//"]};
+ function propOK(lo,f){const g=PK[f];if(!g)return false;if(!g.every(x=>anyOf(lo,x)))return false;
+  const o=ORDER[f];if(o){const si=lo.search(/(^|[^a-z])si([^a-z]|$)/),al=lo.search(/alors|donc|,/);
+   if(si>=0&&al>si){const a=lo.slice(si,al),b=lo.slice(al);if(!(anyOf(a,o[0])&&anyOf(b,o[1])))return false;}}
+  return true;}
+ const DEFLIKE=/part et d.autre|a l.interieur|entre les (deux|2) droites|meme cote|pour sommets?|sommet commun|cote commun/;
+ /* ---------- fiche à réciter (définition ou propriété) ---------- */
+ const FK={
+  1:{need:[["meme sommet|sommet commun"],["cote commun|un cote en commun"],["part et d.autre"]]},
+  3:{need:[["demi.?droite"],["partage|coupe|divise|separe"],["(deux|2) angles"],["meme mesure|egaux|egal"]]},
+  5:{need:[["meme sommet|sommet commun"],["prolongement"]]},
+  7:{need:[["coupe|croise"],["(deux|2) (autres )?droites"],["distinct|differ"]]},
+  8:{need:[["sommet|intersection"],["interieur|entre"],["part et d.autre"]]},
+  9:{need:[["sommet|intersection"],["interieur|entre"],["exterieur|dehors"],["meme cote"]]},
+  12:{need:[["somme"],["mesure"],["90"]],plus:1},
+  13:{need:[["somme"],["mesure"],["180"]],plus:1}
+ };
+ function gradeFiche(text,f,pts,asked){ // asked : "P" ou "D"
+  const com=[];const lo=low(text);if(lo.length<4)return {got:0,max:pts,com:["Pas de réponse."]};
+  let d=null;try{d=diffA(REF[f],tokenize(String(text),true));}catch(e){}
+  let r=null;try{r=recognise(String(text),f);}catch(e){}
+  const F=FICHES[f];
+  // une définition récitée à la place de la propriété
+  if(asked==="P"&&!propOK(lo,f)&&!(d&&d.ok)){
+   if(r&&FICHES[r.f]&&FICHES[r.f].t==="D"&&r.score>0.5||DEFLIKE.test(lo)&&!/parall|meme mesure/.test(lo)){com.push("On demande une propriété, pas la définition.");return {got:0,max:pts,com,def:1};}
+   if(f===10||f===11){if(/parall/.test(lo)&&anyOf(lo,EG)){const o=ORDER[f];const si=lo.search(/(^|[^a-z])si([^a-z]|$)/),al=lo.search(/alors/);if(si>=0&&al>si&&anyOf(lo.slice(si,al),EG)){com.push("Attention : tu as écrit la réciproque. Ici, on part des droites parallèles.");return {got:pts*0.25,max:pts,com};}}}
+  }
+  const polluted=(f===12||f===13)&&/meme sommet|cote commun|cote en commun|un cote|adjacent/.test(lo);
+  if(d&&d.ok&&!polluted){return {got:pts,max:pts,com:d.soft&&d.soft.length?["Juste. Petits mots différents du cahier."]:[],exact:1};}
+  let need,ok=0;
+  if(F.t==="P"&&PK[f]){need=PK[f];ok=need.filter(x=>anyOf(lo,x)).length;if(ok===need.length&&!propOK(lo,f)){ok--;com.push("Attention à l'ordre : « si » puis « alors ». Sinon, c'est la réciproque.");}}
+  else{const K=FK[f]||{need:[]};need=K.need;ok=need.filter(x=>anyOf(lo,x)).length;}
+  let got=need.length?pts*ok/need.length:0;
+  if(f===12||f===13){
+   if(/sommet|cote commun|adjacent|un cote/.test(lo)){got=Math.max(0,got-pts/2);com.push("Ce n'est pas nécessaire : même sommet, côté commun, c'est la définition de « adjacents ». Seule la somme compte.");}
+   if(/somme/.test(lo)&&!/somme (de|des) (leurs |leur )?mesures?|somme des mesures/.test(lo)){got=Math.max(0,got-pts/4);com.push("La somme de leurs mesures.");}
+   if(f===13&&/(^|[^0-9])90([^0-9]|$)/.test(lo)&&!/180/.test(lo))com.push("Supplémentaires, c'est 180°. Complémentaires, c'est 90°.");
+   if(f===12&&/180/.test(lo)&&!/(^|[^0-9])90([^0-9]|$)/.test(lo))com.push("Complémentaires, c'est 90°. Supplémentaires, c'est 180°.");
+  }
+  if(ok<need.length)com.push(`Il manque des éléments de la ${F.t==="P"?"propriété":"définition"}. Relis la fiche ${f} mot à mot.`);
+  else if(!com.length)com.push("Le sens est juste. Apprends quand même la phrase du cahier mot à mot.");
+  return {got:Math.round(got*4)/4,max:pts,com};}
+ /* ---------- rédaction Je sais que / Or / Donc (ou « Par propriété … donc ») ----------
+   s = {hyp:[[regex,commentaire]], prop:[fiches], res:[[nom,val]] , par:"oui"|"non", ahead:[noms], circ:[[nom,val]]|"par", adj:"commentaire si l'adjacence manque", calc:1}
+ */
+ function gradeRedac(text,s,pts){
+  const com=[],P=parts(text),lo=P.lo;if(lo.length<4)return {got:0,max:pts,com:["Pas de réponse."],lines:[]};
+  const W={hyp:s.wh!=null?s.wh:0.35,prop:s.wp!=null?s.wp:0.35,res:s.wr!=null?s.wr:0.3};
+  if(!s.prop||!s.prop.length){W.res+=W.prop;W.prop=0;}
+  if(!s.hyp||!s.hyp.length){W.res+=W.hyp;W.hyp=0;}
+  let got=0;const found={hyp:[],prop:false,res:[]};
+  // le résultat cherché écrit dans « Je sais que »
+  let circ=false;
+  for(const [nm,v] of (s.res||[]))if(P.knows&&hasRes(P.knows,nm,v)){circ=true;}
+  if(s.par&&P.knowsLo&&/parall|\/\//.test(P.knowsLo)&&!/pas parall|non parall/.test(P.knowsLo)&&s.circPar)circ=true;
+  if(circ)com.push("C'est ce qu'on cherche à démontrer dans cette question : ça ne va pas dans « Je sais que ».");
+  // hypothèses
+  if(s.hyp&&s.hyp.length){let ok=0;for(const [re,miss] of s.hyp){if(anyOf(lo,re)){ok++;found.hyp.push(re);}else if(miss)com.push(miss);}
+   got+=W.hyp*(ok/s.hyp.length)*(circ?0.5:1);}
+  // propriété
+  if(W.prop){const seg=P.orSeg||"";const okp=s.prop.some(f=>propOK(seg,f)||(/propriete|d'apres/.test(seg)&&PK[f]&&anyOf(seg,PK[f][0])&&(PK[f][1]?anyOf(seg,PK[f][1])||/propriete (des|du|de l)/.test(seg):true))||(f===2&&/adjacent|plat|align/.test(lo)&&/[a-z]{3} ?\+ ?[a-z]{3}( ?\+ ?[a-z]{3})? ?= ?[a-z]{3}|[a-z]{3} ?= ?[a-z]{3} ?[-+] ?[a-z]{3}/.test(seg)));
+   if(okp){got+=W.prop;found.prop=true;}
+   else if(DEFLIKE.test(seg)&&!s.prop.some(f=>propOK(seg,f)))com.push("On demande une propriété, pas la définition.");
+   else com.push(s.adj&&!/adjacent/.test(lo)?s.adj:"Il manque la propriété du cours : écris-la après « Or » (ou « Par propriété »).");}
+  // conclusion
+  if(s.res&&s.res.length){let ok=0;for(const [nm,v] of s.res){if(hasRes(P.afterKnows||P.raw,nm,v)||(!P.knows&&hasRes(P.raw,nm,v))){ok++;found.res.push(nm);}}
+   if(ok<s.res.length){const [nm,v]=s.res[0];com.push(nums(lo).length?`La conclusion n'est pas juste : on attend ${s.res.map(r=>r[0]+" = "+fmt(r[1])+"°").join(" et ")}.`:"Il manque la conclusion « Donc … ».");}
+   got+=W.res*ok/s.res.length*(circ?0.5:1);
+   if(s.calc&&ok&&!/[-+÷×*\/x]\s*\(?\d/.test(P.raw.replace(/[A-Z]\d/g,"")))com.push("Écris aussi le calcul, pas seulement le résultat.");}
+  if(s.eq){let ok=0;for(const [a,b] of s.eq){const r1=nameRx(a),r2=nameRx(b);if((P.afterKnows||P.raw).split(/[.;\n]|\bdonc\b|\bDonc\b/).some(c=>r1.test(c)&&r2.test(c)&&/=/.test(c)))ok++;}
+   got+=W.res*ok/s.eq.length;if(ok<s.eq.length)com.push("La conclusion attendue : "+s.eq.map(e=>e.join(" = ")).join(" et ")+".");}
+  for(const [re,msg,pen] of (s.warn||[]))if(has(lo,re)){com.push(msg);if(pen)got=Math.max(0,got-pen);}
+  if(s.par){const neg=/(ne|n')\s*(sont|est)\s*pas\s*parall|pas parall|non parall|ne sont pas \/\//.test(lo);const pos=/parall|\/\//.test(lo)&&!neg;
+   const ok=s.par==="non"?neg:pos&&!(P.knows&&s.circPar&&!/(^|[^a-z])(donc)/.test(lo));
+   if(ok){got+=W.res;found.res.push("par");}else com.push(s.par==="non"?"La conclusion attendue : les droites ne sont pas parallèles.":"La conclusion attendue : les droites sont parallèles.");}
+  // la question suivante, trop tôt
+  if(s.ahead&&s.ahead.some(nm=>nameRx(nm).test(P.raw))){got=Math.max(0,got-0.15);com.push("Question suivante : réponds seulement à ce qui est demandé ici.");}
+  if(s.adj&&!/adjacent|angle plat|alignes/.test(lo))com.push(s.adj);
+  got=Math.max(0,Math.min(1,got))*pts;got=Math.round(got*4)/4;
+  // ligne par ligne
+  const lines=String(text).split(/\n|(?<=\.)\s+(?=[A-ZÉ])|(?=\b(?:Or|Donc|Par propriété)\b)/).map(x=>x.trim()).filter(Boolean).map(l=>{const L=low(l);
+   let role=/^je sais|^on sait|^on a\b|^d'apres l'enonce/.test(L)?"js":/^or\b|^par propriete|^d'apres/.test(L)?"or":/^donc|^ainsi/.test(L)?"dc":"";
+   let ok=true,why="";
+   if(role==="js"&&(s.res||[]).some(([nm,v])=>hasRes(strip(prep(l)),nm,v))){ok=false;why="résultat cherché";}
+   if(role==="or"&&W.prop&&!s.prop.some(f=>propOK(L,f))&&!/propriete/.test(L)){ok=false;why="pas la bonne propriété";}
+   if(role==="dc"&&s.res&&s.res.length&&!s.res.some(([nm,v])=>hasRes(strip(prep(l)),nm,v))&&!s.par){ok=false;why="conclusion";}
+   return {t:l,role,ok,why};});
+  return {got,max:pts,com:[...new Set(com)],lines,found};}
+ /* ---------- mots-clés (justifications courtes) ---------- */
+ function gradeKw(text,s,pts){const lo=low(text),com=[];if(lo.length<1)return {got:0,max:pts,com:["Pas de réponse."]};
+  let ok=0;const g=s.kw||[];for(const x of g){const re=x&&x.re?x.re:x,miss=x&&x.miss?x.miss:null;
+   if(anyOf(lo,re))ok++;else if(miss)com.push(miss);}
+  let got=g.length?pts*ok/g.length:pts;
+  for(const [re,msg,pen] of (s.forbid||[]))if(has(lo,re)){got=Math.max(0,got-(pen==null?pts/2:pen*pts));com.push(msg);}
+  if(s.vf!=null){const saysF=/(^|[^a-z])faux([^a-z]|$)/.test(lo),saysV=/(^|[^a-z])vrai([^a-z]|$)/.test(lo);const want=s.vf?saysV&&!saysF:saysF&&!saysV;
+   if(!want){got=0;com.unshift(s.vf?"La réponse est : vrai.":"La réponse est : faux.");}}
+  if(s.yn!=null){const no=/(^|[^a-z])(non|ne peut pas|impossible|pas parall|ne sont pas)([^a-z]|$)/.test(lo),yes=/(^|[^a-z])(oui|on peut)([^a-z]|$)/.test(lo)&&!no;const want=s.yn?yes||(!no&&ok===g.length&&g.length>0):no;
+   if(!want){got=0;com.unshift(s.yn?"La réponse est : oui.":"La réponse est : non.");}}
+  if(ok<g.length&&!com.length)com.push("Ta réponse n'est pas complète. Compare avec la correction.");
+  return {got:Math.round(got*4)/4,max:pts,com:[...new Set(com)]};}
+ /* ---------- nombre (le dernier nombre écrit, ou tous les nombres attendus) ---------- */
+ function gradeNum(text,s,pts){const raw=strip(prep(text));if(!raw)return {got:0,max:pts,com:["Pas de réponse."]};
+  const ns=nums(raw.replace(/[A-Z]\d/g,""));const want=[].concat(s.ans);
+  const last=ns[ns.length-1];
+  const ok=want.length===1?(last!=null&&Math.abs(last-want[0])<0.01):want.every(w=>ns.some(x=>Math.abs(x-w)<0.01));
+  return ok?{got:pts,max:pts,com:[]}:{got:0,max:pts,com:[`On attend ${want.map(v=>fmt(v)+(s.unit===""?"":"°")).join(" et ")}.`]};}
+ return {low,prep,strip,parts,hasRes,propOK,gradeFiche,gradeRedac,gradeKw,gradeNum,nums,fmt,anyOf,PK};
+})();
+
+/* ================= TOUR DES RÉVISIONS : LA BATTERIE DE RÉVISION (préparation du 20/11) =================
+   Chaque exercice reprend l'énoncé, les nombres et la correction de la batterie.
+   Chaque item a un « model » : une réponse juste, utilisée par les tests. */
+const EVD=(()=>{
+ const {mk,P,dir,inter,lerp,rails,C}=EVF;
+ const H={par:["parall|//","Il manque l'hypothèse : les droites sont parallèles."],
+  alt:(a,b)=>["alternes?.?internes?",`Pourquoi pouvez-vous dire cela ? Nomme la position : ${a} et ${b} sont alternes-internes.`],
+  cor:(a,b)=>["correspondant",`Pourquoi pouvez-vous dire cela ? Nomme la position : ${a} et ${b} sont correspondants.`],
+  opp:(a,b)=>["oppose",`Pourquoi ? ${a} et ${b} sont opposés par le sommet.`],
+  adj:(a,b)=>["adjacent",`Pourquoi pouvez-vous dire cela ? (je sais que les angles ${a} et ${b} sont adjacents donc...)`],
+  plat:(p)=>["alignes|plat|180",`Il faut dire que ${p} sont alignés : c'est un angle plat (180°).`]};
+ const R=(id,q,s,model,pts)=>({id,q,k:"redac",s,model,pts:pts||1});
+ const K=(id,q,s,model,pts)=>({id,q,k:"kw",s,model,pts:pts||1});
+ const N=(id,q,ans,model,pts)=>({id,q,k:"num",s:{ans},model,pts:pts||1});
+ const FI=(id,q,f,asked,model,pts)=>({id,q,k:"fiche",f,asked,model,pts:pts||1});
+ const M=(id,q,fields,why,model,pts)=>({id,q,k:"multi",fields,why,model,pts:pts||1});
+ const SO=(id,q,bins,cards,pts)=>({id,q,k:"sort",bins,cards,pts:pts||1,model:Object.fromEntries(cards.map(c=>[c.id,c.b]))});
+ const PA=(id,q,o,model,pts)=>Object.assign({id,q,k:"pairs",model,pts:pts||1},o);
+ const SELF=(id,q,show)=>({id,q,k:"self",show,model:"fait",pts:1});
+ const rnd=(r,a,b)=>a+Math.floor(r()*(b-a+1));
+ const F={};
+ F.e6=()=>{const f=mk(),O=[250,270],A=P(O,180,215),Cc=P(O,0,215),B=P(O,130,185),D=P(O,60,185);
+  f.L(A,Cc).L(O,B).L(O,D).arc(O,A,B,52,C.BLUE,"50°").arc(O,B,D,40,C.ORANGE,"70°");
+  return f.pt(O,"O",270,18).pt(A,"A",90).pt(Cc,"C",90).pt(B,"B",130,16).pt(D,"D",60,16).txt([250,330],"La figure n'est pas en vraie grandeur.",{s:14,nb:1,it:1}).out();};
+ F.e7=()=>{const f=mk(),O=[250,180],A=P(O,160,200),B=P(O,-20,200),Cc=P(O,97,160),D=P(O,277,160);
+  f.L(A,B).L(Cc,D).arc(O,A,Cc,40,C.BLUE,"63°");return f.pt(O,"O",-40,20).lab(A,"A",90).lab(B,"B",90).lab(Cc,"C",0,16).lab(D,"D",180,16).out();};
+ const N8={A:{AR:1,AL:2,BL:3,BR:4},B:{AR:5,AL:6,BL:7,BR:8}};
+ F.eight=(th,par,colors)=>{const de=par?0:-6;const g=rails({secs:[{x:260,th,nums:N8}],delta:de,par,color:colors||[],nr:42});
+  if(!par)g.f.txt([250,340],"(d₁) et (d₂) ne sont pas parallèles.",{s:15,nb:1,it:1});return g.f.out();};
+ F.e10=(a)=>{const f=mk(),y1=110,y2=270,A=[170,y1],B=[170+160/Math.tan(a*Math.PI/180),y2],dB=180-a;
+  const R0=P(A,dB,85),Pp=[40,y1],Q=[Math.max(60,B[0]-150),y2],T=[B[0],60];
+  f.L([0,y1],[500,y1]).L([0,y2],[500,y2]).line(A,B,110,60).L([B[0],40],[B[0],320]);
+  f.arc(A,Pp,R0,40,C.BLUE,a+"°").arc(B,A,Q,46,C.ORANGE,"?").right(B,Q,T,16).chev([300,y1],0).chev([300,y2],0);
+  return f.pt(A,"A",-40,18).pt(B,"B",-40,20).pt(R0,"R",dB+90,16).pt(Pp,"P",90).pt(Q,"Q",270).pt(T,"T",0,16)
+   .txt([470,y1-16],"(d₁)",{it:1}).txt([470,y2-16],"(d₂)",{it:1}).txt(P(A,dB,118),"(s)",{it:1}).out();};
+ F.e11=(a)=>{const f=mk(),y1=110,y2=270,A=[150,y1],B=[150+160/Math.tan(a*Math.PI/180),y2],up=180-a;
+  const R0=P(A,up,80),Cc=[440,y1],Pp=[40,y1],Q=[Math.max(60,B[0]-160),y2],T=[B[0],150];
+  f.L([0,y1],[500,y1]).L([0,y2],[500,y2]).line(A,B,100,60).L([B[0],140],[B[0],320]);
+  f.arc(A,Cc,B,42,C.BLUE,a+"°").right(B,Q,T,16).chev([330,y1],0).chev([330,y2],0);
+  return f.pt(A,"A",60,18).pt(B,"B",-40,20).pt(R0,"R",up+90,16).pt(Pp,"P",90).pt(Cc,"C",90).pt(Q,"Q",270).pt(T,"T",0,16)
+   .txt([475,y1-16],"(d₁)",{it:1}).txt([475,y2-16],"(d₂)",{it:1}).txt(P(A,up,112),"(s)",{it:1}).out();};
+ F.e12=()=>{const f=mk(),D=[110,280],Cc=[420,280],A=[110+170/Math.tan(65*Math.PI/180),110],B=[420-170/Math.tan(70*Math.PI/180),110],E=[30,110];
+  f.L(E,[490,110]).L([20,280],[490,280]).L(A,D).L(B,Cc).arc(A,B,D,36,C.BLUE,"115°").arc(Cc,B,D,36,C.ORANGE,"70°").chev([300,110],0).chev([300,280],0);
+  return f.pt(A,"A",90).pt(B,"B",90).pt(Cc,"C",270).pt(D,"D",270).pt(E,"E",90).out();};
+ F.e13=()=>{const f=mk(),y1=110,y2=260,E=[230,y1],th=74,Fp=inter(E,P(E,th+180,100),[0,y2],[500,y2]);
+  const G=P(E,th,70),Hh=P(Fp,th+180,45);
+  f.L([20,y1],[480,y1]).L([20,y2],[480,y2]).line(Hh,G,20,20);
+  f.arcD(E,th+180,360,34,C.BLUE,"106°").arcD(Fp,0,th,40,C.ORANGE,"74°");
+  return f.pt(E,"E",150,18).pt(Fp,"F",-30,18).pt(G,"G",0,16).pt(Hh,"H",180,16).pt([40,y1],"M",90).pt([460,y1],"N",90).pt([40,y2],"K",270).pt([460,y2],"J",270)
+   .txt([250,335],"Les droites (MN) et (KJ) ont-elles l'air parallèles ? À démontrer !",{s:14,nb:1,it:1}).out();};
+ F.nonpar=(a,b,kind)=>{
+  const col=kind==="cor"?[{sec:0,v:"A",pos:"AR",col:C.BLUE,txt:a+"°"},{sec:0,v:"B",pos:"AR",col:C.ORANGE,txt:b+"°"}]
+   :[{sec:0,v:"A",pos:"BL",col:C.BLUE,txt:a+"°"},{sec:0,v:"B",pos:"AR",col:C.ORANGE,txt:b+"°"}];
+  return rails({secs:[{x:260,th:a}],delta:a-b,color:col}).f.out();};
+ F.e16=()=>{const f=mk(),A=[90,290],B=[410,290],Cc=[230,100],D=[40,100],E=[460,100];
+  f.L(A,B).L(B,Cc).L(Cc,A).L(D,E);
+  f.arc(A,B,Cc,40,C.BLUE,"").arc(Cc,A,D,40,C.BLUE,"").arc(B,Cc,A,40,C.ORANGE,"").arc(Cc,E,B,40,C.ORANGE,"").arc(Cc,B,A,30,C.GREEN,"");
+  f.chev([300,290],0).chev([370,100],0);
+  return f.pt(A,"A",225).pt(B,"B",-45).pt(Cc,"C",90,18).pt(D,"D",90).pt(E,"E",90).out();};
+ F.e19=()=>{const f=mk(),B=[70,280],Cc=[300,280],Dd=[470,280],A=inter(B,P(B,60,100),Cc,P(Cc,110,100));
+  f.L(B,Dd).L(A,B).L(A,Cc).arc(A,B,Cc,36,C.BLUE,"50°").arc(B,Cc,A,40,C.ORANGE,"60°").arc(Cc,Dd,A,34,C.GREEN,"?");
+  return f.pt(A,"A",90).pt(B,"B",270).pt(Cc,"C",270).pt(Dd,"D",270).out();};
+ F.e20=()=>{const f=mk(),B=[70,300],Cc=[440,300],A=inter(B,P(B,65,100),Cc,P(Cc,135,100)),Mm=lerp(B,A,.5),Nn=lerp(Cc,A,.5);
+  f.L(B,Cc).L(A,B).L(A,Cc).L(Mm,Nn).arc(B,Cc,A,40,C.BLUE,"65°").arc(Cc,A,B,44,C.ORANGE,"45°").chev(lerp(Mm,Nn,.5),0).chev([255,300],0);
+  return f.pt(A,"A",90).pt(B,"B",270).pt(Cc,"C",270).pt(Mm,"M",160).pt(Nn,"N",20).out();};
+ F.e21=()=>{const f=mk(),O=[250,280],A=P(O,0,210),B=P(O,128,200),Cc=P(O,64,200),D=P(O,32,200),E=P(O,180,210);
+  f.L(E,A).L(O,B).L(O,Cc).L(O,D).arcD(O,0,128,100,C.GREEN,"128°",{lr:18}).arcD(O,64,128,52,C.BLUE,"",{ticks:2}).arcD(O,32,64,56,C.ORANGE,"",{ticks:1}).arcD(O,0,32,56,C.ORANGE,"",{ticks:1});
+  return f.pt(O,"O",270,18).pt(A,"A",90).pt(B,"B",128,16).pt(Cc,"C",64,16).pt(D,"D",32,16).pt(E,"E",90).out();};
+ F.e22=()=>{const f=mk(),A=[250,100],B=[250-170/Math.tan(48*Math.PI/180),270],Cc=[250+170/Math.tan(57*Math.PI/180),270],Hh=[250,270];
+  f.L([20,100],[480,100]).L([20,270],[480,270]).line(A,B,30,40).line(A,Cc,30,40).L(A,Hh,{dash:"7 5"}).right(Hh,Cc,A,14);
+  f.arc(A,[40,100],B,40,C.BLUE,"48°").arc(A,[460,100],Cc,40,C.ORANGE,"57°").chev([420,100],0).chev([420,270],0);
+  return f.pt([40,100],"D",90).pt(A,"A",90).pt([460,100],"E",90).pt(B,"B",270).pt(Hh,"H",270).pt(Cc,"C",270).txt([490,84],"(d₁)",{it:1,s:16}).txt([490,254],"(d₂)",{it:1,s:16}).out();};
+ F.e23=(delta)=>{const f=mk(),A=[150,90],Mm=[150+100/Math.tan(35*Math.PI/180),190],B=[Mm[0]-100/Math.tan(50*Math.PI/180),290];
+  f.L([20,90],[480,90]).L([20,290],[480,290]).L(A,Mm).L(B,Mm).arc(A,[440,90],Mm,44,C.BLUE,"35°").arc(B,[440,290],Mm,44,C.ORANGE,"50°").arc(Mm,A,B,30,C.GREEN,"?");
+  if(delta)f.L([60,190],[480,190],{dash:"7 6",c:C.GREEN}).txt([80,176],"(Δ)",{it:1,c:C.GREEN});
+  return f.pt(A,"A",120).pt(B,"B",240).pt(Mm,"M",0,18).pt([440,90],"P",90).pt([440,290],"Q",270).txt([40,74],"(d₁)",{it:1,s:16}).txt([40,274],"(d₂)",{it:1,s:16}).chev([360,90],0).chev([360,290],0).out();};
+ F.e24=()=>{const f=mk(),A=[250,90],B=[250-210/Math.tan(70*Math.PI/180),300],Cc=[250+210/Math.tan(70*Math.PI/180),300],E=[60,90],Fp=[440,90];
+  f.L(A,B).L(A,Cc).L(B,Cc).L([30,90],[470,90]).segT(A,B,1).segT(A,Cc,1).arc(A,B,Cc,36,C.GREEN,"40°").arc(B,Cc,A,40,C.BLUE,"70°").arc(Cc,A,B,40,C.BLUE,"70°")
+   .arc(A,E,B,40,C.ORANGE,"70°").arc(A,Fp,Cc,40,C.ORANGE,"70°").chev([380,90],0).chev([250,300],0);
+  return f.pt(A,"A",90).pt(B,"B",225).pt(Cc,"C",-45).pt(E,"E",90).pt(Fp,"F",90).txt([460,74],"(d)",{it:1}).out();};
+ const EX=[];const ex=o=>{EX.push(o);return o;};
+ ex({id:"E0",part:0,src:"Batterie, §0",n:"Avant tout",title:"Ce que l'interro flash nous apprend (3,75 sur 10)",
+  st:`<p>Les calculs sont justes. Les points ont été perdus <b>sur le cours et la rédaction</b>, pas sur le raisonnement. Ça se corrige vite.</p>
+  <ul class="evul"><li><b>Erreur 1 : définition « supplémentaires » polluée.</b> Ajouter « même sommet, un côté en commun », c'est la définition d'<i>adjacents</i>. Deux angles supplémentaires n'ont <b>aucune condition de position</b>, seulement : la somme de leurs mesures vaut 180°.</li>
+  <li><b>Erreur 2 : définition au lieu de propriété.</b> On demandait la <b>propriété</b> (« Si deux droites parallèles… alors… ont la même mesure »). La réponse donnée était la <b>définition</b> (la position des angles). 0,25 sur 3.</li>
+  <li><b>Erreur 3 : raisonnement circulaire.</b> « Je sais que ABQ mesure 38° » alors que c'est justement ce qu'il faut démontrer. Même erreur dans le cours, page 6, question 3 (« Je sais que (d₂) est parallèle à (d₁)… donc (d₂) // (d₁) »).</li>
+  <li><b>Erreur 4 : propriété oubliée.</b> Dans le b), on soustrait sans dire <i>pourquoi</i> on a le droit (angles adjacents).</li>
+  <li><b>Dans le cours à corriger :</b> page 2, il est écrit UOV = VOW = VOW ÷ 2. C'est <b>UOW ÷ 2</b> (l'angle entier, pas la moitié). Et avec UOW = 71°, le résultat est 35,5°, pas 37°.</li></ul>
+  <div class="evgold">⭐ <b>Règle d'or :</b> après « Je sais que », on n'écrit QUE des données de l'énoncé ou des résultats déjà démontrés.</div>
+  <div class="evmodel"><b>La rédaction modèle (3 lignes, toujours les mêmes)</b><br><b>Je sais que</b> … (les données de l'énoncé : droites parallèles, mesure donnée, angle droit, points alignés…) <b>et que</b> … (la configuration : « les angles … et … sont alternes-internes / correspondants / adjacents / opposés par le sommet »).<br><b>Or</b> … (la propriété du cours, écrite en entier : « si …, alors … »).<br><b>Donc</b> … (la conclusion, avec le calcul : ABQ = … = …°).</div>
+  <p class="evplan"><b>Plan suggéré :</b> mercredi soir, parties 1 à 3 ; jeudi soir, parties 4 à 7, puis refaire de mémoire l'exercice 10 (la « revanche »). Chaque soir, commencer par réciter à voix haute la fiche des 8 propriétés (exercice 4).</p>`,
+  items:[K("E0-or","La règle d'or : après « Je sais que », qu'a-t-on le droit d'écrire ?",{kw:[{re:"enonce|donnee",miss:"Les données de l'énoncé."},{re:"demontre|deja|prouve|trouve avant",miss:"Et les résultats déjà démontrés."}]},"Seulement les données de l'énoncé ou des résultats déjà démontrés. Jamais ce que je cherche."),
+   K("E0-red","La rédaction modèle : par quels mots commencent les 3 lignes ?",{kw:[{re:"je sais",miss:"Ligne 1 : Je sais que…"},{re:"(^|[^a-z])or([^a-z]|$)",miss:"Ligne 2 : Or…"},{re:"donc",miss:"Ligne 3 : Donc…"}]},"Je sais que…, Or…, Donc…"),
+   K("E0-uov","Le cours page 2 dit : UOV = VOW = VOW ÷ 2. Corrige la formule, puis calcule UOV quand UOW = 71°.",{kw:[{re:"uow ?(÷|/|:) ?2|uow divise",miss:"La formule juste : UOV = VOW = UOW ÷ 2 (l'angle entier)."},{re:"35\\.5",miss:"71 ÷ 2 = 35,5°."}],forbid:[["(^|[^0-9.])37([^0-9]|$)","Pas 37° : 71 ÷ 2 = 35,5°.",0.5]]},"UOV = VOW = UOW ÷ 2 = 71 ÷ 2 = 35,5°.")],
+  cor:"<p>La règle d'or, les 3 lignes, et UOV = VOW = UOW ÷ 2 = 71 ÷ 2 = 35,5°.</p>"});
+ ex({id:"E1",part:1,src:"Batterie, ex. 1",n:"Exercice 1",title:"Décoder la consigne",st:"<p>Pour chaque consigne, dire ce que le professeur attend exactement. Glisse chaque attente sur sa consigne.</p>",
+  items:[SO("E1-tri","Relie chaque consigne à ce qu'on attend.",[{id:"a",t:"a) « Donner la définition de… »"},{id:"b",t:"b) « Énoncer la propriété… »"},{id:"c",t:"c) « Calculer… en justifiant à l'aide d'une propriété »"},{id:"d",t:"d) « En déduire… »"},{id:"e",t:"e) « Justifier que… »"},{id:"f",t:"f) « Citer la propriété utilisée »"}],
+   [{id:"1",b:"a",t:"Ce qu'EST l'objet (comment on le reconnaît). Pas de « si… alors… » sur des mesures."},{id:"2",b:"b",t:"Une phrase « Si …, alors … » qui permet de déduire quelque chose (une égalité de mesures, un parallélisme)."},
+    {id:"3",b:"c",t:"Les 3 lignes Je sais que / Or (propriété) / Donc (calcul). Un résultat juste sans propriété citée = points perdus."},{id:"4",b:"d",t:"Réutiliser le résultat de la question précédente (c'est un indice : la question d'avant sert !)."},
+    {id:"5",b:"e",t:"Une démonstration complète (Je sais que / Or / Donc) qui aboutit à la phrase demandée."},{id:"6",b:"f",t:"Recopier la propriété en entier, pas juste son nom."}],2),
+   K("E1-piege","Le piège de l'interro : à la question 3a, on demandait de calculer ABQ. Quel mot de la consigne fallait-il repérer, et quelle erreur ne faut-il pas faire ?",{kw:[{re:"calcul|verbe",miss:"Le verbe : calculer."},{re:"je sais|affirm|premiere ligne|tout de suite|resultat|cherche",miss:"Ne pas affirmer ABQ = 38° dès la première ligne (dans « Je sais que »)."}]},"Le verbe « calculer » : il faut démontrer ABQ, pas l'affirmer dans « Je sais que » dès la première ligne.")],
+  cor:`<ul><li>a) <b>Ce qu'EST l'objet</b> (comment on le reconnaît). Pas de « si… alors… » sur des mesures.</li><li>b) Une phrase <b>« Si …, alors … »</b> qui permet de <b>déduire</b> quelque chose (une égalité de mesures, un parallélisme).</li><li>c) Les 3 lignes <b>Je sais que / Or (propriété) / Donc (calcul)</b>. Un résultat juste sans propriété citée = points perdus.</li><li>d) <b>Réutiliser le résultat de la question précédente</b> (c'est un indice : la question d'avant sert !).</li><li>e) Une démonstration complète (Je sais que / Or / Donc) qui aboutit à la phrase demandée.</li><li>f) Recopier la propriété <b>en entier</b>, pas juste son nom.</li></ul><p>Piège de l'interro : à la question 3a on demandait de <i>calculer</i> ABQ. La copie <i>affirmait</i> ABQ = 38° dès la première ligne. Lire la consigne = repérer le verbe (donner, énoncer, calculer, justifier, en déduire).</p>`});
+ ex({id:"E2",part:1,src:"Batterie, ex. 2",n:"Exercice 2",title:"Définition ou propriété ?",st:"<p>Pour chaque phrase, dire D (définition) ou P (propriété). Glisse chaque phrase dans la bonne boîte.</p>",
+  items:[SO("E2-tri","Range les 8 phrases.",[{id:"D",t:"D : définition"},{id:"P",t:"P : propriété"}],[
+   {id:"1",b:"D",t:"1. Deux angles sont adjacents s'ils ont le même sommet, un côté commun et s'ils sont situés de part et d'autre de ce côté commun."},
+   {id:"2",b:"P",t:"2. Deux angles opposés par le sommet ont la même mesure."},
+   {id:"3",b:"P",t:"3. Si deux droites parallèles sont coupées par une sécante, alors les angles correspondants ont la même mesure."},
+   {id:"4",b:"D",t:"4. Deux angles sont complémentaires si la somme de leurs mesures est égale à 90°."},
+   {id:"5",b:"P",t:"5. Si deux droites coupées par une sécante forment des angles alternes-internes de même mesure, alors ces droites sont parallèles."},
+   {id:"6",b:"P",t:"6. Dans un triangle, la somme des mesures des angles est égale à 180°."},
+   {id:"7",b:"D",t:"7. La bissectrice d'un angle est la demi-droite qui partage cet angle en deux angles adjacents de même mesure."},
+   {id:"8",b:"D",t:"8. Deux angles alternes-internes sont situés de part et d'autre de la sécante, entre les deux droites, et ont pour sommets les deux points d'intersection."}],2)],
+  cor:`<p>1 D · 2 P · 3 P · 4 D · 5 P · 6 P · 7 D · 8 D</p><p><b>Truc :</b> une <b>définition</b> sert à <i>nommer</i> (« ces angles SONT alternes-internes »). Une <b>propriété</b> sert à <i>conclure</i> (« DONC ils ont la même mesure », « DONC les droites sont parallèles »). La propriété, c'est ce qu'on écrit après « Or ».</p><p>La phrase 8 est exactement ce qui a été écrit à l'interro quand on demandait la propriété : c'est une définition.</p>`});
+ const E3=[["a","angles adjacents",1,"Deux angles sont adjacents s'ils ont le même sommet, un côté commun, et s'ils sont situés de part et d'autre de ce côté commun."],
+  ["b","angles opposés par le sommet",5,"Deux angles sont opposés par le sommet s'ils ont le même sommet et si leurs côtés sont dans le prolongement l'un de l'autre."],
+  ["c","angles complémentaires",12,"Deux angles sont complémentaires si la somme de leurs mesures est égale à 90°."],
+  ["d","angles supplémentaires",13,"Deux angles sont supplémentaires si la somme de leurs mesures est égale à 180°."],
+  ["e","droite sécante à deux droites",7,"Une droite qui coupe deux autres droites en deux points distincts est sécante à ces deux droites."],
+  ["f","angles alternes-internes",8,"Deux droites coupées par une sécante forment des angles alternes-internes : ils ont pour sommets les deux points d'intersection ; ils sont situés entre les deux droites ; ils sont de part et d'autre de la sécante."],
+  ["g","angles correspondants",9,"Deux droites coupées par une sécante forment des angles correspondants : ils ont pour sommets les deux points d'intersection ; l'un est entre les deux droites, l'autre à l'extérieur ; ils sont du même côté de la sécante."],
+  ["h","bissectrice",3,"La bissectrice d'un angle est la demi-droite qui partage cet angle en deux angles adjacents de même mesure."]];
+ ex({id:"E3",part:1,src:"Batterie, ex. 3",n:"Exercice 3",title:"Réciter les définitions (à l'écrit, sans regarder)",st:"<p>Écrire la définition de chaque mot, sans regarder.</p>",recite:1,
+  items:E3.map(([l,t,f,m])=>FI("E3"+l,`${l}) ${t[0].toUpperCase()+t.slice(1)}`,f,"D",m)),
+  cor:"<ul>"+E3.map(([l,t,f,m])=>`<li>${l}) ${m}${f===13?" (Rien d'autre ! Pas de « même sommet », pas de « côté commun ».)":""}</li>`).join("")+`</ul><p><b>Mémo :</b> com<b>PL</b>émentaire → 90 (on « complète » un coin droit) ; su<b>PPL</b>émentaire → 180 (plus de lettres, plus de degrés).</p>`});
+ const E4=[["1","angles opposés par le sommet",6,"Si deux angles sont opposés par le sommet, alors ils ont la même mesure."],["2","angles adjacents",2,"Si les angles AOB et BOC sont adjacents, alors AOC = AOB + BOC."],
+  ["3","droites parallèles et angles alternes-internes",10,"Si deux droites parallèles sont coupées par une sécante, alors les angles alternes-internes qu'elles forment ont la même mesure."],
+  ["4","droites parallèles et angles correspondants",11,"Si deux droites parallèles sont coupées par une sécante, alors les angles correspondants qu'elles forment ont la même mesure."],
+  ["5","réciproque avec les alternes-internes",15,"Si deux droites coupées par une sécante forment deux angles alternes-internes de même mesure, alors ces deux droites sont parallèles."],
+  ["6","réciproque avec les correspondants",16,"Si deux droites coupées par une sécante forment deux angles correspondants de même mesure, alors ces deux droites sont parallèles."],
+  ["7","somme des angles d'un triangle",17,"Dans un triangle, la somme des mesures des trois angles est égale à 180°."]];
+ ex({id:"E4",part:1,src:"Batterie, ex. 4",n:"Exercice 4",title:"Réciter les 8 propriétés (la fiche réflexe)",st:"<p>Énoncer chaque propriété sous la forme « Si …, alors … ».</p>",recite:1,
+  items:E4.map(([l,t,f,m])=>FI("E4-"+l,`${l}) ${t[0].toUpperCase()+t.slice(1)}`,f,"P",m)).concat([
+   K("E4-8","8) Triangle rectangle, isocèle, équilatéral",{kw:[{re:"rectangle",miss:"Le triangle rectangle."},{re:"complementaire|90",miss:"Rectangle : les deux angles aigus sont complémentaires (somme 90°)."},{re:"isocele",miss:"Le triangle isocèle."},{re:"base",miss:"Isocèle : les deux angles à la base ont la même mesure."},{re:"equilateral",miss:"Le triangle équilatéral."},{re:"60|meme mesure",miss:"Équilatéral : les trois angles mesurent 60°."}]},"Dans un triangle rectangle, les deux angles aigus sont complémentaires (leur somme vaut 90°). Dans un triangle isocèle, les deux angles à la base ont la même mesure. Dans un triangle équilatéral, les trois angles mesurent 60°."),
+   FI("E4-bonus","Bonus : la « contraposée » avec les alternes-internes",23,"P","Si deux angles alternes-internes ont des mesures différentes, alors les droites ne sont pas parallèles."),
+   FI("E4-bonus2","Bonus : la « contraposée » avec les correspondants",24,"P","Si deux angles correspondants ont des mesures différentes, alors les droites ne sont pas parallèles.")]),
+  cor:"<ol>"+E4.map(([l,t,f,m])=>`<li>${m}${f===10?" <b>← la question de l'interro</b>":""}</li>`).join("")+"<li>Dans un triangle rectangle, les deux angles aigus sont complémentaires (leur somme vaut 90°). Dans un triangle isocèle, les deux angles à la base ont la même mesure. Dans un triangle équilatéral, les trois angles mesurent 60°.</li></ol><p><b>Bonus (« contraposée ») :</b> si deux angles alternes-internes (ou correspondants) ont des mesures différentes, alors les droites ne sont pas parallèles.</p>"});
+ ex({id:"E5",part:1,src:"Batterie, ex. 5",n:"Exercice 5",title:"La réciproque est-elle vraie ?",st:"<p>Pour chaque propriété vraie, écrire sa réciproque, puis dire si elle est vraie ou fausse (donner un contre-exemple si elle est fausse).</p>",
+  items:[K("E5-1","1. Si deux angles sont opposés par le sommet, alors ils ont la même mesure.",{kw:[{re:"si .*(meme mesure|egaux).* alors .*oppos",miss:"La réciproque : « Si deux angles ont la même mesure, alors ils sont opposés par le sommet. »"},{re:"coin|90|droit|exemple|feuille|contre",miss:"Donne un contre-exemple."}],vf:false},"Si deux angles ont la même mesure, alors ils sont opposés par le sommet. Faux : deux coins d'une feuille mesurent 90° tous les deux sans être opposés par le sommet."),
+   K("E5-2","2. Si un triangle est équilatéral, alors ses trois angles mesurent 60°.",{kw:[{re:"si .*60.* alors .*equilateral",miss:"La réciproque : « Si un triangle a trois angles de 60°, alors il est équilatéral. »"}],vf:true},"Si un triangle a trois angles de 60°, alors il est équilatéral. Vrai."),
+   K("E5-3","3. Si deux angles sont adjacents, alors ils ont le même sommet.",{kw:[{re:"si .*meme sommet.* alors .*adjacent",miss:"La réciproque : « Si deux angles ont le même sommet, alors ils sont adjacents. »"},{re:"aob|aod|exemple|contre|l.un (est )?dans l.autre|interieur",miss:"Donne un contre-exemple (AOB et AOD de l'exercice 6)."}],vf:false},"Si deux angles ont le même sommet, alors ils sont adjacents. Faux : AOB et AOD dans l'exercice 6 ont le même sommet, mais l'un est dans l'autre."),
+   K("E5-4","4. Si un nombre se termine par 0, alors il est pair.",{kw:[{re:"si .*pair.* alors .*(termine|finit)",miss:"La réciproque : « Si un nombre est pair, alors il se termine par 0. »"},{re:"(^|[^0-9])(14|2|4|6|8|12|16|18|22)([^0-9]|$)|exemple|contre",miss:"Donne un contre-exemple : 14 est pair."}],vf:false},"Si un nombre est pair, alors il se termine par 0. Faux : 14 est pair."),
+   K("E5-5","5. Si deux droites sont parallèles, alors les angles alternes-internes formés avec une sécante ont la même mesure.",{kw:[{re:"si .*(alternes?.?internes?).*(meme mesure|egaux).* alors .*parall",miss:"La réciproque : « Si deux droites coupées par une sécante forment des angles alternes-internes de même mesure, alors elles sont parallèles. »"}],vf:true},"Si deux droites coupées par une sécante forment des angles alternes-internes de même mesure, alors elles sont parallèles. Vrai, c'est une propriété du cours.")],
+  cor:`<ol><li>Réciproque : « Si deux angles ont la même mesure, alors ils sont opposés par le sommet. » <b>FAUX</b> : deux coins d'une feuille mesurent 90° tous les deux sans être opposés par le sommet.</li><li>« Si un triangle a trois angles de 60°, alors il est équilatéral. » <b>VRAI</b>.</li><li>« Si deux angles ont le même sommet, alors ils sont adjacents. » <b>FAUX</b> : voir AOB et AOD dans l'exercice 6 (même sommet, même côté [OA), mais l'un est dans l'autre).</li><li>« Si un nombre est pair, alors il se termine par 0. » <b>FAUX</b> : 14 est pair.</li><li>« Si deux droites coupées par une sécante forment des angles alternes-internes de même mesure, alors elles sont parallèles. » <b>VRAI</b> (propriété du cours).</li></ol><p>Le chien Socrate du cours : « avoir des poils » ne prouve pas qu'on est un chat. Une réciproque se vérifie toujours, elle n'est jamais automatique.</p>`});
+ const VF=[["1","Deux angles complémentaires sont forcément adjacents.",false,"triangle rectangle|pas forcement|exemple|position|somme|meme sommet","Faux : dans un triangle rectangle, les deux angles aigus sont complémentaires mais n'ont pas le même sommet."],
+  ["2","Deux angles supplémentaires ont forcément un côté commun.",false,"somme|180|position|seule","Faux : c'est l'erreur de l'interro. Seule la somme compte (= 180°), pas la position."],
+  ["3","Un angle de 35° et un angle de 55° sont complémentaires.",true,"35 ?\\+ ?55|(^|[^0-9])90","Vrai : 35 + 55 = 90."],
+  ["4","Un angle de 125° et un angle de 65° sont supplémentaires.",false,"190|125 ?\\+ ?65|55","Faux : 125 + 65 = 190 ≠ 180. (Le supplémentaire de 125° est 55°.)"],
+  ["5","Deux angles alternes-internes ont toujours la même mesure.",false,"parall","Faux : seulement si les deux droites sont parallèles. Piège n°1 des interros."],
+  ["6","Deux angles opposés par le sommet ont toujours la même mesure.",true,"parall|toujours|propriete|oppos","Vrai : et ici, pas besoin de droites parallèles."],
+  ["7","Un triangle peut avoir deux angles obtus.",false,"180","Faux : deux angles obtus font déjà plus de 180°."],
+  ["8","Deux angles aigus peuvent être supplémentaires.",false,"180|90","Faux : deux angles aigus font moins de 90 + 90 = 180°."],
+  ["9","Si deux angles correspondants mesurent tous les deux 72°, alors les droites sont parallèles.",true,"reciproque|correspondant|parall","Vrai : réciproque de la propriété des angles correspondants."],
+  ["10","Deux angles supplémentaires de même mesure sont droits.",true,"90|x ?\\+ ?x|2 ?x|180 ?(÷|/) ?2","Vrai : x + x = 180 donc x = 90°."]];
+ ex({id:"E6b",part:1,src:"Batterie, ex. 6 bis",n:"Exercice 6 bis",title:"Vrai ou faux ? (justifier chaque réponse)",st:"<p>Écris « vrai » ou « faux », puis ta justification.</p>",
+  items:VF.map(([l,q,v,re,m])=>K("E6b-"+l,`${l}. ${q}`,{kw:[{re,miss:"Ta justification n'est pas complète."}],vf:v},m)),
+  cor:"<ol>"+VF.map(v=>`<li>${v[4].replace(/^(Vrai|Faux)/,"<b>$1</b>")}</li>`).join("")+"</ol>"});
+ ex({id:"E6",part:2,src:"Batterie, ex. 6",n:"Exercice 6",title:"Angles adjacents et angle plat",fig:F.e6,st:"<p>A, O et C sont alignés. La figure n'est pas en vraie grandeur.</p><p>On donne AOB = 50° et BOD = 70°.</p>",
+  items:[K("E6a","a) Pourquoi les angles AOB et BOD sont-ils adjacents ?",{kw:[{re:"meme sommet|sommet commun|sommet o",miss:"Même sommet O."},{re:"cote commun|\\[ob\\)",miss:"Un côté commun [OB)."},{re:"part et d.autre",miss:"De part et d'autre de [OB)."}]},"Ils ont le même sommet O, un côté commun [OB), et ils sont situés de part et d'autre de [OB)."),
+   R("E6b","b) Calculer AOD en justifiant.",{hyp:[H.adj("AOB","BOD")],prop:[2],res:[["AOD",120]],calc:1},"Je sais que AOB et BOD sont adjacents. Or, si deux angles sont adjacents, la mesure de l'angle total est la somme de leurs mesures. Donc AOD = AOB + BOD = 50° + 70° = 120°."),
+   R("E6c","c) Calculer DOC en justifiant.",{hyp:[H.plat("A, O et C"),H.adj("AOD","DOC")],prop:[2],res:[["DOC",60]],calc:1},"Je sais que A, O et C sont alignés, donc AOC est un angle plat : AOC = 180°. De plus AOD et DOC sont adjacents. Or AOD + DOC = AOC. Donc DOC = 180° − 120° = 60°."),
+   K("E6d","d) Les angles AOB et AOD sont-ils adjacents ? Justifier.",{kw:[{re:"part et d.autre|interieur|l.un (est )?dans l.autre|dedans",miss:"Ils ne sont pas de part et d'autre de [OA) : AOB est à l'intérieur de AOD."}],yn:false},"Non. Ils ont le même sommet O et le côté commun [OA), mais ils ne sont pas de part et d'autre de [OA) : AOB est à l'intérieur de AOD."),
+   N("E6e","e) Calculer BOC.",130,"BOC = 180° − 50° = 130° (AOB et BOC sont adjacents et forment l'angle plat AOC)."),
+   K("E6f","f) Citer deux paires d'angles supplémentaires.",{kw:[{re:"aob.*boc|boc.*aob",miss:"AOB et BOC (50 + 130 = 180)."},{re:"aod.*doc|doc.*aod",miss:"AOD et DOC (120 + 60 = 180)."}]},"AOB et BOC (50 + 130 = 180) ; AOD et DOC (120 + 60 = 180)."),
+   K("E6g","g) Les angles AOB et DOC sont-ils complémentaires ?",{kw:[{re:"110|50 ?\\+ ?60",miss:"50 + 60 = 110."}],yn:false},"50 + 60 = 110 ≠ 90 : non.")],
+  cor:`<p>a) Ils ont le même sommet O, un côté commun [OB), et ils sont situés de part et d'autre de [OB).</p><p>b) Je sais que AOB et BOD sont adjacents. Or, si deux angles sont adjacents, la mesure de l'angle total est la somme de leurs mesures. Donc AOD = AOB + BOD = 50° + 70° = <b>120°</b>.</p><p>c) Je sais que A, O et C sont alignés, donc AOC est un angle plat : AOC = 180°. De plus AOD et DOC sont adjacents. Or AOD + DOC = AOC. Donc DOC = 180° − 120° = <b>60°</b>.</p><p>d) <b>Non.</b> Ils ont le même sommet O et le côté commun [OA), mais ils ne sont pas de part et d'autre de [OA) : AOB est « à l'intérieur » de AOD.</p><p>e) BOC = 180° − 50° = <b>130°</b> (AOB et BOC sont adjacents et forment l'angle plat AOC).</p><p>f) AOB et BOC (50 + 130 = 180) ; AOD et DOC (120 + 60 = 180).</p><p>g) 50 + 60 = 110 ≠ 90 : <b>non</b>.</p><p>« Même sommet » ne suffit jamais pour dire « adjacents ».</p>`});
+ ex({id:"E7",part:2,src:"Batterie, ex. 7",n:"Exercice 7",title:"Deux droites qui se coupent",fig:F.e7,st:"<p>Les droites (AB) et (CD) se coupent en O.</p><p>On donne AOC = 63°. Calculer BOD, AOD et BOC en justifiant chaque réponse.</p>",
+  items:[R("E7a","Calculer BOD.",{hyp:[H.opp("AOC","BOD")],prop:[6],res:[["BOD",63]]},"Je sais que AOC et BOD sont opposés par le sommet. Or deux angles opposés par le sommet ont la même mesure. Donc BOD = AOC = 63°."),
+   R("E7b","Calculer AOD.",{hyp:[H.plat("C, O et D"),H.adj("AOC","AOD")],prop:[2],res:[["AOD",117]],calc:1},"Je sais que C, O et D sont alignés, donc COD = 180°, et que AOC et AOD sont adjacents. Or COD = AOC + AOD. Donc AOD = 180° − 63° = 117°."),
+   R("E7c","Calculer BOC.",{hyp:[H.opp("BOC","AOD")],prop:[6],res:[["BOC",117]]},"Je sais que BOC et AOD sont opposés par le sommet. Or deux angles opposés par le sommet ont la même mesure. Donc BOC = AOD = 117°.")],
+  cor:`<p>• Je sais que AOC et BOD sont opposés par le sommet. Or deux angles opposés par le sommet ont la même mesure. Donc BOD = AOC = <b>63°</b>.</p><p>• Je sais que C, O et D sont alignés, donc COD = 180°, et que AOC et AOD sont adjacents. Donc AOD = 180° − 63° = <b>117°</b>.</p><p>• BOC et AOD sont opposés par le sommet, donc BOC = AOD = <b>117°</b>.</p><p>Les 4 angles ne sont PAS tous égaux : il y en a deux de 63° et deux de 117° (63 + 117 = 180).</p>`});
+ const T8={};for(const v of ["A","B"])for(const pos in N8[v])T8[N8[v][pos]]={sec:0,v,pos};
+ ex({id:"E8",part:2,src:"Batterie, ex. 8",n:"Exercice 8",title:"Les 8 angles (droites NON parallèles)",fig:()=>F.eight(62,false),st:"<p><b>Attention : (d₁) et (d₂) ne sont PAS parallèles.</b> Touche deux numéros pour former une paire.</p>",
+  items:[PA("E8a","a) Citer toutes les paires d'angles alternes-internes.",{rel:"alt",all:1,tmpl:T8},[[3,5],[4,6]]),
+   PA("E8b","b) Citer toutes les paires d'angles correspondants.",{rel:"cor",all:1,tmpl:T8},[[1,5],[2,6],[3,7],[4,8]]),
+   PA("E8c","c) Citer toutes les paires d'angles opposés par le sommet.",{rel:"opp",all:1,tmpl:T8},[[1,3],[2,4],[5,7],[6,8]]),
+   PA("E8d","d) Citer une paire d'angles adjacents supplémentaires.",{rel:"adj",n:1,tmpl:T8},[[1,2]]),
+   K("E8e","e) Piège : l'angle 3 mesure 62°. Peut-on en déduire la mesure de l'angle 5 ? Celle de l'angle 1 ? Celles des angles 2 et 4 ?",{kw:[{re:"non|ne peut pas|impossible|on ne sait pas",miss:"Angle 5 : NON."},{re:"parall",miss:"Dis pourquoi : (d₁) et (d₂) ne sont pas parallèles."},{re:"(^|[^0-9])62",miss:"Angle 1 : oui, 62° (opposé par le sommet à 3)."},{re:"118",miss:"Angles 2 et 4 : oui, 180° − 62° = 118°."}]},"Angle 5 : non, les droites (d₁) et (d₂) ne sont pas parallèles, on ne peut pas utiliser la propriété des alternes-internes. Angle 1 : oui, 62° (opposé par le sommet à 3). Angles 2 et 4 : oui, 180° − 62° = 118°.")],
+  cor:`<p>a) Alternes-internes : <b>3 et 5</b> ; <b>4 et 6</b> (entre les deux droites, de part et d'autre de la sécante).</p><p>b) Correspondants : <b>1 et 5</b> ; <b>2 et 6</b> ; <b>3 et 7</b> ; <b>4 et 8</b> (même position à chaque carrefour). C'est l'exercice de la page 5 du cours, resté vide.</p><p>c) Opposés par le sommet : 1 et 3 ; 2 et 4 ; 5 et 7 ; 6 et 8.</p><p>d) Par exemple 1 et 2 (ou 2 et 3, 3 et 4, 4 et 1, 5 et 6…).</p><p>e) <b>Angle 5 : NON !</b> Les droites (d₁) et (d₂) ne sont pas parallèles, donc on ne peut pas utiliser la propriété des alternes-internes. <b>Angle 1 : oui</b>, 62° (opposé par le sommet à 3, et ça marche sans parallèles). <b>Angles 2 et 4 : oui</b>, 180° − 62° = 118° (adjacents à 3, sur un angle plat).</p><p>Avant d'utiliser « alternes-internes » ou « correspondants » pour calculer, vérifier qu'on SAIT que les droites sont parallèles.</p>`});
+ function ex9(a){const b=180-a;return {id:"E9",part:2,src:"Batterie, ex. 9",n:"Exercice 9",title:"Les 8 angles avec des parallèles",fig:()=>F.eight(b,true,[{sec:0,v:"A",pos:"AL",col:C.ORANGE,txt:""}]),
+  st:`<p>(d₁) // (d₂). Donnée : l'angle 2 mesure ${a}°.</p><p>Calculer les mesures des 7 autres angles en citant à chaque fois la propriété utilisée.</p>`,variant:1,
+  items:[M("E9-m","Les 7 autres angles, puis les propriétés utilisées.",[["Angle 1",b],["Angle 3",b],["Angle 4",a],["Angle 5",b],["Angle 6",a],["Angle 7",b],["Angle 8",a]],{kw:[{re:"adjacent|plat|180",miss:"Angle 1 : 1 et 2 sont adjacents et forment un angle plat."},{re:"oppos",miss:"Angles 3, 4, 7, 8 : opposés par le sommet."},{re:"correspondant|alternes",miss:"Angles 5 et 6 : correspondants ou alternes-internes."},{re:"parall|//",miss:"Et (d₁) // (d₂) !"}]},
+   {f:[b,b,a,b,a,b,a],why:"Angle 1 : adjacents, angle plat. Angles 3, 4, 7, 8 : opposés par le sommet. Angles 5 et 6 : correspondants et alternes-internes car (d₁) // (d₂)."},2)],
+  cor:`<ul><li>Angle 1 = 180° − ${a}° = <b>${b}°</b> (1 et 2 sont adjacents et forment un angle plat).</li><li>Angle 3 = <b>${b}°</b> (opposé par le sommet à 1) ; angle 4 = <b>${a}°</b> (opposé par le sommet à 2).</li><li>Angle 5 = <b>${b}°</b> : 1 et 5 sont correspondants et (d₁) // (d₂).</li><li>Angle 6 = <b>${a}°</b> : 4 et 6 sont alternes-internes et (d₁) // (d₂) (ou : 2 et 6 correspondants).</li><li>Angle 7 = <b>${b}°</b> (opposé à 5) ; angle 8 = <b>${a}°</b> (opposé à 6).</li></ul><p><b>Astuce de vérification :</b> avec deux parallèles, il n'existe que deux valeurs : tous les angles « pointus » sont égaux (${b}°), tous les angles « ouverts » sont égaux (${a}°), et ${b} + ${a} = 180.</p>`};}
+ EX.push(Object.assign(ex9(123),{gen:r=>ex9(rnd(r,100,140))}));
+ function ex10(a){const b=90-a;return {id:"E10",part:3,src:"Batterie, ex. 10",n:"Exercice 10",title:"LA REVANCHE : l'interro flash, rédigée parfaitement",fig:()=>F.e10(a),variant:1,
+  st:`<p>(d₁) // (d₂). L'angle QBT est droit.</p><p>Les droites (d₁) et (d₂) sont parallèles. La sécante (s) les coupe en A et B. On donne PAR = ${a}° et l'angle QBT est droit.</p>`,
+  items:[R("E10a","a) Calculer la mesure de ABQ en justifiant à l'aide d'une propriété.",{hyp:[H.par,H.cor("PAR","ABQ")],prop:[11],res:[["ABQ",a]],ahead:["ABT"]},`Je sais que les droites (d₁) et (d₂) sont parallèles et que les angles PAR et ABQ sont correspondants. Or, si deux droites parallèles sont coupées par une sécante, alors les angles correspondants ont la même mesure. Donc ABQ = PAR = ${a}°.`,1.5),
+   R("E10b","b) En déduire la mesure de ABT. Justifier et écrire le calcul.",{hyp:[["90|droit","Il manque : QBT = 90° (angle droit)."],H.adj("ABT","ABQ")],prop:[2],res:[["ABT",b]],calc:1},`Je sais que QBT = 90° et que les angles ABT et ABQ sont adjacents. Or, si deux angles sont adjacents, ABT + ABQ = QBT. Donc ABT = QBT − ABQ = 90° − ${a}° = ${b}°.`,1.5)],
+  cor:`<p><b>a)</b> Je sais que les droites (d₁) et (d₂) sont parallèles et que les angles PAR et ABQ sont correspondants (formés par la sécante (s), du même côté de (s), l'un à l'extérieur, l'autre entre les droites).<br>Or, si deux droites parallèles sont coupées par une sécante, alors les angles correspondants ont la même mesure.<br>Donc ABQ = PAR = <b>${a}°</b>.</p><p><b>b)</b> Je sais que QBT = 90° et que les angles ABT et ABQ sont adjacents (même sommet B, côté commun [BA), de part et d'autre de [BA)).<br>Or, si deux angles sont adjacents, ABT + ABQ = QBT.<br>Donc ABT = QBT − ABQ = 90° − ${a}° = <b>${b}°</b>.</p><p>Ce qui avait été fait à l'interro : en a), « Je sais que ABQ mesure 38° » (on affirme ce qu'on doit prouver) ; en b), le calcul est juste mais sans dire que les angles sont adjacents. Refaire cet exercice de mémoire jeudi soir jusqu'à ce qu'il soit parfait.</p>`};}
+ EX.push(Object.assign(ex10(38),{gen:r=>ex10(rnd(r,25,62))}));
+ function ex11(a){return {id:"E11",part:3,src:"Batterie, ex. 11",n:"Exercice 11",title:"Variante avec les alternes-internes",fig:()=>F.e11(a),variant:1,
+  st:`<p>(d₁) // (d₂). (BT) est perpendiculaire à (d₂).</p><p>(d₁) // (d₂), C, A, P sont sur (d₁), CAB = ${a}° et (BT) ⟂ (d₂).</p>`,
+  items:[R("E11a","a) Calculer ABQ.",{hyp:[H.par,H.alt("CAB","ABQ")],prop:[10],res:[["ABQ",a]]},`Je sais que (d₁) // (d₂) et que CAB et ABQ sont alternes-internes. Or si deux droites parallèles sont coupées par une sécante, les angles alternes-internes ont la même mesure. Donc ABQ = CAB = ${a}°.`),
+   R("E11b","b) En déduire ABT.",{hyp:[["90|perpendic|droit","Il manque : QBT = 90°."],H.adj("ABT","ABQ")],prop:[2],res:[["ABT",90-a]],calc:1},`Je sais que QBT = 90° et que ABT et ABQ sont adjacents. Or ABT + ABQ = QBT. Donc ABT = 90° − ${a}° = ${90-a}°.`),
+   R("E11c","c) Calculer PAB.",{hyp:[H.plat("C, A, P"),H.adj("CAB","BAP")],prop:[2],res:[["PAB",180-a]],calc:1},`Je sais que C, A, P sont alignés, donc CAP = 180°, et que CAB et BAP sont adjacents. Or CAB + BAP = CAP. Donc PAB = 180° − ${a}° = ${180-a}°.`),
+   K("E11d","d) Calculer PAR de deux façons différentes.",{kw:[{re:"oppos",miss:"Façon 1 : PAR et CAB sont opposés par le sommet."},{re:"correspondant",miss:"Façon 2 : PAR et ABQ sont correspondants, et (d₁) // (d₂)."},{re:"(^|[^0-9])"+a+"([^0-9]|$)",miss:`Les deux façons donnent ${a}°.`}]},`Façon 1 : PAR et CAB sont opposés par le sommet, donc PAR = ${a}°. Façon 2 : PAR et ABQ sont correspondants et (d₁) // (d₂), donc PAR = ABQ = ${a}°.`)],
+  cor:`<p>a) Je sais que (d₁) // (d₂) et que CAB et ABQ sont alternes-internes (sécante (s)). Or si deux droites parallèles sont coupées par une sécante, les angles alternes-internes ont la même mesure. Donc ABQ = CAB = <b>${a}°</b>.</p><p>b) QBT = 90° et ABT, ABQ sont adjacents, donc ABT = 90° − ${a}° = <b>${90-a}°</b>.</p><p>c) C, A, P sont alignés, donc CAP = 180°. CAB et BAP sont adjacents, donc PAB = 180° − ${a}° = <b>${180-a}°</b>.</p><p>d) <b>Façon 1</b> : PAR et CAB sont opposés par le sommet, donc PAR = ${a}°. <b>Façon 2</b> : PAR et ABQ sont correspondants et (d₁) // (d₂), donc PAR = ABQ = ${a}°. Les deux méthodes donnent <b>${a}°</b> : on vérifie ainsi son résultat.</p>`};}
+ EX.push(Object.assign(ex11(41),{gen:r=>ex11(rnd(r,28,62))}));
+ ex({id:"E12",part:3,src:"Batterie, ex. 12",n:"Exercice 12",title:"Le trapèze (niveau +)",fig:F.e12,
+  st:"<p>ABCD est un trapèze : (AB) // (DC). E est sur la droite (AB).</p><p>ABCD est un trapèze de bases [AB] et [DC] : (AB) // (DC). On donne DAB = 115° et BCD = 70°. E est sur la droite (AB), A est entre E et B.</p>",
+  items:[R("E12a","a) Calculer EAD.",{hyp:[H.plat("E, A, B"),H.adj("EAD","DAB")],prop:[2],res:[["EAD",65]],calc:1},"Je sais que E, A, B sont alignés donc EAB = 180°, et que EAD et DAB sont adjacents. Or EAD + DAB = EAB. Donc EAD = 180° − 115° = 65°."),
+   R("E12b","b) En déduire ADC.",{hyp:[["parall|//","Il manque : (AB) // (DC)."],H.alt("EAD","ADC")],prop:[10],res:[["ADC",65]],warn:[["dab.*(=|meme mesure).*adc|adc ?= ?dab","DAB et ADC ne sont ni alternes-internes ni correspondants : on ne peut pas dire qu'ils sont égaux !",0.5]]},"Je sais que (AB) // (DC) et que EAD et ADC sont alternes-internes (sécante (AD)). Or si deux droites parallèles sont coupées par une sécante, les angles alternes-internes ont la même mesure. Donc ADC = EAD = 65°."),
+   K("E12c","c) Avec la même méthode, calculer ABC.",{kw:[{re:"fbc|prolong",miss:"On prolonge (AB) après B par un point F."},{re:"alternes?.?internes?",miss:"FBC et BCD sont alternes-internes."},{re:"110",miss:"ABC = 180° − 70° = 110°."}]},"On prolonge (AB) après B par un point F. FBC et BCD sont alternes-internes (sécante (BC)) et (AB) // (DC), donc FBC = 70°. Puis ABC = 180° − 70° = 110°."),
+   K("E12d","d) Calculer la somme des 4 angles du trapèze. Que remarque-t-on ?",{kw:[{re:"360",miss:"115 + 65 + 70 + 110 = 360°."},{re:"supplementaire|180",miss:"Remarque : deux angles sur le même côté oblique sont supplémentaires."}]},"115 + 65 + 70 + 110 = 360°. Deux angles qui s'appuient sur le même côté oblique sont supplémentaires (115 + 65 = 180).")],
+  cor:`<p>a) E, A, B sont alignés donc EAB = 180°. EAD et DAB sont adjacents, donc EAD = 180° − 115° = <b>65°</b>.</p><p>b) Je sais que (AB) // (DC) et que EAD et ADC sont alternes-internes (sécante (AD)). Or si deux droites parallèles sont coupées par une sécante, les angles alternes-internes ont la même mesure. Donc ADC = EAD = <b>65°</b>.</p><p>c) On prolonge (AB) après B par un point F. FBC et BCD sont alternes-internes (sécante (BC)) et (AB) // (DC), donc FBC = 70°. Puis ABC = 180° − 70° = <b>110°</b>.</p><p>d) 115 + 65 + 70 + 110 = <b>360°</b>. Dans un trapèze, deux angles qui « s'appuient » sur le même côté oblique sont supplémentaires (115 + 65 = 180 ; 70 + 110 = 180).</p><p>DAB et ADC ne sont ni alternes-internes ni correspondants : on ne peut pas dire qu'ils sont égaux ! Il faut passer par l'angle plat.</p>`});
+ ex({id:"E13",part:4,src:"Batterie, ex. 13",n:"Exercice 13",title:"Piège : deux mesures différentes… et pourtant parallèles",fig:F.e13,
+  st:"<p>G, E, F, H sont alignés sur la sécante. On donne NEF = 106° et EFJ = 74°.</p>",
+  items:[R("E13a","Les droites (MN) et (KJ) sont-elles parallèles ? Justifier.",{hyp:[["mef|180 ?- ?106|74","Calcule d'abord MEF = 180° − 106° = 74° (M, E, N alignés)."],["alternes?.?internes?","MEF et EFJ sont alternes-internes."]],prop:[15],par:"oui",warn:[["106 ?(≠|!=|n'est pas egal|different).*74.*(pas|non) parall|pas parall.*106","Réflexe à bannir : « 106 ≠ 74 donc pas parallèles ». NEF et EFJ ne sont ni alternes-internes ni correspondants.",0.6]]},
+   "Je sais que M, E, N sont alignés, donc MEN = 180°, et que MEF et NEF sont adjacents. Donc MEF = 180° − 106° = 74°. Je sais que les angles MEF et EFJ sont alternes-internes et qu'ils ont la même mesure : 74°. Or, si deux droites coupées par une sécante forment des angles alternes-internes de même mesure, alors ces droites sont parallèles. Donc (MN) // (KJ).",2)],
+  cor:`<p>Les angles NEF et EFJ ne sont ni alternes-internes ni correspondants : on ne peut pas les comparer directement.</p><p>Je sais que M, E, N sont alignés, donc MEN = 180°, et que MEF et NEF sont adjacents. Donc MEF = 180° − 106° = 74°.</p><p>Je sais que les angles MEF et EFJ sont alternes-internes (sécante (EF)) et qu'ils ont la même mesure : 74°.<br>Or, si deux droites coupées par une sécante forment des angles alternes-internes de même mesure, alors ces droites sont parallèles.<br>Donc <b>(MN) // (KJ)</b>.</p><p>Réflexe à bannir : « 106 ≠ 74 donc pas parallèles ». On compare seulement des angles alternes-internes ou correspondants.</p>`});
+ function ex14(a,b){return {id:"E14",part:4,src:"Batterie, ex. 14",n:"Exercice 14",title:"Démontrer qu'elles NE sont PAS parallèles",fig:()=>F.nonpar(a,b,"cor"),variant:1,
+  st:`<p>Les deux angles colorés sont correspondants.</p><p>Les droites (d₁) et (d₂) sont coupées par la sécante (s). Les angles colorés sont correspondants et mesurent ${a}° et ${b}°.</p>`,
+  items:[R("E14a","(d₁) et (d₂) sont-elles parallèles ?",{hyp:[["correspondant","Dis que les angles sont correspondants."],["≠|!=|differ|pas (la )?meme|pas egaux|"+a+".*"+b,`Compare : ${a}° ≠ ${b}°.`]],prop:[24,16],par:"non"},`Si les droites (d₁) et (d₂) étaient parallèles, alors, d'après la propriété des angles correspondants, ces deux angles auraient la même mesure. Or ${a}° ≠ ${b}°. Donc les droites (d₁) et (d₂) ne sont pas parallèles.`,1.5)],
+  cor:`<p>Si les droites (d₁) et (d₂) étaient parallèles, alors, d'après la propriété des angles correspondants, ces deux angles auraient la même mesure.<br>Or ${a}° ≠ ${b}°.<br>Donc les droites (d₁) et (d₂) <b>ne sont pas parallèles</b>.</p>`};}
+ EX.push(Object.assign(ex14(58,61),{gen:r=>{const a=rnd(r,50,75);return ex14(a,a+(r()<.5?-1:1)*rnd(r,2,4));}}));
+ ex({id:"E15",part:4,src:"Batterie, ex. 15",n:"Exercice 15",title:"Piège de la figure « à l'œil »",fig:()=>F.nonpar(89,91,"alt"),
+  st:"<p>À l'œil, les droites semblent parallèles… Les angles colorés sont alternes-internes.</p><p>Les angles colorés sont alternes-internes et mesurent 89° et 91°.</p>",
+  items:[R("E15a","a) (d₁) et (d₂) sont-elles parallèles ?",{hyp:[["alternes?.?internes?","Dis que les angles sont alternes-internes."],["≠|!=|differ|pas (la )?meme|pas egaux|89.*91","Compare : 89° ≠ 91°."]],prop:[23,15],par:"non"},"Si (d₁) et (d₂) étaient parallèles, d'après la propriété des angles alternes-internes, ces angles auraient la même mesure. Or 89° ≠ 91°. Donc (d₁) et (d₂) ne sont pas parallèles."),
+   K("E15b","b) Un élève répond : « Oui, on voit bien sur le dessin qu'elles sont parallèles. » Que lui répondre ?",{kw:[{re:"yeux|voir|dessin|figure|oeil|regard",miss:"On ne démontre jamais avec ses yeux : une figure peut tromper."},{re:"enonce|donnee|propriete|cours|mesure|tromp|invisible",miss:"On utilise seulement les données de l'énoncé et les propriétés du cours."}]},"En mathématiques, on ne démontre jamais avec ses yeux : une figure peut tromper. On utilise uniquement les données de l'énoncé et les propriétés du cours.")],
+  cor:`<p>a) Si (d₁) et (d₂) étaient parallèles, ces angles alternes-internes auraient la même mesure. Or 89° ≠ 91°. Donc (d₁) et (d₂) <b>ne sont pas parallèles</b>.</p><p>b) En mathématiques, on ne démontre jamais avec ses yeux : une figure peut tromper (2° d'écart sont invisibles). On utilise uniquement les données de l'énoncé et les propriétés du cours.</p>`});
+ ex({id:"E15x",part:4,src:"Batterie, ex. 15 bis",n:"Exercice 15 bis",title:"Questions express (oral, 1 min chacune)",st:"<p>Réponds vite, puis compare.</p>",
+  items:[K("E15x-1","1. Deux angles alternes-internes mesurent 47° et 47°. Conclusion ?",{kw:[{re:"parall",miss:"Les droites sont parallèles."}],forbid:[["pas parall|non parall","Non : même mesure, donc parallèles (réciproque).",1]]},"Les droites sont parallèles (réciproque)."),
+   K("E15x-2","2. Deux angles correspondants mesurent 112° et 68°. Conclusion ?",{kw:[{re:"pas parall|non parall|ne sont pas",miss:"Les droites ne sont pas parallèles (112 ≠ 68)."}]},"Les droites ne sont pas parallèles (112 ≠ 68)."),
+   N("E15x-3","3. On sait que (d₁) // (d₂). Un angle mesure 35°, son alterne-interne mesure ?",35,"35°."),
+   K("E15x-4","4. Deux angles opposés par le sommet mesurent 40° et 41°. Que penser ?",{kw:[{re:"impossible|faux|erreur|pas possible|toujours|meme mesure",miss:"Impossible : deux angles opposés par le sommet ont toujours la même mesure."}]},"Impossible : deux angles opposés par le sommet ont toujours la même mesure. L'énoncé (ou la figure) est faux.")],
+  cor:"<ol><li>Les droites sont parallèles (réciproque).</li><li>Les droites ne sont pas parallèles (112 ≠ 68).</li><li>35°.</li><li>Impossible : deux angles opposés par le sommet ont toujours la même mesure. L'énoncé (ou la figure) est faux.</li></ol>"});
+ ex({id:"E16",part:5,src:"Batterie, ex. 16 (cours p. 12)",n:"Exercice 16",title:"Démontrer que la somme des angles vaut 180° (page 12 du cours, restée vide)",fig:F.e16,
+  st:"<p>La droite (DE) passe par C et est parallèle à (AB).</p>",
+  items:[R("E16a","1) Montrer que DCA = CAB.",{hyp:[["parall|//","Il manque : (DE) // (AB)."],H.alt("DCA","CAB")],prop:[10],eq:[["DCA","CAB"]]},"Je sais que (DE) // (AB) et que DCA et CAB sont alternes-internes (sécante (AC)). Or si deux droites parallèles sont coupées par une sécante, les angles alternes-internes ont la même mesure. Donc DCA = CAB."),
+   R("E16b","2) Montrer que ECB = ABC.",{hyp:[["parall|//","Il manque : (DE) // (AB)."],H.alt("ECB","ABC")],prop:[10],eq:[["ECB","ABC"]]},"Je sais que (DE) // (AB) et que ECB et ABC sont alternes-internes (sécante (BC)). Or si deux droites parallèles sont coupées par une sécante, les angles alternes-internes ont la même mesure. Donc ECB = ABC."),
+   K("E16c","3) Que vaut DCA + ACB + BCE ?",{kw:[{re:"180",miss:"180°."},{re:"align|plat",miss:"Pourquoi : D, C, E sont alignés (angle plat DCE)."}]},"D, C, E sont alignés : les trois angles adjacents DCA, ACB, BCE forment l'angle plat DCE. Donc DCA + ACB + BCE = 180°."),
+   K("E16d","4) Conclure.",{kw:[{re:"cab ?\\+ ?acb ?\\+ ?abc|remplac|triangle",miss:"En remplaçant : CAB + ACB + ABC = 180°."},{re:"180",miss:"La somme des angles du triangle vaut 180°."}]},"En remplaçant : CAB + ACB + ABC = 180°. La somme des angles du triangle ABC vaut 180°.")],
+  cor:`<p>1) Je sais que (DE) // (AB) et que DCA et CAB sont alternes-internes (sécante (AC)). Or si deux droites parallèles sont coupées par une sécante, les angles alternes-internes ont la même mesure. Donc DCA = CAB.</p><p>2) De même avec la sécante (BC) : ECB et ABC sont alternes-internes, donc ECB = ABC.</p><p>3) D, C, E sont alignés : les trois angles adjacents DCA, ACB, BCE forment l'angle plat DCE. Donc DCA + ACB + BCE = 180°.</p><p>4) En remplaçant : CAB + ACB + ABC = 180°. La somme des angles du triangle ABC vaut <b>180°</b>.</p>`});
+ function ex17(v){const [a1,b1,d2,g3,k4]=v;const h3=(180-g3)/2;
+  return {id:"E17",part:5,src:"Batterie, ex. 17",n:"Exercice 17",title:"Calculs express (faire à chaque fois une figure à main levée codée)",variant:1,st:"<p>Fais à chaque fois une figure à main levée codée sur ton brouillon.</p>",
+  items:[N("E17-1",`1. ABC : A = ${a1}°, B = ${b1}°. Calculer C.`,180-a1-b1,`C = 180 − ${a1} − ${b1} = ${180-a1-b1}°.`),
+   N("E17-2",`2. DEF rectangle en E, D = ${d2}°. Calculer F.`,90-d2,`F = 90 − ${d2} = ${90-d2}°.`),
+   M("E17-3",`3. GHI isocèle en G, G = ${g3}°. Calculer H et I.`,[["H",h3],["I",h3]],null,{f:[h3,h3]}),
+   M("E17-4",`4. JKL isocèle en J, K = ${k4}°. Calculer L et J.`,[["L",k4],["J",180-2*k4]],null,{f:[k4,180-2*k4]}),
+   N("E17-5","5. MNO équilatéral. Mesure de chaque angle ?",60,"60°."),
+   M("E17-6","6. PQR rectangle et isocèle en P. Calculer Q et R.",[["Q",45],["R",45]],null,{f:[45,45]}),
+   K("E17-7","7. Défi : les angles d'un triangle mesurent x, 2x et 3x. Calculer x. Quelle est la nature du triangle ?",{kw:[{re:"(^|[^0-9])30",miss:"6x = 180, donc x = 30°."},{re:"rectangle",miss:"Angles 30°, 60°, 90° : triangle rectangle."}]},"x + 2x + 3x = 6x = 180, donc x = 30° : angles 30°, 60°, 90°, triangle rectangle.")],
+  cor:`<ol><li>Dans un triangle, la somme des angles vaut 180°. C = 180 − ${a1} − ${b1} = <b>${180-a1-b1}°</b>.</li><li>Dans un triangle rectangle, les angles aigus sont complémentaires : F = 90 − ${d2} = <b>${90-d2}°</b>.</li><li>Isocèle en G donc H = I. H = (180 − ${g3}) ÷ 2 = ${180-g3} ÷ 2 = <b>${String(h3).replace(".",",")}°</b> = I.</li><li>Isocèle en J donc K = L = <b>${k4}°</b> ; J = 180 − 2 × ${k4} = 180 − ${2*k4} = <b>${180-2*k4}°</b>.</li><li>180 ÷ 3 = <b>60°</b>.</li><li>P = 90°, Q = R = 90 ÷ 2 = <b>45°</b>.</li><li>x + 2x + 3x = 6x = 180, donc x = <b>30°</b> : angles 30°, 60°, 90° → triangle <b>rectangle</b>.</li></ol><p>« Isocèle en J » : J est le sommet principal, les angles égaux sont les DEUX AUTRES (K et L).</p>`};}
+ EX.push(Object.assign(ex17([38,97,27,52,33]),{gen:r=>ex17([rnd(r,25,60),rnd(r,61,100),rnd(r,15,70),2*rnd(r,15,60),rnd(r,20,70)])}));
+ ex({id:"E18",part:5,src:"Batterie, ex. 18",n:"Exercice 18",title:"Pièges sur les triangles",st:"<p>Réfléchis avant de calculer !</p>",
+  items:[N("E18-1","1. Un triangle isocèle a un angle de 100°. Calculer les deux autres.",40,"100° est l'angle au sommet : (180 − 100) ÷ 2 = 40°."),
+   K("E18-2","2. Un triangle isocèle a un angle de 50°. Calculer les deux autres. (Attention !)",{kw:[{re:"80",miss:"Cas 1 : 50° est un angle à la base : 50°, 50°, 80°."},{re:"65",miss:"Cas 2 : 50° est l'angle au sommet : 50°, 65°, 65°."}]},"Deux cas ! Base : 50°, 50°, 80°. Sommet : 50°, 65°, 65°."),
+   K("E18-3","3. Peut-on construire un triangle dont les angles mesurent 90°, 45° et 50° ?",{kw:[{re:"185|180",miss:"90 + 45 + 50 = 185 ≠ 180."}],yn:false},"Non : 90 + 45 + 50 = 185 ≠ 180."),
+   K("E18-4","4. Un triangle isocèle peut-il avoir un angle à la base de 90° ?",{kw:[{re:"180|90 ?\\+ ?90|deux angles",miss:"Les deux angles à la base feraient déjà 180°."}],yn:false},"Non : les deux angles à la base feraient déjà 180°, il ne resterait rien pour le troisième."),
+   K("E18-5","5. Un triangle a deux angles de 60°. Quelle est sa nature exacte ?",{kw:[{re:"equilateral",miss:"Il est équilatéral (le troisième vaut 60°)."}]},"Le troisième vaut 180 − 120 = 60° : trois angles de 60°, le triangle est équilatéral."),
+   K("E18-6","6. ABC est isocèle en A et B = 70°. Un élève écrit A = 70°. Où est l'erreur ?",{kw:[{re:"b.*c|c ?= ?70|base|deux autres",miss:"Isocèle en A : ce sont B et C qui sont égaux."},{re:"40",miss:"A = 180 − 140 = 40°."}]},"Isocèle en A : ce sont B et C qui sont égaux. C = 70° et A = 180 − 140 = 40°.")],
+  cor:"<ol><li>100° ne peut pas être un angle à la base (100 + 100 = 200 > 180). C'est donc l'angle au sommet : les deux autres valent (180 − 100) ÷ 2 = <b>40°</b>.</li><li><b>Deux cas !</b> Si 50° est un angle à la base : 50°, 50°, 80°. Si 50° est l'angle au sommet : 50°, 65°, 65°.</li><li><b>Non</b> : 90 + 45 + 50 = 185 ≠ 180.</li><li><b>Non</b> : les deux angles à la base feraient déjà 180°, il ne resterait rien pour le troisième.</li><li>Le troisième vaut 180 − 120 = 60° : trois angles de 60°, le triangle est <b>équilatéral</b>.</li><li>Isocèle en A : ce sont B et C qui sont égaux. C = 70° et A = 180 − 140 = <b>40°</b>.</li></ol>"});
+ ex({id:"E19",part:5,src:"Batterie, ex. 19",n:"Exercice 19",title:"L'angle extérieur",fig:F.e19,st:"<p>B, C et D sont alignés.</p><p>B, C, D sont alignés. BAC = 50° et ABC = 60°.</p>",
+  items:[R("E19a","a) Calculer ACB.",{hyp:[["triangle","Dans le triangle ABC…"]],prop:[17],res:[["ACB",70]],calc:1},"Je sais que ABC est un triangle avec BAC = 50° et ABC = 60°. Or dans un triangle, la somme des mesures des trois angles est égale à 180°. Donc ACB = 180° − 50° − 60° = 70°."),
+   R("E19b","b) En déduire ACD.",{hyp:[H.plat("B, C, D"),H.adj("ACB","ACD")],prop:[2],res:[["ACD",110]],calc:1},"Je sais que B, C, D sont alignés donc BCD = 180°, et que ACB et ACD sont adjacents. Or ACB + ACD = BCD. Donc ACD = 180° − 70° = 110°."),
+   K("E19c","c) Comparer ACD avec BAC + ABC.",{kw:[{re:"110",miss:"50 + 60 = 110."},{re:"egal|=|meme",miss:"Ils sont égaux."}]},"50 + 60 = 110 = ACD : ils sont égaux."),
+   K("E19d","d) Défi : expliquer pourquoi c'est toujours vrai.",{kw:[{re:"180 ?- ?acb|180 ?-",miss:"ACD = 180 − ACB."},{re:"a ?\\+ ?b|bac ?\\+ ?abc|somme",miss:"Donc ACD = A + B."}]},"ACD = 180 − ACB et ACB = 180 − A − B. Donc ACD = 180 − (180 − A − B) = A + B.")],
+  cor:"<p>a) Somme des angles du triangle ABC : ACB = 180 − 50 − 60 = <b>70°</b>.</p><p>b) B, C, D alignés donc BCD = 180°, et ACB, ACD sont adjacents : ACD = 180 − 70 = <b>110°</b>.</p><p>c) 50 + 60 = 110 = ACD.</p><p>d) ACD = 180 − ACB et ACB = 180 − A − B. Donc ACD = 180 − (180 − A − B) = A + B. L'angle extérieur est toujours égal à la somme des deux angles intérieurs « éloignés ».</p>"});
+ ex({id:"E20",part:5,src:"Batterie, ex. 20",n:"Exercice 20",title:"Triangle coupé par une parallèle",fig:F.e20,st:"<p>M est sur [AB], N est sur [AC], et (MN) // (BC).</p><p>ABC = 65° et ACB = 45°. M ∈ [AB], N ∈ [AC], (MN) // (BC).</p>",
+  items:[R("E20a","a) Calculer BAC.",{hyp:[["triangle","Dans le triangle ABC…"]],prop:[17],res:[["BAC",70]],calc:1},"Je sais que ABC est un triangle. Or dans un triangle, la somme des mesures des trois angles est égale à 180°. Donc BAC = 180° − 65° − 45° = 70°."),
+   R("E20b","b) Calculer AMN.",{hyp:[["parall|//","Il manque : (MN) // (BC)."],H.cor("AMN","ABC")],prop:[11],res:[["AMN",65]]},"Je sais que (MN) // (BC) et que AMN et ABC sont correspondants (sécante (AB)). Or si deux droites parallèles sont coupées par une sécante, les angles correspondants ont la même mesure. Donc AMN = ABC = 65°."),
+   R("E20c","c) Calculer ANM.",{hyp:[["parall|//","Il manque : (MN) // (BC)."],H.cor("ANM","ACB")],prop:[11],res:[["ANM",45]]},"Je sais que (MN) // (BC) et que ANM et ACB sont correspondants (sécante (AC)). Or si deux droites parallèles sont coupées par une sécante, les angles correspondants ont la même mesure. Donc ANM = ACB = 45°."),
+   R("E20d","d) Calculer BMN.",{hyp:[H.plat("A, M, B"),H.adj("AMN","BMN")],prop:[2],res:[["BMN",115]],calc:1},"Je sais que A, M, B sont alignés donc AMB = 180°, et que AMN et NMB sont adjacents. Or AMN + NMB = AMB. Donc BMN = 180° − 65° = 115°."),
+   K("E20e","e) Vérifier avec le triangle AMN.",{kw:[{re:"70 ?\\+ ?65 ?\\+ ?45|180",miss:"70 + 65 + 45 = 180."}]},"Triangle AMN : 70 + 65 + 45 = 180.")],
+  cor:"<p>a) BAC = 180 − 65 − 45 = <b>70°</b> (somme des angles d'un triangle).</p><p>b) Je sais que (MN) // (BC) et que AMN et ABC sont correspondants (sécante (AB)). Or si deux droites parallèles sont coupées par une sécante, les angles correspondants ont la même mesure. Donc AMN = ABC = <b>65°</b>.</p><p>c) De même avec la sécante (AC) : ANM = ACB = <b>45°</b>.</p><p>d) A, M, B alignés : BMN = 180 − 65 = <b>115°</b>.</p><p>e) Triangle AMN : 70 + 65 + 45 = 180 ✓.</p>"});
+ ex({id:"E21",part:6,src:"Batterie, ex. 21",n:"Exercice 21",title:"Bissectrices emboîtées",fig:F.e21,st:"<p>[OC) est la bissectrice de AOB ; [OD) est la bissectrice de AOC ; E, O, A alignés.</p><p>AOB = 128°.</p>",
+  items:[R("E21a","a) Calculer AOC et COB.",{hyp:[["bissectrice","[OC) est la bissectrice de AOB."]],prop:[4],res:[["AOC",64],["COB",64]],calc:1},"Je sais que [OC) est la bissectrice de AOB. Or la bissectrice partage un angle en deux angles adjacents de même mesure. Donc AOC = COB = AOB ÷ 2 = 128 ÷ 2 = 64°."),
+   R("E21b","b) Calculer AOD.",{hyp:[["bissectrice","[OD) est la bissectrice de AOC."]],prop:[4],res:[["AOD",32]],calc:1},"Je sais que [OD) est la bissectrice de AOC. Or la bissectrice partage un angle en deux angles adjacents de même mesure. Donc AOD = DOC = AOC ÷ 2 = 64 ÷ 2 = 32°."),
+   R("E21c","c) Calculer DOB.",{hyp:[H.adj("DOC","COB")],prop:[2],res:[["DOB",96]],calc:1},"Je sais que DOC et COB sont adjacents. Or DOB = DOC + COB. Donc DOB = 32° + 64° = 96°."),
+   R("E21d","d) E, O, A sont alignés : calculer BOE.",{hyp:[H.plat("E, O, A")],prop:[2],res:[["BOE",52]],calc:1},"Je sais que E, O, A sont alignés donc EOA = 180°, et que AOB et BOE sont adjacents. Or AOB + BOE = AOE. Donc BOE = 180° − 128° = 52°."),
+   M("E21e","e) Rapide : bissectrice d'un angle de 71° ? d'un angle droit ? d'un angle plat ?",[["71°",35.5],["angle droit",45],["angle plat",90]],null,{f:[35.5,45,90]})],
+  cor:"<p>a) Je sais que [OC) est la bissectrice de AOB. Or la bissectrice partage un angle en deux angles adjacents de même mesure. Donc AOC = COB = AOB ÷ 2 = 128 ÷ 2 = <b>64°</b>.</p><p>b) [OD) bissectrice de AOC : AOD = DOC = 64 ÷ 2 = <b>32°</b>.</p><p>c) DOC et COB sont adjacents : DOB = 32 + 64 = <b>96°</b>.</p><p>d) E, O, A alignés : EOA = 180°, donc BOE = 180 − 128 = <b>52°</b>.</p><p>e) 35,5° · 45° · 90°.</p><p>On divise l'angle ENTIER par 2 : UOV = VOW = <b>UOW</b> ÷ 2 (erreur de la page 2 du cours).</p>"});
+ ex({id:"E22",part:7,src:"Batterie, ex. 22",n:"Exercice 22",title:"Problème de synthèse",fig:F.e22,st:"<p>(d₁) // (d₂) ; D, A, E sur (d₁) ; B, H, C sur (d₂) ; (AH) ⟂ (d₂).</p><p>(d₁) // (d₂). DAB = 48° et EAC = 57°.</p>",
+  items:[R("E22a","a) Calculer ABC.",{hyp:[H.par,H.alt("DAB","ABC")],prop:[10],res:[["ABC",48]]},"Je sais que (d₁) // (d₂) et que DAB et ABC sont alternes-internes (sécante (AB)). Or si deux droites parallèles sont coupées par une sécante, les angles alternes-internes ont la même mesure. Donc ABC = DAB = 48°."),
+   R("E22b","b) Calculer ACB.",{hyp:[H.par,H.alt("EAC","ACB")],prop:[10],res:[["ACB",57]]},"Je sais que (d₁) // (d₂) et que EAC et ACB sont alternes-internes (sécante (AC)). Or si deux droites parallèles sont coupées par une sécante, les angles alternes-internes ont la même mesure. Donc ACB = EAC = 57°."),
+   K("E22c","c) Calculer BAC de deux façons différentes.",{kw:[{re:"triangle",miss:"Façon 1 : la somme des angles du triangle."},{re:"align|plat",miss:"Façon 2 : D, A, E alignés (angle plat)."},{re:"75",miss:"BAC = 180 − 48 − 57 = 75°."}]},"Façon 1 (triangle) : BAC = 180 − 48 − 57 = 75°. Façon 2 (angle plat) : D, A, E alignés, donc DAB + BAC + CAE = 180, d'où BAC = 75°."),
+   M("E22d","d) (AH) est la hauteur issue de A : calculer BAH et HAC, puis vérifier.",[["BAH",42],["HAC",33]],{kw:[{re:"rectangle|90",miss:"Les triangles ABH et AHC sont rectangles en H."},{re:"75|42 ?\\+ ?33",miss:"Vérification : 42 + 33 = 75."}]},{f:[42,33],why:"ABH rectangle en H : 90 − 48 = 42. AHC rectangle en H : 90 − 57 = 33. 42 + 33 = 75."}),
+   K("E22e","e) Le triangle ABC est-il isocèle ?",{kw:[{re:"48.*57.*75|aucun|pas (deux )?(angles )?egaux|differ",miss:"Ses angles mesurent 48°, 57° et 75° : aucun n'est égal à un autre."}],yn:false},"Non : ses angles mesurent 48°, 57° et 75°, aucun n'est égal à un autre.")],
+  cor:"<p>a) Je sais que (d₁) // (d₂) et que DAB et ABC sont alternes-internes (sécante (AB)). Or si deux droites parallèles sont coupées par une sécante, les angles alternes-internes ont la même mesure. Donc ABC = DAB = <b>48°</b>.</p><p>b) De même, EAC et ACB sont alternes-internes (sécante (AC)) : ACB = <b>57°</b>.</p><p>c) <b>Façon 1</b> (triangle) : BAC = 180 − 48 − 57 = 75°. <b>Façon 2</b> (angle plat) : D, A, E alignés, donc DAB + BAC + CAE = 180, d'où BAC = 180 − 48 − 57 = 75°. Résultat : <b>75°</b>.</p><p>d) Le triangle ABH est rectangle en H : BAH = 90 − 48 = <b>42°</b>. Le triangle AHC est rectangle en H : HAC = 90 − 57 = <b>33°</b>. Vérification : 42 + 33 = 75 = BAC ✓.</p><p>e) Ses angles mesurent 48°, 57° et 75° : aucun n'est égal à un autre, donc <b>non</b>.</p><p><b>Remarque :</b> la façon 2 est exactement la démonstration de l'exercice 16 !</p>"});
+ ex({id:"E23",part:7,src:"Batterie, ex. 23",n:"Exercice 23",title:"Le chevron (défi de concours)",fig:()=>F.e23(false),figCor:()=>F.e23(true),st:"<p>(d₁) // (d₂). PAM = 35° et QBM = 50°.</p><p><i>Indice : tracer la parallèle (Δ) à (d₁) passant par M.</i></p>",
+  items:[N("E23a","Calculer AMB.",85,"AMB = 35° + 50° = 85°.",1),
+   K("E23b","Explique ta méthode (la parallèle (Δ), les alternes-internes, les adjacents).",{kw:[{re:"parallele|\\(?delta|Δ",miss:"On trace (Δ), parallèle à (d₁) passant par M."},{re:"alternes?.?internes?",miss:"PAM et AMX sont alternes-internes, QBM et BMX aussi."},{re:"adjacent|35 ?\\+ ?50",miss:"AMX et XMB sont adjacents : AMB = 35 + 50."}]},"On trace (Δ), parallèle à (d₁) passant par M. PAM et AMX sont alternes-internes donc AMX = 35°. (Δ) // (d₂), QBM et BMX sont alternes-internes donc BMX = 50°. AMX et XMB sont adjacents : AMB = 35 + 50 = 85°.",2)],
+  cor:"<p>(d₁) // (d₂) ; (Δ) passe par M et est parallèle à (d₁).</p><p>On trace (Δ), parallèle à (d₁) passant par M, et un point X sur (Δ) à gauche de M.</p><p>• (Δ) // (d₁) et PAM, AMX sont alternes-internes (sécante (AM)), donc AMX = 35°.</p><p>• (Δ) // (d₁) et (d₁) // (d₂), donc (Δ) // (d₂) (deux droites parallèles à une même droite sont parallèles entre elles). QBM et BMX sont alternes-internes (sécante (BM)), donc BMX = 50°.</p><p>• AMX et XMB sont adjacents : AMB = 35 + 50 = <b>85°</b>.</p><p><b>À retenir :</b> quand on est bloqué, on peut <b>ajouter une droite parallèle</b> pour faire apparaître des angles alternes-internes.</p>"});
+ ex({id:"E24",part:7,src:"Batterie, ex. 24",n:"Exercice 24",title:"Sans figure : à toi de la construire",figCor:F.e24,st:"<p>ABC est un triangle isocèle en A tel que BAC = 40°. La droite (d) passe par A et est parallèle à (BC). E et F sont deux points de (d), E du côté de B, F du côté de C.</p>",
+  items:[SELF("E24a","a) Faire une figure codée (sur ton cahier). Puis compare avec la figure de la correction.","fig"),
+   M("E24b","b) Calculer ABC et ACB.",[["ABC",70],["ACB",70]],{kw:[{re:"isocele",miss:"Isocèle en A : ABC = ACB."}]},{f:[70,70],why:"Isocèle en A : ABC = ACB = (180 − 40) ÷ 2 = 70°."}),
+   M("E24c","c) Calculer EAB et FAC.",[["EAB",70],["FAC",70]],{kw:[{re:"alternes?.?internes?",miss:"EAB et ABC sont alternes-internes (sécante (AB)), et (d) // (BC)."}]},{f:[70,70],why:"(d) // (BC) et EAB, ABC sont alternes-internes : EAB = 70°. De même FAC = ACB = 70°."}),
+   K("E24d","d) Vérifier que EAB + BAC + CAF = 180°.",{kw:[{re:"70 ?\\+ ?40 ?\\+ ?70|180",miss:"70 + 40 + 70 = 180."}]},"70 + 40 + 70 = 180 : E, A, F sont alignés (angle plat).")],
+  cor:"<p>b) Isocèle en A : ABC = ACB = (180 − 40) ÷ 2 = <b>70°</b>.</p><p>c) (d) // (BC) et EAB, ABC sont alternes-internes (sécante (AB)) : EAB = <b>70°</b>. De même FAC = ACB = <b>70°</b>.</p><p>d) 70 + 40 + 70 = 180 ✓ (E, A, F sont alignés : angle plat).</p>"});
+ ex({id:"E25",part:7,src:"Batterie, ex. 25 (cours p. 11)",n:"Exercice 25",title:"Rédiger à fond (méthode en 5 étapes du cours, page 11)",fig:F.e13,st:"<p>Reprendre l'exercice 13 (NEF = 106° et EFJ = 74°) et rédiger la réponse en suivant exactement les 5 étapes.</p>",
+  items:[K("E25-1","1) Nommer les deux droites et la sécante.",{kw:[{re:"\\(?mn\\)?",miss:"Les droites (MN) et (KJ)."},{re:"\\(?kj\\)?",miss:"Les droites (MN) et (KJ)."},{re:"\\(?ef\\)?|\\(?gh\\)?|secante",miss:"La sécante (EF)."}]},"Les droites (MN) et (KJ) sont coupées par la sécante (EF)."),
+   K("E25-2","2) Identifier la paire d'angles.",{kw:[{re:"mef",miss:"MEF…"},{re:"efj",miss:"…et EFJ."},{re:"alternes?.?internes?",miss:"Ils sont alternes-internes."}]},"Les angles MEF et EFJ sont alternes-internes."),
+   K("E25-3","3) Citer ce qu'on sait avec certitude.",{kw:[{re:"74",miss:"EFJ = 74° et MEF = 180° − 106° = 74°."},{re:"align|180",miss:"M, E, N sont alignés."}]},"Je sais que EFJ = 74° et, comme M, E, N sont alignés, MEF = 180° − NEF = 180° − 106° = 74°."),
+   K("E25-4","4) Dire ce qu'on cherche à démontrer.",{kw:[{re:"parall|//",miss:"On cherche à démontrer que (MN) // (KJ)."}]},"On cherche à démontrer que (MN) // (KJ)."),
+   R("E25-5","5) Nommer la propriété et conclure.",{prop:[15],par:"oui"},"Or, si deux droites coupées par une sécante forment des angles alternes-internes de même mesure, alors elles sont parallèles. Donc (MN) // (KJ).")],
+  cor:"<p>1) Les droites (MN) et (KJ) sont coupées par la sécante (EF).<br>2) Les angles MEF et EFJ sont alternes-internes.<br>3) Je sais que EFJ = 74° et, comme M, E, N sont alignés, MEF = 180° − NEF = 180° − 106° = 74°.<br>4) On cherche à démontrer que (MN) // (KJ).<br>5) Or, si deux droites coupées par une sécante forment des angles alternes-internes de même mesure, alors elles sont parallèles. Donc (MN) // (KJ).</p>"});
+ const CHECK=["Je lis le <b>verbe</b> de la consigne : définition ≠ propriété ≠ calcul.","Supplémentaires = somme 180°, <b>c'est tout</b>.","« Je sais que » : seulement l'énoncé ou ce que j'ai déjà démontré. Jamais ce que je cherche.","Avant « alternes-internes » ou « correspondants » pour calculer : je vérifie que les droites sont <b>parallèles</b>.","Pour soustraire ou additionner des angles, je dis qu'ils sont <b>adjacents</b> (ou qu'ils forment un angle plat).","Je ne lis jamais une mesure sur la figure.","Je vérifie mon résultat par une deuxième méthode quand c'est possible."];
+ ex({id:"ECK",part:8,src:"Batterie, check-list de vendredi",n:"Check-list",title:"Check-list de vendredi (à relire juste avant l'interro)",st:"<ul class=\"evul\">"+CHECK.map(c=>`<li>${c}</li>`).join("")+"</ul>",
+  items:CHECK.map((c,i)=>SELF("ECK-"+(i+1),c.replace(/<[^>]+>/g,""),"check")),cor:"<p>Relis-la vendredi matin.</p>"});
+ return {EX,F,H,R,K,N,FI,M,SO,PA,SELF,rnd,N8,T8,ex,CHECK};
+})();
+
+/* ================= TOUR DES RÉVISIONS : LES EXERCICES DU LIVRE (Nathan, chapitre 8 Transformations. Angles) =================
+   Figures redessinées à partir des photos (mêmes lettres, mêmes mesures). */
+const EVB=(()=>{
+ const {mk,P,dir,inter,lerp,C}=EVF;const {H,R,K,N,M,SELF,PA}=EVD;
+ const RD=Math.PI/180;
+ const L2=(f,p,d,a,b,opt)=>f.L(P(p,d,a),P(p,d+180,b),opt); // droite passant par p, direction d
+ const F={};
+ F.b13=()=>{const f=mk(),Hh=[110,80],I=[390,80],Kk=[390,250],J=[110,250];
+  f.L(Hh,I).L(I,Kk).L(Kk,J).L(J,Hh).L(J,I).right(Hh,I,J).right(I,Hh,Kk).right(Kk,I,J).right(J,Hh,Kk);
+  f.arc(J,Kk,I,56,C.BLUE,"31°",{fill:1});
+  return f.pt(Hh,"H",135).pt(I,"I",45).pt(Kk,"K",-45).pt(J,"J",225).out();};
+ F.b14=()=>{const f=mk(),A=[70,90],B=[250,90],Cc=[430,90],Fp=[70,270],E=[250,270],D=[430,270];
+  f.L(A,Cc).L(Fp,D).L(A,Fp).L(B,E).L(Cc,D).L(Fp,Cc);
+  for(const [v,a,b] of [[A,B,Fp],[B,A,E],[B,Cc,E],[Cc,B,D],[Fp,A,E],[E,B,Fp],[E,B,D],[D,Cc,E]])f.right(v,a,b,12);
+  f.arc(Fp,D,Cc,60,C.GREEN,"30°",{fill:1,lr:22});
+  return f.pt(A,"A",135).pt(B,"B",90).pt(Cc,"C",45).pt(Fp,"F",225).pt(E,"E",270).pt(D,"D",-45).out();};
+ F.b15=()=>{const f=mk(),A=[90,300],B=[430,300],Cc=[90,60],D=[430,60],Fp=[430,250],E=[90,250-340*Math.tan(15*RD)];
+  f.L(A,[90,40]).L(B,[430,40]).L(A,B).L(E,Fp).right(A,B,Cc,14).right(B,A,D,14);
+  f.arcD(E,dir(E,Fp),90,34,C.BLUE,"?",{fill:1}).arcD(Fp,90,dir(Fp,E),40,C.GREEN,"75°",{fill:1});
+    return f.pt(A,"A",225).pt(B,"B",-45).pt(Cc,"C",180).pt(D,"D",0).pt(E,"E",180).pt(Fp,"F",0).out();};
+ F.b16=()=>{const f=mk(),th=8,se=56,B=[260,130],D=inter(B,P(B,se,1),[0,250],[500,250-500*Math.tan(th*RD)]);
+  const Dd=[D[0],D[1]];L2(f,B,th,240,200,{c:C.RED});L2(f,Dd,th,240,250,{c:C.RED});L2(f,B,se,80,0);f.L(B,P(Dd,se+180,70));
+  f.arcD(B,th,se,38,C.GREEN,"48°",{fill:1}).arcD(Dd,th+180,se+180,38,C.GREEN,"48°",{fill:1});
+  return f.pt(P(B,th+180,170),"A",90).pt(P(B,th,120),"G",90).pt(P(Dd,th+180,150),"C",270).pt(P(Dd,th,90),"H",90).pt(B,"B",150,20).pt(Dd,"D",-20,20).pt(P(B,se,70),"F",0).pt(P(Dd,se+180,60),"E",0).out();};
+ F.b17=()=>{const f=mk(),th=8,s=332,B=[190,120],Cc=inter(B,P(B,s,1),[0,250],[500,250-500*Math.tan(th*RD)]);
+  L2(f,B,th,250,160,{c:C.RED});L2(f,Cc,th,220,170,{c:C.RED});f.L(P(B,s+180,70),P(Cc,s,70));
+  f.arcD(B,s+180,th+180,40,C.GREEN,"36°",{fill:1}).arcD(Cc,s,th+360,40,C.GREEN,"36°",{fill:1});
+  return f.pt(P(B,s+180,55),"A",90).pt(B,"B",60,18).pt(P(B,th+180,120),"F",270).pt(P(B,th,190),"H",90).pt(Cc,"C",210,20).pt(P(Cc,th,120),"G",90).pt(P(Cc,th+180,140),"E",270).pt(P(Cc,s,55),"D",270).out();};
+ F.b18=()=>{const f=mk(),s=-5,ln=128,I=[170,150],Lp=P(I,s,190);
+  L2(f,I,s,300,150);L2(f,I,ln,90,150,{c:C.RED});L2(f,Lp,ln,110,130,{c:C.RED});
+  f.arcD(I,s+180,ln+180,34,C.BLUE,"133°",{fill:1,lr:22}).arcD(Lp,ln,s+180,38,C.GREEN,"47°",{fill:1});
+  return f.pt(P(I,s+180,90),"K",90).pt(P(I,ln,70),"H",0).pt(I,"I",60,18).pt(P(I,ln+180,130),"J",0).pt(P(Lp,ln,90),"M",0).pt(Lp,"L",-30,18).pt(P(Lp,ln+180,100),"N",0).out();};
+ F.b38=()=>{const f=mk(),A=[270,120],t1=3,t2=-5,se=63,B=inter(A,P(A,se,1),[0,250],[500,250+500*Math.tan(5*RD)]);
+  L2(f,A,t1,190,190);L2(f,B,t2,200,180);L2(f,A,se,100,0,{c:C.RED});f.L(A,P(B,se+180,90),{c:C.RED});
+  f.lab(P(A,t1+180,170),"t",90).lab(P(A,t1,175),"x",90).lab(P(B,t2+180,180),"z",270).lab(P(B,t2,170),"y",270).lab(P(A,se,95),"u",0).lab(P(B,se+180,85),"v",180);
+  return f.pt(A,"A",-30,20).pt(B,"B",-30,20).out();};
+ F.b39a=()=>{const f=mk("0 0 500 300"),r=13,s=312,P1=[200,110],P2=inter(P1,P(P1,s,1),[0,230],[500,230-500*Math.tan(r*RD)]);
+  L2(f,P1,r,240,180,{c:C.RED});L2(f,P2,r,220,240,{c:C.RED});f.L(P(P1,s+180,70),P(P2,s,70));
+  f.arcD(P1,s,r+360,36,C.BLUE,"61°",{fill:1}).arcD(P2,s,r+360,36,C.GREEN,"?",{fill:1});return f.out();};
+ F.b39b=()=>{const f=mk("0 0 500 300"),r=22,s=-10,P1=[150,120],P2=P(P1,s,230);
+  L2(f,P1,r,170,130,{c:C.RED});L2(f,P2,r,90,220,{c:C.RED});f.L(P(P1,s+180,100),P(P2,s,90));
+  f.arcD(P1,r+180,s+360,32,C.GREEN,"?",{fill:1}).arcD(P2,r,s+180,32,C.BLUE,"148°",{fill:1});return f.out();};
+ F.b40=()=>{const f=mk("0 0 500 300"),s=-3,d=32,A=[130,160],Cc=P(A,s,190),E=P(A,s,300);
+  L2(f,A,s,350,60);L2(f,A,d,120,120);L2(f,Cc,d,140,110);
+  f.arcD(A,s,d,40,C.GREEN,"35°",{fill:1});
+  return f.pt(A,"A",130,20).pt(P(A,d,100),"B",120).pt(Cc,"C",80,20).pt(P(Cc,d,120),"D",120).pt(E,"E",270).out();};
+ F.b45a=()=>{const f=mk("0 0 500 300"),P1=[220,100],s=319,P2=inter(P1,P(P1,s,1),[0,214],[500,214+500*Math.tan(2*RD)]);
+  f.L([40,100],[470,100],{c:C.RED}).L(P(P2,178,250),P(P2,358,220),{c:C.RED});f.L(P(P1,s+180,80),P(P2,s,70));
+  f.arcD(P1,s,360,36,C.PURP,"41°",{fill:1}).arcD(P2,s-180,178,36,C.GREEN,"39°",{fill:1});return f.out();};
+ F.b45b=()=>{const f=mk("0 0 500 300"),s=-10,P1=[160,120],P2=inter(P1,P(P1,s,1),[360,0],[360,300]);
+  f.L([160,20],[160,290],{c:C.RED}).L([360,20],[360,290],{c:C.RED});f.L(P(P1,s+180,110),P(P2,s,110));
+  f.arcD(P1,90,s+180,36,C.GREEN,"80°",{fill:1}).arcD(P2,90,s+180,36,C.GREEN,"80°",{fill:1});return f.out();};
+ F.b46=()=>{const f=mk(),B=[150,290],d=33,Cc=P(B,d,260);
+  L2(f,B,d,330,60);L2(f,B,d+90,200,50);L2(f,Cc,d+90,90,130);
+  f.right(B,Cc,P(B,d+90,10),14).right(Cc,B,P(Cc,d-90,10),14);
+  return f.pt(P(B,d+90,180),"A",180).pt(B,"B",-60,20).pt(Cc,"C",-20,20).pt(P(Cc,d+90,80),"D",0).pt(P(Cc,d-90,110),"E",0).out();};
+ F.b47=()=>{const f=mk(),O=[60,290],A=[60+190/Math.tan(50*RD),100],J=[60+190/Math.tan(25*RD),100];
+  f.L([30,100],[480,100]).L([30,290],[480,290]).line(O,A,0,30).line(O,J,0,30);
+  f.arc(A,[80,100],O,36,C.PURP,"50°",{fill:1}).arc(O,[300,290],J,70,C.GREEN,"25°",{fill:1});
+  return f.pt([110,100],"I",90).pt(A,"A",90).pt(J,"J",70,18).pt(O,"O",200).pt([330,290],"B",90).out();};
+ F.b48=()=>{const f=mk(),th=15,s=-28,R0=[210,140],S=inter(R0,P(R0,s,1),[0,300],P([0,300],th,1));
+  L2(f,R0,th,170,170);L2(f,S,th,140,170);L2(f,R0,s,0,130);f.L(R0,P(S,s,90));
+  f.arcD(R0,s+180,th+180,40,C.GREEN,"43°",{fill:1}).arcD(S,th,s+180,32,C.PURP,"137°",{fill:1,lr:24});
+  return f.pt(P(R0,s+180,100),"E",90).pt(R0,"R",270,20).pt(P(R0,th+180,140),"A",270).pt(P(R0,th,120),"B",90).pt(S,"S",270,20).pt(P(S,th+180,100),"C",270).pt(P(S,th,120),"D",270).pt(P(S,s,70),"F",270).out();};
+ F.b49=()=>{const f=mk(),th=15,A=[150,210],B=P(A,th,230);
+  L2(f,A,th,0,100);f.L(A,P(B,th,110));L2(f,A,67,110,110);L2(f,B,105,100,120);L2(f,B,68,100,130);
+  f.arcD(A,th,67,40,C.PURP,"52°",{fill:1}).arcD(B,248,285,52,C.GREEN,"37°",{fill:1,lr:24}).right(B,P(B,th,10),P(B,285,10),14);
+  f.lab(P(A,th+180,95),"u",90).lab(P(B,th,105),"v",90).lab(P(A,67,110),"y",180).lab(P(A,247,110),"x",180).lab(P(B,105,105),"r",180).lab(P(B,285,125),"s",0).lab(P(B,68,105),"t",0).lab(P(B,248,135),"z",180);
+  return f.pt(A,"A",-60,20).pt(B,"B",140,22).out();};
+ F.b50=()=>{const f=mk(),B=[60,300],A=P(B,45,250),Cc=inter(A,P(A,315,1),B,P(B,-5,1)),I=P(A,185,190);
+  f.L(I,A).L(A,Cc).L(Cc,B).L(B,I).L(B,A);
+  f.arcD(A,185,315,70,C.GREEN,"130°",{lr:24}).right(A,B,Cc,16).arcD(B,-5,45,60,C.PURP,"50°");
+  f.txt([250,345],"Figure à main levée",{s:14,nb:1,it:1});
+  return f.pt(I,"I",135).pt(A,"A",60).pt(B,"B",210).pt(Cc,"C",-30).out();};
+ F.b51=()=>{const f=mk(),A=[60,300],B=[460,300],Cc=[60+230/Math.tan(47*RD),70],Mm=lerp(Cc,A,.4),Nn=inter(Mm,[Mm[0]+10,Mm[1]],Cc,B);
+  f.L(A,B).L(A,Cc).L(Cc,B).line(Mm,Nn,40,40);
+  f.arc(Mm,A,Nn,34,C.GREEN,"133°",{fill:1,lr:24}).arc(A,B,Cc,40,C.PURP,"47°",{fill:1});
+  f.txt([250,345],"Figure à main levée",{s:14,nb:1,it:1});
+  return f.pt(A,"A",225).pt(B,"B",-30).pt(Cc,"C",90).pt(Mm,"M",135,18).pt(Nn,"N",60,18).out();};
+ F.b52=()=>{const f=mk(),Lp=[140,300],J=[140+200/Math.tan(55*RD),100],Kk=lerp(Lp,J,.42),Mm=[110,100],Nn=inter(Mm,Kk,[0,300],[500,300]);
+  f.L([40,100],[460,100]).L([40,300],[470,300]).L(Lp,P(J,55,60)).L(Mm,Nn);
+  f.arcD(J,55,180,32,C.GREEN,"125°",{fill:1,lr:24}).arcD(Lp,0,55,40,C.PURP,"55°",{fill:1});
+  f.txt([250,345],"Figure à main levée",{s:14,nb:1,it:1});
+  return f.pt(P(J,55,50),"I",0).pt(J,"J",-30,18).pt(Kk,"K",0,18).pt(Lp,"L",225).pt(Mm,"M",90).pt(Nn,"N",270).out();};
+ F.b66=()=>{const f=mk(),A=[110,70],B=P(A,345,250),Cc=inter(B,P(B,257,1),A,P(A,322,1));
+  f.L([110,30],[110,320]).L(P(A,165,70),P(B,345,60)).L(P(A,142,40),P(Cc,322,60)).L(P(B,77,70),P(Cc,257,60));
+  f.arc(A,B,Cc,60,C.PURP,"23°",{fill:1,lr:24}).arcD(Cc,257,322,30,C.GREEN,"65°",{fill:1,lr:22});
+  f.lab([110,22],"u",0).lab([100,322],"v",180).lab(P(A,165,80),"x",90).lab(P(B,345,62),"y",270).lab(P(Cc,322,62),"s",0).lab(P(B,77,72),"z",0).lab(P(Cc,257,65),"t",180);
+  return f.pt(A,"A",200,20).pt(B,"B",120,20).pt(Cc,"C",180,20).out();};
+ F.b67=()=>{const f=mk(),B=[90,300],Cc=P(B,8,340),A=inter(B,P(B,58,1),Cc,P(Cc,154,1));
+  L2(f,A,8,150,170);L2(f,B,8,0,50);f.L(B,P(Cc,8,40)).L(A,B).L(A,Cc);
+  f.arc(A,P(A,188,10),B,30,C.GREEN,"",{fill:1}).arc(A,B,Cc,34,C.PURP,"96°",{fill:1,lr:26}).arc(Cc,A,B,46,C.BLUE,"34°",{fill:1,lr:24}).arc(B,Cc,A,36,C.ORANGE,"",{fill:1});
+  f.chev(P(A,8,120),8).chev(P(B,8,250),8);
+  return f.lab(P(A,188,150),"x",90).lab(P(A,8,165),"y",90).pt(A,"A",90,20).pt(B,"B",240).pt(Cc,"C",-60).out();};
+ F.b68=()=>{const f=mk(),J=[70,230],Kk=P(J,340,250),I=inter(J,P(J,41,1),Kk,P(Kk,128,1));
+  L2(f,I,340,200,200);L2(f,J,340,0,40);f.L(J,P(Kk,340,40)).L(P(J,221,30),P(I,41,90)).L(I,Kk);
+  f.arcD(I,340,41,34,C.GREEN,"",{fill:1}).arc(I,J,Kk,30,C.PURP,"87°",{fill:1,lr:24}).arc(Kk,I,J,40,C.BLUE,"32°",{fill:1,lr:22}).arc(J,Kk,I,40,C.ORANGE,"",{fill:1});
+  f.chev(P(I,340,110),340).chev(P(J,340,250),340);
+  return f.lab(P(I,160,190),"x",90).lab(P(I,340,150),"y",90).lab(P(I,41,90),"z",0).pt(I,"I",100,20).pt(J,"J",240,20).pt(Kk,"K",-60,20).out();};
+ F.b69=()=>{const f=mk(),x0=150,x1=350,ax=250,t=Math.tan(42*RD),F0=[ax,60],E=[ax,125],D=[ax,190],J=[ax,300];
+  f.raw(`<rect x="${x0}" y="40" width="${x1-x0}" height="300" fill="#ead9bd" stroke="#222" stroke-width="2.4"/>`);
+  f.L([x0,300],[x1,300]).L([x0,320],[x1,320]).L(F0,J);
+  for(const p of [F0,E,D,[ax,255]]){f.L(p,[x0,p[1]+100*t]);f.L(p,[x1,p[1]+100*t]);}
+  f.arcD(D,222,270,40,C.GREEN,"48°",{fill:1,lr:24});
+  const A=[x0,60+100*t],B=[x0,125+100*t],Cc=[x0,190+100*t],G=[x1,60+100*t],Hh=[x1,125+100*t],I=[x1,190+100*t];
+  return f.pt(F0,"F",90).pt(E,"E",20,18).pt(D,"D",20,18).pt(J,"J",-30,18).pt(A,"A",180).pt(B,"B",180).pt(Cc,"C",180).pt(G,"G",0).pt(Hh,"H",0).pt(I,"I",0).out();};
+ F.b70=()=>{const f=mk(),Mm=[130,250],Nn=[290,250];
+  f.L(Mm,[130,40]).L(Mm,[460,250]).L(P(Mm,241,40),P(Mm,61,230)).L(P(Nn,241,80),P(Nn,61,220));
+  f.right(Mm,[130,200],[200,250],14).arcD(Mm,61,90,60,C.GREEN,"29°",{fill:1,lr:22}).arcD(Nn,241,360,30,C.PURP,"119°",{fill:1,lr:24});
+  f.lab([130,30],"x",0).lab(P(Mm,61,240),"y",0).lab(P(Nn,61,230),"z",0).lab(P(Nn,241,90),"u",180).lab([470,240],"t",90);
+  return f.pt(Mm,"M",225,20).pt(Nn,"N",120,20).out();};
+ F.b71=()=>{const f=mk(),A=[230,40],B=[80,290],Cc=[450,310];
+  const a=Math.hypot(B[0]-Cc[0],B[1]-Cc[1]),b=Math.hypot(A[0]-Cc[0],A[1]-Cc[1]),c=Math.hypot(A[0]-B[0],A[1]-B[1]),s=a+b+c;
+  const Kk=[(a*A[0]+b*B[0]+c*Cc[0])/s,(a*A[1]+b*B[1]+c*Cc[1])/s],d=dir(B,Cc);
+  const Lp=inter(Kk,P(Kk,d,1),A,B),Mm=inter(Kk,P(Kk,d,1),A,Cc);
+  f.L(A,B).L(B,Cc).L(Cc,A).line(B,Kk,0,90).line(Cc,Kk,0,90).line(Lp,Mm,30,30,{c:C.RED});
+  f.arcD(B,d,dir(B,Kk),56,C.INK,"",{ticks:1}).arcD(B,dir(B,Kk),dir(B,A),56,C.INK,"",{ticks:1});
+  f.arcD(Cc,dir(Cc,A),dir(Cc,Kk),56,C.INK,"",{ticks:2}).arcD(Cc,dir(Cc,Kk),d+180,56,C.INK,"",{ticks:2});
+  return f.pt(A,"A",90).pt(B,"B",225).pt(Cc,"C",-45).pt(Kk,"K",90,20).pt(Lp,"L",160,20).pt(Mm,"M",30,20).out();};
+ F.b73=()=>{const f=mk(),I=[120,140],E=[280,190],J=[2*E[0]-I[0],2*E[1]-I[1]],d=dir(I,J)+90;
+  L2(f,I,d,90,70);L2(f,J,d,90,80);f.L(I,J).right(I,J,P(I,d,10),14).segT(I,E,1).segT(E,J,1).dot(E);
+  return f.pt(P(I,d,80),"B",180).pt(P(I,d+180,60),"A",180).lab(I,"I",150).pt(P(J,d,80),"D",0).pt(P(J,d+180,60),"C",0).lab(J,"J",-30).lab(E,"E",90).out();};
+ F.b74=()=>{const f=mk(),O=[300,130],O2=P(O,220,190),A=P(O,190,230),Mm=P(O,160,230),Nn=P(O2,10,280),B=P(O2,25,260);
+  f.L(O,Mm).L(O,A).L(O,O2).L(O2,Nn).L(O2,B);
+  f.arcD(O,160,220,44,C.PURP,"60°",{fill:1,lr:26}).arcD(O2,10,25,90,C.GREEN,"15°",{fill:1,lr:22});
+  f.txt([250,345],"Figure à main levée",{s:14,nb:1,it:1});
+  return f.pt(Mm,"M",90).pt(A,"A",90).pt(O,"O",0,18).pt(O2,"O'",225).pt(B,"B",90).pt(Nn,"N",270).out();};
+ F.b75=()=>{const f=mk(),A=[130,320],B=P(A,10,290),Cc=inter(B,P(B,115,1),A,P(A,45,1));
+  f.L(A,P(A,115,200)).L(A,P(A,80,190),{c:C.RED}).L(A,P(Cc,45,80),{c:C.GREEN}).L(A,P(B,10,90)).L(B,P(Cc,115,80));
+  f.arcD(A,80,115,50,"#a8553a","35°",{fill:1,lr:24}).arcD(B,115,190,32,C.PURP,"75°",{fill:1,lr:24});
+  f.lab(P(A,115,215),"x",180).lab(P(A,80,205),"y",0).lab(P(Cc,45,95),"t",0).lab(P(B,10,100),"u",90).lab(P(Cc,115,95),"z",180);
+  return f.pt(A,"A",270).pt(B,"B",-60,20).pt(Cc,"C",0,20).out();};
+ F.b72=()=>{const f=mk(),k=55,A=[250,180],B=[A[0]+3.2*k,A[1]],D=[A[0],A[1]-2.2*k],Cc=[B[0],D[1]],B2=[A[0]-3.2*k,A[1]],D2=[A[0],A[1]+2.2*k],C2=[B2[0],D2[1]];
+  f.L(A,B).L(B,Cc).L(Cc,D).L(D,A).L(A,B2,{c:C.BLUE}).L(B2,C2,{c:C.BLUE}).L(C2,D2,{c:C.BLUE}).L(D2,A,{c:C.BLUE}).L(Cc,C2,{dash:"5 6",c:"#888"});
+  return f.pt(A,"A",45).pt(B,"B",-45).pt(Cc,"C",45).pt(D,"D",135).pt(B2,"B'",135).pt(C2,"C'",225).pt(D2,"D'",-45).out();};
+ const EX=[];const ex=o=>{o.book=1;EX.push(o);return o;};
+ const PROP10="Or, si deux droites parallèles sont coupées par une sécante, alors les angles alternes-internes ont la même mesure.";
+ const PROP11="Or, si deux droites parallèles sont coupées par une sécante, alors les angles correspondants ont la même mesure.";
+ const PROP15="Or, si deux droites coupées par une sécante forment des angles alternes-internes de même mesure, alors ces droites sont parallèles.";
+ const PROP16="Or, si deux droites coupées par une sécante forment des angles correspondants de même mesure, alors ces droites sont parallèles.";
+ ex({id:"B13",part:"L1",src:"Livre p. 161, ex. 13 (résolu)",n:"Livre 13",title:"Reconnaître des angles de même mesure (exercice résolu)",fig:F.b13,
+  st:"<p>Sur la figure ci-contre, HIKJ est un rectangle.</p>",
+  items:[R("B13a","Quelle est la mesure de l'angle HIJ ? Expliquer.",{hyp:[["rectangle|parall|//","Il faut commencer par justifier que les droites (HI) et (JK) sont parallèles (HIKJ est un rectangle)."],H.alt("HIJ","IJK")],prop:[10],res:[["HIJ",31]]},"Je sais que les droites (HI) et (JK) sont parallèles car HIKJ est un rectangle, et que les angles HIJ et IJK sont alternes-internes (sécante (IJ)). "+PROP10+" Donc HIJ = IJK = 31°.",1.5)],
+  cor:"<p><b>Solution du livre :</b> Les droites (HI) et (JK) coupées par la sécante (IJ) forment les angles alternes-internes HIJ et IJK.<br>Or les droites (HI) et (JK) sont parallèles car HIKJ est un rectangle.<br>Donc les angles HIJ et IJK ont la même mesure : HIJ = <b>31°</b>.</p><p><b>Conseil :</b> il faut commencer par justifier que les droites (HI) et (JK) sont parallèles.</p><p>À l'interro, ton professeur attend aussi la propriété écrite en entier : « Or, si deux droites parallèles sont coupées par une sécante, alors les angles alternes-internes ont la même mesure. »</p>"});
+ ex({id:"B14",part:"L1",src:"Livre p. 161, ex. 14",n:"Livre 14",title:"Deux carrés",fig:F.b14,st:"<p>La figure ci-contre est constituée de deux carrés identiques ABEF et BCDE.</p>",
+  items:[R("B14a","Quelle est la mesure de l'angle ACF ? Expliquer.",{hyp:[["carre|parall|//","Les droites (AC) et (FD) sont parallèles (côtés des carrés)."],H.alt("ACF","CFD")],prop:[10],res:[["ACF",30]]},"Je sais que les droites (AC) et (FD) sont parallèles (ce sont les côtés opposés des carrés) et que les angles ACF et CFD sont alternes-internes (sécante (FC)). "+PROP10+" Donc ACF = CFD = 30°.",1.5)],
+  cor:"<p>Les droites (AC) et (FD) coupées par la sécante (FC) forment les angles alternes-internes ACF et CFD.<br>Or les droites (AC) et (FD) sont parallèles (côtés opposés des carrés : ACDF est un rectangle).<br>Donc ACF = CFD = <b>30°</b>.</p>"});
+ ex({id:"B15",part:"L1",src:"Livre p. 161, ex. 15",n:"Livre 15",title:"Points alignés",fig:F.b15,st:"<p>Sur la figure ci-contre, les points A, E, C sont alignés ainsi que les points B, F, D.</p>",
+  items:[R("B15a","Quelle est la mesure de l'angle FEC ? Expliquer.",{hyp:[["perpendic|angle droit|parall|//","Les droites (AC) et (BD) sont perpendiculaires à (AB), donc parallèles."],["alternes?.?internes?|aef","Les angles AEF et EFD sont alternes-internes."],H.plat("A, E, C")],prop:[10],res:[["FEC",105]],calc:1},"Je sais que (AC) et (BD) sont toutes les deux perpendiculaires à (AB), donc (AC) // (BD). Les angles AEF et EFD sont alternes-internes (sécante (EF)). "+PROP10+" Donc AEF = EFD = 75°. Comme A, E, C sont alignés, AEF et FEC sont adjacents et AEC = 180°. Donc FEC = 180° − 75° = 105°.",2)],
+  cor:"<p>• (AC) et (BD) sont perpendiculaires à la même droite (AB), donc elles sont parallèles.</p><p>• Les angles AEF et EFD sont alternes-internes (sécante (EF)) et (AC) // (BD), donc AEF = EFD = 75°.</p><p>• A, E, C sont alignés : AEF et FEC sont adjacents et forment un angle plat. Donc FEC = 180° − 75° = <b>105°</b>.</p><p>Attention : FEC et EFD sont du même côté de la sécante, ils ne sont pas alternes-internes ! On ne peut pas dire qu'ils sont égaux.</p>"});
+ ex({id:"B16",part:"L1",src:"Livre p. 161, ex. 16 (résolu)",n:"Livre 16",title:"Reconnaître des droites parallèles (exercice résolu)",fig:F.b16,st:"<p>Sur la figure ci-contre, la droite (EF) coupe les droites (AG) et (CH) en B et D.</p>",
+  items:[R("B16a","Expliquer pourquoi les droites (AG) et (CH) sont parallèles.",{hyp:[H.opp("ABD","FBG"),["correspondant","ABD et CDE sont correspondants."]],prop:[16],par:"oui"},"Les angles ABD et FBG sont opposés par le sommet, donc ABD = FBG = 48°. Les angles correspondants ABD et CDE ont la même mesure. "+PROP16+" Donc les droites (AG) et (CH) sont parallèles.",1.5)],
+  cor:"<p><b>Solution du livre :</b><br>• Les angles ABD et FBG sont opposés par le sommet, donc ABD = FBG = 48°.<br>• Les angles correspondants ABD et CDE ont la même mesure, donc les droites (AB) et (CD) sont parallèles.</p><p>(AB), c'est la droite (AG) et (CD), c'est la droite (CH).)</p><p><b>Conseil :</b> pour démontrer que des droites sont parallèles, on peut repérer des angles alternes-internes ou correspondants de même mesure.</p>"});
+ ex({id:"B17",part:"L1",src:"Livre p. 161, ex. 17",n:"Livre 17",title:"Les droites rouges (36°)",fig:F.b17,st:"<p>Expliquer pourquoi les droites rouges de la figure ci-contre sont parallèles.</p>",
+  items:[R("B17a","Pourquoi les droites (FH) et (EG) sont-elles parallèles ?",{hyp:[H.opp("ABF","HBC"),["correspondant|alternes?.?internes?","HBC et GCD sont correspondants."]],prop:[16,15],par:"oui"},"Les angles ABF et HBC sont opposés par le sommet, donc HBC = ABF = 36°. Les angles HBC et GCD sont correspondants et ont la même mesure (36°). "+PROP16+" Donc les droites (FH) et (EG) sont parallèles.",1.5)],
+  cor:"<p>• ABF et HBC sont opposés par le sommet, donc HBC = 36°.</p><p>• HBC et GCD sont correspondants (sécante (AD)) et ont la même mesure : 36°.</p><p>• Si deux droites coupées par une sécante forment des angles correspondants de même mesure, alors elles sont parallèles. Donc <b>(FH) // (EG)</b>.</p><p>Attention : ABF et GCD ne sont ni alternes-internes ni correspondants (ils sont tous les deux à l'extérieur). Il faut passer par un angle opposé par le sommet.</p>"});
+ ex({id:"B18",part:"L1",src:"Livre p. 161, ex. 18",n:"Livre 18",title:"Les droites rouges (133° et 47°)",fig:F.b18,st:"<p>Expliquer pourquoi les droites rouges de la figure ci-contre sont parallèles.</p>",
+  items:[R("B18a","Pourquoi les droites (HJ) et (MN) sont-elles parallèles ?",{hyp:[["hik|180 ?- ?133|47","Calcule HIK = 180° − 133° = 47° (K, I, L alignés)."],["correspondant|alternes?.?internes?","HIK et MLI sont correspondants."]],prop:[16,15],par:"oui",warn:[["133 ?(!=|n'est pas egal|different).*47.*(pas|non) parall","133° et 47° ne sont pas des angles correspondants : il faut d'abord calculer HIK.",0.5]]},"Je sais que K, I, L sont alignés, donc KIJ et HIK sont adjacents et forment un angle plat : HIK = 180° − 133° = 47°. Les angles HIK et MLI sont correspondants et ont la même mesure : 47°. "+PROP16+" Donc (HJ) // (MN).",1.5)],
+  cor:"<p>• K, I, L sont alignés : HIK = 180° − 133° = 47°.</p><p>• HIK et MLI sont correspondants (sécante (KL)) et mesurent tous les deux 47°.</p><p>• Donc, d'après la réciproque de la propriété des angles correspondants, <b>(HJ) // (MN)</b>.</p>"});
+ ex({id:"B38",part:"L2",src:"Livre p. 163, ex. 38",n:"Livre 38",title:"Questions flash : nommer des angles",fig:F.b38,st:"<p>Sur la figure ci-contre, nommer :</p>",
+  items:[K("B38a","a. un angle alterne-interne avec l'angle tAB ;",{kw:[{re:"aby|yba",miss:"ABy (de l'autre côté de la sécante, entre les deux droites)."}]},"ABy"),
+   K("B38b","b. un angle correspondant avec l'angle xAu ;",{kw:[{re:"aby|yba",miss:"ABy (même position en B : au-dessus de (zy), à droite de (uv))."}]},"ABy"),
+   K("B38c","c. l'angle opposé par le sommet avec l'angle vBy.",{kw:[{re:"zba|abz|zbu|ubz",miss:"zBA (ou zBu)."}]},"zBA")],
+  cor:"<p>a. <b>ABy</b> est alterne-interne avec tAB.</p><p>b. <b>ABy</b> est correspondant avec xAu.</p><p>c. <b>zBA</b> (c'est aussi zBu) est opposé par le sommet avec vBy.</p><p>Remarque : ici, rien ne dit que (tx) et (zy) sont parallèles. On peut nommer les angles, mais on ne peut rien dire de leurs mesures.</p>"});
+ ex({id:"B39",part:"L2",src:"Livre p. 163, ex. 39",n:"Livre 39",title:"Questions flash : l'angle vert",st:"<p>Sur les figures ci-dessous, les droites rouges sont parallèles. Donner oralement la mesure de l'angle vert et justifier en citant une propriété du cours.</p>",
+  items:[Object.assign(K("B39a","a. Mesure de l'angle vert, et la propriété.",{kw:[{re:"(^|[^0-9])61",miss:"L'angle vert mesure 61°."},{re:"correspondant",miss:"Les angles bleu et vert sont correspondants."},{re:"parall",miss:"Et les droites rouges sont parallèles."}]},"61°. Les angles bleu et vert sont correspondants et les droites rouges sont parallèles. Or si deux droites parallèles sont coupées par une sécante, alors les angles correspondants ont la même mesure."),{fig:F.b39a}),
+   Object.assign(K("B39b","b. Mesure de l'angle vert, et la propriété.",{kw:[{re:"148",miss:"L'angle vert mesure 148°."},{re:"alternes?.?internes?",miss:"Les angles bleu et vert sont alternes-internes."},{re:"parall",miss:"Et les droites rouges sont parallèles."}]},"148°. Les angles bleu et vert sont alternes-internes et les droites rouges sont parallèles. Or si deux droites parallèles sont coupées par une sécante, alors les angles alternes-internes ont la même mesure."),{fig:F.b39b})],
+  cor:"<p>a. <b>61°</b> : les angles bleu et vert sont correspondants, et les droites rouges sont parallèles. Si deux droites parallèles sont coupées par une sécante, alors les angles correspondants ont la même mesure.</p><p>b. <b>148°</b> : les angles bleu et vert sont alternes-internes, et les droites rouges sont parallèles. Si deux droites parallèles sont coupées par une sécante, alors les angles alternes-internes ont la même mesure.</p>"});
+ ex({id:"B40",part:"L2",src:"Livre p. 163, ex. 40",n:"Livre 40",title:"(AB) // (CD)",fig:F.b40,st:"<p>Sur la figure ci-contre, les droites (AB) et (CD) sont parallèles.</p><p>Déterminer, en justifiant, la mesure de l'angle :</p>",
+  items:[R("B40a","a. ECD ;",{hyp:[["parall|//","Il manque : (AB) // (CD)."],H.cor("BAC","ECD")],prop:[11],res:[["ECD",35]]},"Je sais que (AB) // (CD) et que les angles BAC et ECD sont correspondants (sécante (AE)). "+PROP11+" Donc ECD = BAC = 35°."),
+   R("B40b","b. ACD.",{hyp:[H.plat("A, C, E"),H.adj("ACD","DCE")],prop:[2],res:[["ACD",145]],calc:1},"Je sais que A, C, E sont alignés, donc ACE = 180°, et que ACD et DCE sont adjacents. Or ACD + DCE = ACE. Donc ACD = 180° − 35° = 145°.")],
+  cor:"<p>a. Je sais que (AB) // (CD) et que BAC et ECD sont correspondants (sécante (AE)). Or si deux droites parallèles sont coupées par une sécante, alors les angles correspondants ont la même mesure. Donc ECD = BAC = <b>35°</b>.</p><p>b. A, C, E sont alignés, et ACD, DCE sont adjacents : ACD = 180° − 35° = <b>145°</b>.</p>"});
+ ex({id:"B45",part:"L2",src:"Livre p. 164, ex. 45",n:"Livre 45",title:"Questions flash : les droites rouges sont-elles parallèles ?",st:"<p>Les droites rouges sont-elles parallèles ?</p>",
+  items:[Object.assign(K("B45a","a.",{kw:[{re:"alternes?.?internes?",miss:"Les angles de 41° et 39° sont alternes-internes."},{re:"41.*39|39.*41|!=|differ|pas (la )?meme",miss:"41° ≠ 39°."}],yn:false},"Non : les angles de 41° et 39° sont alternes-internes, mais 41° ≠ 39°. Donc les droites rouges ne sont pas parallèles."),{fig:F.b45a}),
+   Object.assign(K("B45b","b.",{kw:[{re:"correspondant",miss:"Les deux angles de 80° sont correspondants."},{re:"80|meme mesure|egaux",miss:"Ils ont la même mesure : 80°."}],yn:true},"Oui : les deux angles de 80° sont correspondants et ont la même mesure, donc les droites rouges sont parallèles."),{fig:F.b45b})],
+  cor:"<p>a. <b>Non.</b> Les angles de 41° et 39° sont alternes-internes. Si les droites étaient parallèles, ils auraient la même mesure. Or 41° ≠ 39°. (À l'œil, on ne voit pas la différence !)</p><p>b. <b>Oui.</b> Les deux angles de 80° sont correspondants et ont la même mesure. Si deux droites coupées par une sécante forment des angles correspondants de même mesure, alors elles sont parallèles.</p>"});
+ ex({id:"B46",part:"L2",src:"Livre p. 164, ex. 46",n:"Livre 46",title:"Questions flash : (AB) et (DE)",fig:F.b46,st:"<p>Étudier oralement le parallélisme des droites (AB) et (DE) à l'aide de l'expression « angles alternes-internes ».</p>",
+  items:[R("B46a","(AB) et (DE) sont-elles parallèles ?",{hyp:[["90|droit","ABC et BCE sont des angles droits (90°)."],H.alt("ABC","BCE")],prop:[15],par:"oui"},"Les angles ABC et BCE sont alternes-internes (sécante (BC)) et ils sont droits : ils mesurent tous les deux 90°. "+PROP15+" Donc (AB) // (DE).")],
+  cor:"<p>Les angles ABC et BCE sont <b>alternes-internes</b> (sécante (BC)) et mesurent tous les deux 90° (angles droits). Donc <b>(AB) // (DE)</b>.</p><p>On retrouve : deux droites perpendiculaires à une même droite sont parallèles.</p>"});
+ ex({id:"B47",part:"L3",src:"Livre, automatismes, ex. 47",n:"Livre 47",title:"Bissectrice et droites parallèles",fig:F.b47,st:"<p>Sur la figure ci-contre, la bissectrice [OJ) de l'angle AOB coupe la droite (IA) en J.</p>",
+  items:[R("B47a","a. Déterminer la mesure de l'angle AOB.",{hyp:[["bissectrice","[OJ) est la bissectrice de AOB."]],prop:[4],res:[["AOB",50]],calc:1},"Je sais que [OJ) est la bissectrice de AOB, donc AOJ = JOB = 25°. Or la bissectrice partage l'angle en deux angles adjacents de même mesure. Donc AOB = 2 × 25° = 50°."),
+   R("B47b","b. Que peut-on en déduire pour les droites (AI) et (OB) ? Expliquer.",{hyp:[H.alt("IAO","AOB"),["50","IAO = AOB = 50°."]],prop:[15],par:"oui"},"Les angles IAO et AOB sont alternes-internes (sécante (AO)) et ils ont la même mesure : 50°. "+PROP15+" Donc (AI) // (OB).")],
+  cor:"<p>a. [OJ) est la bissectrice de AOB, donc AOB = 2 × JOB = 2 × 25° = <b>50°</b>.</p><p>b. IAO et AOB sont alternes-internes (sécante (AO)) et mesurent tous les deux 50°. Donc <b>(AI) // (OB)</b>.</p>"});
+ ex({id:"B48",part:"L3",src:"Livre, automatismes, ex. 48",n:"Livre 48",title:"La droite (EF) coupe (AB) et (CD)",fig:F.b48,st:"<p>Sur la figure ci-contre, la droite (EF) coupe les droites (AB) et (CD) en R et S.</p>",
+  items:[R("B48a","a. Déterminer, en justifiant, la mesure de l'angle BRS.",{hyp:[H.opp("ARE","BRS")],prop:[6],res:[["BRS",43]]},"Je sais que les angles ARE et BRS sont opposés par le sommet. Or deux angles opposés par le sommet ont la même mesure. Donc BRS = ARE = 43°."),
+   R("B48b","a. (suite) Déterminer, en justifiant, la mesure de l'angle RSC.",{hyp:[H.plat("C, S, D"),H.adj("RSC","RSD")],prop:[2],res:[["RSC",43]],calc:1},"Je sais que C, S, D sont alignés, donc CSD = 180°, et que RSC et RSD sont adjacents. Or RSC + RSD = CSD. Donc RSC = 180° − 137° = 43°."),
+   R("B48c","b. Que peut-on en déduire pour les droites (AB) et (CD) ? Expliquer.",{hyp:[H.alt("BRS","RSC")],prop:[15],par:"oui"},"Les angles BRS et RSC sont alternes-internes (sécante (EF)) et ont la même mesure : 43°. "+PROP15+" Donc (AB) // (CD).")],
+  cor:"<p>a. ARE et BRS sont opposés par le sommet : BRS = <b>43°</b>. C, S, D sont alignés : RSC = 180° − 137° = <b>43°</b>.</p><p>b. BRS et RSC sont alternes-internes et mesurent 43° tous les deux. Donc <b>(AB) // (CD)</b>.</p>"});
+ ex({id:"B49",part:"L3",src:"Livre, automatismes, ex. 49",n:"Livre 49",title:"Droites concourantes",fig:F.b49,st:"<p>Les droites (uv), (rs) et (zt) sont concourantes en B. Les droites (xy) et (uv) sont sécantes en A.</p>",
+  items:[R("B49a","a. Déterminer la mesure de l'angle uBz.",{hyp:[["90|droit|perpendic","vBs est droit (90°)."],["align|plat|180|adjacent","u, B, v sont alignés : uBs = 180° − 90° = 90°."]],prop:[2],res:[["uBz",53]],calc:1},"Je sais que vBs = 90° et que u, B, v sont alignés, donc uBs = 180° − 90° = 90°. Les angles uBz et zBs sont adjacents. Or uBz + zBs = uBs. Donc uBz = 90° − 37° = 53°."),
+   K("B49b","b. Lucas affirme : « Les droites (xy) et (zt) sont parallèles. » A-t-il raison ? Expliquer.",{kw:[{re:"53",miss:"tBv = uBz = 53° (opposés par le sommet)."},{re:"52",miss:"yAv = 52°."},{re:"correspondant",miss:"yAv et tBv sont correspondants (sécante (uv))."}],yn:false},"Non. tBv et uBz sont opposés par le sommet donc tBv = 53°. Les angles yAv et tBv sont correspondants (sécante (uv)). Si (xy) et (zt) étaient parallèles, ils auraient la même mesure. Or 52° ≠ 53°. Donc (xy) et (zt) ne sont pas parallèles : Lucas a tort.")],
+  note:"Dans le livre, la question b. parle de « (uv) et (zt) ». C'est sûrement une coquille : ces deux droites se coupent en B. On étudie (xy) et (zt).",
+  cor:"<p>a. vBs = 90° et u, B, v sont alignés, donc uBs = 90°. uBz et zBs sont adjacents : uBz = 90° − 37° = <b>53°</b>.</p><p>b. tBv et uBz sont opposés par le sommet : tBv = 53°. yAv et tBv sont correspondants (sécante (uv)). Si (xy) // (zt), ils auraient la même mesure. Or 52° ≠ 53°. Donc <b>Lucas a tort</b> : les droites ne sont pas parallèles. (Sur la figure, on ne voit pas la différence d'un degré !)</p><p><i>Dans le livre, la question parle de « (uv) et (zt) » : c'est sûrement une coquille, ces deux droites se coupent en B.</i></p>"});
+ ex({id:"B50",part:"L3",src:"Livre, automatismes, ex. 50",n:"Livre 50",title:"Figure à main levée (130° et 50°)",fig:F.b50,st:"<p>Voici une figure à main levée.</p>",
+  items:[R("B50a","a. Déterminer la mesure de l'angle BAI.",{hyp:[["90|droit","BAC est droit (90°)."],H.adj("BAI","BAC")],prop:[2],res:[["BAI",40]],calc:1},"Je sais que IAC = 130°, que BAC = 90° (angle droit) et que les angles BAI et BAC sont adjacents. Or BAI + BAC = IAC. Donc BAI = 130° − 90° = 40°."),
+   R("B50b","b. Les droites (AI) et (BC) sont-elles parallèles ? Expliquer.",{hyp:[H.alt("BAI","ABC"),["40.*50|50.*40|!=|differ|pas (la )?meme","40° ≠ 50°."]],prop:[23,15],par:"non"},"Les angles BAI et ABC sont alternes-internes (sécante (AB)). Si (AI) et (BC) étaient parallèles, d'après la propriété des angles alternes-internes, ils auraient la même mesure. Or 40° ≠ 50°. Donc (AI) et (BC) ne sont pas parallèles.")],
+  cor:"<p>a. BAI et BAC sont adjacents : BAI = IAC − BAC = 130° − 90° = <b>40°</b>.</p><p>b. BAI et ABC sont alternes-internes (sécante (AB)). Or 40° ≠ 50°. Donc <b>(AI) et (BC) ne sont pas parallèles</b>.</p>"});
+ ex({id:"B51",part:"L3",src:"Livre, automatismes, ex. 51",n:"Livre 51",title:"Figure à main levée (47° et 133°)",fig:F.b51,st:"<p>Voici une figure à main levée où les points C, M, A et les points C, N, B sont alignés.</p>",
+  items:[R("B51a","Les droites (MN) et (AB) sont-elles parallèles ?",{hyp:[["cmn|180 ?- ?133|47","Calcule CMN = 180° − 133° = 47° (C, M, A alignés)."],["correspondant","CMN et CAB sont correspondants."]],prop:[16],par:"oui"},"Je sais que C, M, A sont alignés, donc CMN et NMA sont adjacents et CMA = 180° : CMN = 180° − 133° = 47°. Les angles CMN et CAB sont correspondants (sécante (CA)) et ont la même mesure : 47°. "+PROP16+" Donc (MN) // (AB).",1.5)],
+  cor:"<p>C, M, A alignés : CMN = 180° − 133° = 47°. CMN et CAB sont correspondants (sécante (AC)) et mesurent tous les deux 47°. Donc <b>(MN) // (AB)</b>.</p>"});
+ ex({id:"B52",part:"L3",src:"Livre, automatismes, ex. 52",n:"Livre 52",title:"Figure à main levée (125° et 55°)",fig:F.b52,st:"<p>Sur cette figure à main levée, les points I, J, K, L et les points M, K, N sont alignés.</p>",
+  items:[R("B52a","Les droites (MJ) et (LN) sont-elles parallèles ?",{hyp:[["mjk|mjl|180 ?- ?125|55","Calcule MJK = 180° − 125° = 55° (I, J, K alignés)."],["alternes?.?internes?|correspondant","MJK et JLN sont alternes-internes."]],prop:[15,16],par:"oui"},"Je sais que I, J, K sont alignés, donc MJI et MJK sont adjacents et forment un angle plat : MJK = 180° − 125° = 55°. Les angles MJK et KLN sont alternes-internes (sécante (IL)) et ont la même mesure : 55°. "+PROP15+" Donc (MJ) // (LN).",1.5)],
+  cor:"<p>I, J, K alignés : MJK = 180° − 125° = 55°. MJK et KLN sont alternes-internes (sécante (IL)) et mesurent 55°. Donc <b>(MJ) // (LN)</b>.</p><p>La droite (MN) ne sert à rien ici : c'est un piège pour l'œil.</p>"});
+ ex({id:"B66",part:"L4",src:"Livre, je m'entraîne, ex. 66",n:"Livre 66",title:"Émi a-t-elle raison ?",fig:F.b66,st:"<p>Les droites (uv), (xy) et (AC) sont concourantes en A. La droite (zt) coupe les droites (xy) et (As) en B et C.</p><p>Émi affirme : « Les droites (xy) et (zt) sont perpendiculaires. »</p>",
+  items:[N("B66a","Calcule d'abord ACB.",65,"ACB et sCt sont opposés par le sommet, donc ACB = 65°."),
+   N("B66b","Puis ABC.",92,"Dans le triangle ABC : ABC = 180° − 23° − 65° = 92°."),
+   K("B66c","A-t-elle raison ? Expliquer.",{kw:[{re:"92",miss:"ABC = 92°."},{re:"90|droit",miss:"92° ≠ 90° : l'angle n'est pas droit."}],yn:false},"Non. ACB = sCt = 65° (opposés par le sommet). Dans le triangle ABC, ABC = 180° − 23° − 65° = 92°. 92° ≠ 90°, donc les droites (xy) et (zt) ne sont pas perpendiculaires.")],
+  cor:"<p>• ACB et sCt sont opposés par le sommet : ACB = 65°.</p><p>• Dans le triangle ABC, la somme des angles vaut 180° : ABC = 180° − 23° − 65° = 92°.</p><p>• 92° ≠ 90° : <b>Émi a tort</b>, les droites (xy) et (zt) ne sont pas perpendiculaires (même si ça y ressemble !).</p>"});
+ ex({id:"B67",part:"L4",src:"Livre, je m'entraîne, ex. 67",n:"Livre 67",title:"(xy) // (BC)",fig:F.b67,st:"<p>Sur la figure ci-contre, les droites (xy) et (BC) sont parallèles. Le point A appartient à la droite (xy).</p><p>Calculer, en justifiant, la mesure de l'angle :</p>",
+  items:[R("B67a","a. ABC",{hyp:[["triangle","Dans le triangle ABC…"]],prop:[17],res:[["ABC",50]],calc:1},"Je sais que ABC est un triangle avec BAC = 96° et ACB = 34°. Or dans un triangle, la somme des mesures des trois angles est égale à 180°. Donc ABC = 180° − 96° − 34° = 50°."),
+   R("B67b","b. xAB",{hyp:[["parall|//","Il manque : (xy) // (BC)."],H.alt("xAB","ABC")],prop:[10],res:[["xAB",50]]},"Je sais que (xy) // (BC) et que xAB et ABC sont alternes-internes (sécante (AB)). "+PROP10+" Donc xAB = ABC = 50°.")],
+  cor:"<p>a. Somme des angles du triangle ABC : ABC = 180° − 96° − 34° = <b>50°</b>.</p><p>b. (xy) // (BC) et xAB, ABC sont alternes-internes (sécante (AB)) : xAB = ABC = <b>50°</b>.</p>"});
+ ex({id:"B68",part:"L4",src:"Livre, je m'entraîne, ex. 68",n:"Livre 68",title:"(xy) // (JK)",fig:F.b68,st:"<p>Sur la figure ci-contre, les droites (xy) et (JK) sont parallèles. Le point I est à l'intersection des droites (xy) et (Jz).</p><p>Calculer, en justifiant, la mesure de l'angle :</p>",
+  items:[R("B68a","a. IJK",{hyp:[["triangle","Dans le triangle IJK…"]],prop:[17],res:[["IJK",61]],calc:1},"Je sais que IJK est un triangle avec JIK = 87° et IKJ = 32°. Or dans un triangle, la somme des mesures des trois angles est égale à 180°. Donc IJK = 180° − 87° − 32° = 61°."),
+   R("B68b","b. yIz",{hyp:[["parall|//","Il manque : (xy) // (JK)."],H.cor("yIz","IJK")],prop:[11],res:[["yIz",61]]},"Je sais que (xy) // (JK) et que yIz et IJK sont correspondants (sécante (Jz)). "+PROP11+" Donc yIz = IJK = 61°.")],
+  cor:"<p>a. Somme des angles du triangle IJK : IJK = 180° − 87° − 32° = <b>61°</b>.</p><p>b. (xy) // (JK) et yIz, IJK sont correspondants (sécante (Jz)) : yIz = IJK = <b>61°</b>.</p>"});
+ ex({id:"B69",part:"L4",src:"Livre, je m'entraîne, ex. 69",n:"Livre 69",title:"La porte à chevrons",fig:F.b69,st:"<p>Sur cette porte à chevrons, les segments [AF], [BE], [CD] sont parallèles, ainsi que les segments [FG], [EH], [DI]. La demi-droite [DJ) est la bissectrice de l'angle CDI.</p><p><i>Les bords de la porte sont parallèles à la ligne du milieu (FJ).</i></p><p>Déterminer la mesure de l'angle :</p>",
+  items:[R("B69a","a. ACD",{hyp:[["parall|//|bord","Le bord (AC) est parallèle à (FJ)."],H.alt("ACD","CDJ")],prop:[10],res:[["ACD",48]]},"Je sais que (AC) // (FJ) et que ACD et CDJ sont alternes-internes (sécante (CD)). "+PROP10+" Donc ACD = CDJ = 48°."),
+   R("B69b","b. CDI",{hyp:[["bissectrice","[DJ) est la bissectrice de CDI."]],prop:[4],res:[["CDI",96]],calc:1},"Je sais que [DJ) est la bissectrice de CDI. Or la bissectrice partage l'angle en deux angles adjacents de même mesure. Donc CDI = 2 × CDJ = 2 × 48° = 96°."),
+   R("B69c","c. BEF",{hyp:[["cde|180 ?- ?48|132","CDE = 180° − 48° = 132° (E, D, J alignés)."],["parall|//","[BE] // [CD]."],H.cor("BEF","CDE")],prop:[11],res:[["BEF",132]]},"Je sais que E, D, J sont alignés, donc CDE = 180° − 48° = 132°. (BE) // (CD) et les angles BEF et CDE sont correspondants (sécante (FJ)). "+PROP11+" Donc BEF = CDE = 132°.")],
+  note:"Le livre ne dit pas que les bords de la porte sont parallèles à (FJ) : on l'ajoute pour la question a.",
+  cor:"<p>a. (AC) // (FJ) (bords de la porte) et ACD, CDJ sont alternes-internes (sécante (CD)) : ACD = CDJ = <b>48°</b>.</p><p>b. [DJ) est la bissectrice de CDI : CDI = 2 × 48° = <b>96°</b>.</p><p>c. E, D, J alignés : CDE = 180° − 48° = 132°. [BE] // [CD] et BEF, CDE sont correspondants (sécante (FJ)) : BEF = <b>132°</b>.</p>"});
+ ex({id:"B70",part:"L4",src:"Livre, je m'entraîne, ex. 70",n:"Livre 70",title:"(My) et (uz) sont-elles parallèles ?",fig:F.b70,st:"<p>Les droites (My) et (uz) de cette figure sont-elles parallèles ? Expliquer.</p>",
+  items:[N("B70a","Calcule yMN.",61,"xMN = 90° et xMy, yMN sont adjacents : yMN = 90° − 29° = 61°."),
+   N("B70b","Calcule zNt.",61,"u, N, z sont alignés : uNt et tNz sont adjacents, zNt = 180° − 119° = 61°."),
+   R("B70c","Conclure : (My) et (uz) sont-elles parallèles ?",{hyp:[["correspondant","yMN et zNt sont correspondants."],["61","Ils mesurent tous les deux 61°."]],prop:[16],par:"oui"},"Les angles yMN et zNt sont correspondants (sécante (Mt)) et mesurent tous les deux 61°. "+PROP16+" Donc (My) // (uz).")],
+  cor:"<p>• xMt est droit et xMy, yMN sont adjacents : yMN = 90° − 29° = 61°.</p><p>• u, N, z sont alignés : uNt et tNz sont adjacents et forment un angle plat, zNt = 180° − 119° = 61°.</p><p>• yMN et zNt sont correspondants (sécante (Mt)) et mesurent 61°. Donc <b>(My) // (uz)</b>.</p>"});
+ ex({id:"B71",part:"L4",src:"Livre, je m'entraîne, ex. 71 (casse-tête)",n:"Livre 71",title:"Axel a-t-il raison ? (casse-tête)",fig:F.b71,st:"<p>Axel affirme : « LM = BL + CM ».</p><p>Décider si Axel a raison en utilisant les codages de cette figure et le fait que la droite (LM) est parallèle à (BC) passant par K.</p>",
+  items:[K("B71a","Montre que LKB = LBK.",{kw:[{re:"alternes?.?internes?",miss:"LKB et KBC sont alternes-internes, et (LM) // (BC)."},{re:"bissectrice|codage|lbk ?= ?kbc|meme mesure",miss:"[BK) est la bissectrice de ABC : LBK = KBC."}]},"(LM) // (BC) et LKB, KBC sont alternes-internes (sécante (BK)), donc LKB = KBC. Et [BK) est la bissectrice de ABC (codage), donc LBK = KBC. Donc LKB = LBK."),
+   K("B71b","Que peut-on en déduire pour le triangle LBK ? Et pour LB et LK ?",{kw:[{re:"isocele",miss:"Le triangle LBK a deux angles de même mesure : il est isocèle en L."},{re:"lb ?= ?lk|lk ?= ?lb|bl ?= ?lk|lk ?= ?bl|meme longueur",miss:"Donc LB = LK."}]},"Le triangle LBK a deux angles de même mesure : il est isocèle en L, donc LB = LK."),
+   K("B71c","Conclure : Axel a-t-il raison ?",{kw:[{re:"km ?= ?cm|mk ?= ?mc|cm ?= ?km|mc ?= ?mk|de meme",miss:"De même, avec C : MK = MC."},{re:"lk ?\\+ ?km|lk ?\\+ ?mk",miss:"LM = LK + KM = BL + CM."}],yn:true},"Oui. De même, MKC = KCB = MCK, donc le triangle MKC est isocèle en M et MK = MC. LM = LK + KM = BL + CM : Axel a raison.")],
+  note:"Casse-tête : on utilise qu'un triangle qui a deux angles de même mesure est isocèle (la réciproque de la fiche 19).",
+  cor:"<p>• (LM) // (BC) et LKB, KBC sont alternes-internes (sécante (BK)) : LKB = KBC. Comme [BK) est la bissectrice de ABC, LBK = KBC. Donc LKB = LBK : le triangle LBK est isocèle en L, donc <b>LB = LK</b>.</p><p>• De même, MKC = KCB = MCK : le triangle MKC est isocèle en M, donc <b>MC = MK</b>.</p><p>• LM = LK + KM = BL + CM : <b>Axel a raison</b>.</p>"});
+ ex({id:"B74",part:"L4",src:"Livre, je m'entraîne, ex. 74",n:"Livre 74",title:"Deux bissectrices (60° et 15°)",fig:F.b74,st:"<p>Sur cette figure à main levée, les demi-droites [OA) et [O'B) sont les bissectrices des angles MOO' et OO'N.</p>",
+  items:[N("B74a","Calcule AOO'.",30,"[OA) bissectrice de MOO' : AOO' = 60° ÷ 2 = 30°."),
+   N("B74b","Calcule OO'N.",30,"[O'B) bissectrice de OO'N : OO'N = 2 × 15° = 30°."),
+   R("B74c","Rédiger un raisonnement pour expliquer pourquoi les droites (OA) et (O'N) sont parallèles.",{hyp:[["bissectrice","Utilise les bissectrices."],["alternes?.?internes?","AOO' et OO'N sont alternes-internes."]],prop:[15],par:"oui"},"[OA) est la bissectrice de MOO', donc AOO' = 60° ÷ 2 = 30°. [O'B) est la bissectrice de OO'N, donc OO'N = 2 × 15° = 30°. Les angles AOO' et OO'N sont alternes-internes (sécante (OO')) et ont la même mesure. "+PROP15+" Donc (OA) // (O'N).",1.5)],
+  cor:"<p>• [OA) est la bissectrice de MOO' : AOO' = 60° ÷ 2 = 30°.</p><p>• [O'B) est la bissectrice de OO'N : OO'N = 2 × 15° = 30°.</p><p>• AOO' et OO'N sont alternes-internes (sécante (OO')) et mesurent 30°. Donc <b>(OA) // (O'N)</b>.</p>"});
+ ex({id:"B75",part:"L4",src:"Livre, je m'entraîne, ex. 75",n:"Livre 75",title:"Bissectrices rouges et vertes (35° et 75°)",fig:F.b75,st:"<p>Sur cette figure, les demi-droites rouges et vertes sont les bissectrices des angles xAt et yAu : la rouge [Ay) est la bissectrice de xAt et la verte [At) est la bissectrice de yAu.</p>",
+  items:[N("B75a","Calcule xAu.",105,"xAy = yAt = 35° et yAt = tAu = 35°, donc xAu = 3 × 35° = 105°."),
+   N("B75b","Calcule zBu (A, B, u sont alignés).",105,"zBA = 75°, A, B, u alignés : zBu = 180° − 75° = 105°."),
+   R("B75c","Les demi-droites [Ax) et [Bz) sont-elles parallèles ? Rédiger une explication.",{hyp:[["bissectrice|105|35","Calcule xAu avec les bissectrices."],["correspondant","xAu et zBu sont correspondants."]],prop:[16],par:"oui"},"[Ay) est la bissectrice de xAt donc yAt = xAy = 35°. [At) est la bissectrice de yAu donc tAu = yAt = 35°. Donc xAu = 35° + 35° + 35° = 105°. A, B, u sont alignés donc zBu = 180° − 75° = 105°. Les angles xAu et zBu sont correspondants (sécante (Au)) et ont la même mesure. "+PROP16+" Donc [Ax) et [Bz) sont parallèles.",1.5)],
+  note:"Sur la photo, on ne voit pas les couleurs : on a pris [Ay) rouge et [At) verte (c'est la seule possibilité qui marche avec la figure).",
+  cor:"<p>• [Ay) est la bissectrice de xAt : yAt = xAy = 35°. [At) est la bissectrice de yAu : tAu = yAt = 35°. Donc xAu = 3 × 35° = 105°.</p><p>• A, B, u alignés : zBu = 180° − 75° = 105°.</p><p>• xAu et zBu sont correspondants (sécante (Au)) et mesurent 105°. Donc <b>[Ax) et [Bz) sont parallèles</b>.</p>"});
+ ex({id:"B72",part:"BONUS",bonus:1,src:"Livre, je m'entraîne, ex. 72 (symétrie centrale)",n:"Bonus 72",title:"Rectangle et son symétrique (construction)",fig:F.b72,
+  st:"<p>a. Construire un rectangle ABCD tel que AB = 3,2 cm et AD = 2,2 cm.</p><p>b. Construire le symétrique AB'C'D' du rectangle ABCD par rapport au point A.</p><p>c. Que peut-on dire des périmètres et des aires de ces deux rectangles ? Rédiger une explication.</p><p class=\"evnote\">Bonus : cet exercice utilise la symétrie centrale (vue dans l'activité de la page 6 du cours). La construction est aussi sur la fiche à imprimer.</p>",
+  items:[SELF("B72a","a. et b. Construis les deux rectangles sur ta feuille (fiche à imprimer), puis compare avec la figure.","fig"),
+   N("B72b","c. Périmètre de ABCD (en cm) ?",10.8,"2 × (3,2 + 2,2) = 10,8 cm."),
+   N("B72c","c. Aire de ABCD (en cm²) ?",7.04,"3,2 × 2,2 = 7,04 cm²."),
+   K("B72d","c. Et pour AB'C'D' ? Explique.",{kw:[{re:"meme|egal|identique|pareil",miss:"Ils ont le même périmètre et la même aire."},{re:"symetr|longueur|conserve",miss:"La symétrie centrale conserve les longueurs (et les aires)."}]},"Même périmètre (10,8 cm) et même aire (7,04 cm²) : la symétrie centrale conserve les longueurs, les angles et les aires.")].map(x=>{if(x.k==="num")x.s.unit="";return x;}),
+  cor:"<p>c. Les deux rectangles ont le <b>même périmètre</b> : 2 × (3,2 + 2,2) = 10,8 cm, et la <b>même aire</b> : 3,2 × 2,2 = 7,04 cm². La symétrie centrale conserve les longueurs, les angles et les aires.</p>"});
+ ex({id:"B73",part:"BONUS",bonus:1,src:"Livre, je m'entraîne, ex. 73 (symétrie centrale)",n:"Bonus 73",title:"Droites symétriques et perpendiculaires",fig:F.b73,st:"<p>Sur la figure ci-dessous, les droites (AB) et (CD) sont symétriques par rapport au point E.</p><p class=\"evnote\">Bonus : il faut savoir que la symétrique d'une droite par rapport à un point est une droite parallèle (activité de la page 6 du cours).</p>",
+  items:[K("B73a","Rédiger un raisonnement pour expliquer pourquoi les droites (IJ) et (CD) sont perpendiculaires.",{kw:[{re:"parall|//",miss:"(AB) et (CD) sont symétriques par rapport à E, donc parallèles."},{re:"perpendic|angle droit|90",miss:"(IJ) est perpendiculaire à (AB)."},{re:"alternes?.?internes?|si deux droites sont parall|l.autre",miss:"Si deux droites sont parallèles, toute perpendiculaire à l'une est perpendiculaire à l'autre (ou : angles alternes-internes de 90°)."}]},"Le symétrique d'une droite par rapport à un point est une droite parallèle : (AB) // (CD). (IJ) est perpendiculaire à (AB) en I. Les angles AIJ et IJD sont alternes-internes (sécante (IJ)) et (AB) // (CD), donc IJD = AIJ = 90°. Donc (IJ) et (CD) sont perpendiculaires.")],
+  cor:"<p>• (AB) et (CD) sont symétriques par rapport à E : une droite et sa symétrique par rapport à un point sont parallèles, donc (AB) // (CD).</p><p>• (IJ) ⟂ (AB) : l'angle en I est droit. Les angles alternes-internes formés par (IJ) avec (AB) et (CD) ont la même mesure, donc l'angle en J mesure aussi 90°.</p><p>• Donc <b>(IJ) ⟂ (CD)</b>.</p>"});
+ return {EX,F};
+})();
+
+/* ================= TOUR DES RÉVISIONS : DÉFIS (trouve l'erreur, chaînes, cite sans justifier) et ÉVALUATION BLANCHE ================= */
+const EVX=(()=>{
+ const {F,H,R,K,N,FI,M,PA,rnd,N8}=EVD;const {mk,P,rails,C}=EVF;
+ const seeded=s=>{let x=(s>>>0)%2147483647||7;return ()=>{x=(x*16807)%2147483647;return (x-1)/2147483646;};};
+ const pick=(r,a)=>a[Math.floor(r()*a.length)];
+ const shuffle=(r,a)=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(r()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;};
+ /* ---------- Trouve l'erreur : des copies avec les erreurs de l'interro flash ---------- */
+ const ER=(id,src,q,lines,bad,kw,model,fig)=>({id,q,k:"err",lines,bad,s:{kw},model:{sel:bad.slice(0,1),fix:model},src,fig,pts:1});
+ const ERR=[
+  ER("ER1","Interro flash, erreur 1","Donner la définition de deux angles supplémentaires.",["Deux angles sont supplémentaires","s'ils ont le même sommet, un côté commun","et si la somme de leurs mesures est égale à 180°."],[1],[{re:"somme",miss:"La somme de leurs mesures…"},{re:"180",miss:"…est égale à 180°."}],"Deux angles sont supplémentaires si la somme de leurs mesures est égale à 180°. (Pas de « même sommet » : c'est la définition d'adjacents.)"),
+  ER("ER2","Interro flash, erreur 2","Énoncer la propriété des angles alternes-internes formés par deux droites parallèles.",["Deux angles alternes-internes sont situés de part et d'autre de la sécante, entre les deux droites, et ont pour sommets les deux points d'intersection."],[0],[{re:"si .*parall",miss:"Une propriété commence par « Si deux droites parallèles… »."},{re:"alors .*(meme mesure|egaux)",miss:"…alors les angles alternes-internes ont la même mesure."}],"C'est la définition, pas la propriété. Propriété : si deux droites parallèles sont coupées par une sécante, alors les angles alternes-internes ont la même mesure."),
+  ER("ER3","Interro flash, erreur 3","(d₁) // (d₂), PAR = 38°. Calculer ABQ en justifiant.",["Je sais que ABQ mesure 38° et que (d₁) // (d₂).","Or, si deux droites parallèles sont coupées par une sécante, alors les angles correspondants ont la même mesure.","Donc ABQ = 38°."],[0],[{re:"(^|[^a-z])par ?(=|mesure|vaut)|donnee|enonce",miss:"Dans « Je sais que », on écrit la donnée : PAR = 38°."},{re:"correspondant",miss:"Et on dit que PAR et ABQ sont correspondants."}],"On ne peut pas écrire « ABQ mesure 38° » dans « Je sais que » : c'est ce qu'on cherche. Il faut : Je sais que PAR = 38°, que (d₁) // (d₂) et que PAR et ABQ sont correspondants.",()=>F.e10(38)),
+  ER("ER4","Interro flash, erreur 4","QBT est droit et ABQ = 38°. En déduire ABT. Justifier et écrire le calcul.",["Je sais que QBT = 90° et que ABQ = 38°.","Donc ABT = 90° − 38° = 52°."],[0],[{re:"adjacent",miss:"Il faut dire que ABT et ABQ sont adjacents."},{re:"abt ?\\+ ?abq|abq ?\\+ ?abt|(^|[^a-z])or([^a-z]|$)",miss:"Puis la propriété : Or ABT + ABQ = QBT."}],"Il manque pourquoi on a le droit de soustraire : les angles ABT et ABQ sont adjacents. Or ABT + ABQ = QBT. Donc ABT = 90° − 38° = 52°.",()=>F.e10(38)),
+  ER("ER5","Piège des droites non parallèles","(d₁) et (d₂) ne sont pas parallèles. L'angle 3 mesure 62°.",["Les angles 3 et 5 sont alternes-internes.","Or, si deux droites parallèles sont coupées par une sécante, alors les angles alternes-internes ont la même mesure.","Donc l'angle 5 mesure 62°."],[1,2],[{re:"pas parall|non parall|ne sont pas|on ne peut pas|impossible",miss:"Les droites ne sont pas parallèles : on ne peut pas utiliser cette propriété."}],"Les droites ne sont pas parallèles : on ne peut rien dire de l'angle 5.",()=>F.eight(62,false)),
+  ER("ER6","Piège : 106 et 74","NEF = 106° et EFJ = 74°. Les droites (MN) et (KJ) sont-elles parallèles ?",["NEF = 106° et EFJ = 74°.","106° ≠ 74°.","Donc les droites (MN) et (KJ) ne sont pas parallèles."],[1,2],[{re:"mef|180 ?- ?106",miss:"Il faut calculer MEF = 180° − 106° = 74°."},{re:"alternes?.?internes?",miss:"MEF et EFJ sont alternes-internes : même mesure, donc parallèles."}],"NEF et EFJ ne sont ni alternes-internes ni correspondants. MEF = 180° − 106° = 74° = EFJ, et MEF, EFJ sont alternes-internes : donc (MN) // (KJ).",F.e13),
+  ER("ER7","Piège du triangle isocèle","ABC est isocèle en A et ABC = 70°. Calculer BAC.",["ABC est isocèle en A, donc BAC = ABC.","Donc BAC = 70°."],[0],[{re:"b.*c|abc ?= ?acb|acb ?= ?abc|base",miss:"Isocèle en A : ce sont les angles à la base, B et C, qui sont égaux."},{re:"40",miss:"BAC = 180° − 2 × 70° = 40°."}],"Isocèle en A : ABC = ACB = 70°. Donc BAC = 180° − 70° − 70° = 40°."),
+  ER("ER8","Erreur du cours page 2","[OV) est la bissectrice de UOW et UOW = 71°. Calculer UOV.",["[OV) est la bissectrice de UOW.","Donc UOV = VOW = VOW ÷ 2 = 37°."],[1],[{re:"uow ?(÷|/|:) ?2|71 ?(÷|/|:) ?2",miss:"On divise l'angle entier : UOW ÷ 2."},{re:"35\\.5",miss:"71 ÷ 2 = 35,5°."}],"UOV = VOW = UOW ÷ 2 = 71 ÷ 2 = 35,5°."),
+  ER("ER9","La réciproque au lieu de la propriété","(d₁) // (d₂) et CAB = 41°. Calculer ABQ.",["Je sais que (d₁) // (d₂) et que CAB et ABQ sont alternes-internes.","Or, si deux droites coupées par une sécante forment des angles alternes-internes de même mesure, alors elles sont parallèles.","Donc ABQ = CAB = 41°."],[1],[{re:"si .*parall.*alors .*(meme mesure|egaux)",miss:"Ici on part des droites parallèles : « Si deux droites parallèles…, alors les angles… ont la même mesure. »"}],"La ligne « Or » est la réciproque. Il faut : Or, si deux droites parallèles sont coupées par une sécante, alors les angles alternes-internes ont la même mesure.",()=>F.e11(41)),
+  ER("ER10","Complémentaire ou supplémentaire ?","Donner la définition de deux angles complémentaires.",["Deux angles sont complémentaires si la somme de leurs mesures est égale à 180°."],[0],[{re:"(^|[^0-9])90",miss:"Complémentaires : 90°."}],"Deux angles sont complémentaires si la somme de leurs mesures est égale à 90°. (180°, c'est supplémentaires.)"),
+  ER("ER11","Lire sur la figure","Calculer ACB dans le triangle ABC (BAC = 50°, ABC = 60°).",["Avec mon rapporteur, je mesure sur la figure : ACB = 72°."],[0],[{re:"triangle|180",miss:"On calcule avec la somme des angles du triangle (180°)."},{re:"70",miss:"ACB = 180° − 50° − 60° = 70°."}],"On ne lit jamais une mesure sur la figure. Dans un triangle, la somme des angles vaut 180° : ACB = 180° − 50° − 60° = 70°.",F.e19)
+ ];
+ /* ---------- Défi « Cite sans justifier » (figure tirée au hasard) ---------- */
+ const POS=["AR","AL","BL","BR"];
+ function citeEx(seed){const r=seeded(seed),th=rnd(r,48,132),par=r()<.6,labs=shuffle(r,[1,2,3,4,5,6,7,8]);
+  const nums={A:{},B:{}};let k=0;for(const v of ["A","B"])for(const p of POS)nums[v][p]=labs[k++];
+  const n=(v,p)=>nums[v][p];
+  const alt=[[n("A","BL"),n("B","AR")],[n("A","BR"),n("B","AL")]],cor=POS.map(p=>[n("A",p),n("B",p)]),opp=[["AR","BL"],["AL","BR"]].flatMap(([a,b])=>[[n("A",a),n("A",b)],[n("B",a),n("B",b)]]);
+  const g=rails({secs:[{x:260,th,nums:{A:nums.A,B:nums.B}}],delta:par?0:(r()<.5?-7:7),par,nr:42});
+  if(!par)g.f.txt([250,340],"(d₁) et (d₂) ne sont pas parallèles.",{s:15,nb:1,it:1});const svg=g.f.out();
+  const tmpl={};for(const v of ["A","B"])for(const p of POS)tmpl[nums[v][p]]={v,p};
+  const k0=pick(r,POS),kv=pick(r,["A","B"]),ka=n(kv,k0),kc=n(kv==="A"?"B":"A",k0),val=rnd(r,35,145);
+  const ac=(()=>{const x=nums[kv];const o={AR:"BL",BL:"AR",AL:"BR",BR:"AL"}[k0];return x[o];})();
+  const sup=nums[kv][{AR:"AL",AL:"AR",BL:"BR",BR:"BL"}[k0]];
+  return {id:"DCITE",part:"D",src:"Défi",n:"Défi",title:"Cite sans justifier",fig:()=>svg,variant:1,seed,
+   st:`<p>Sur la figure, les droites (d₁) et (d₂) sont coupées par la sécante (s). ${par?"<b>(d₁) // (d₂)</b>.":"<b>Attention : (d₁) et (d₂) ne sont PAS parallèles.</b>"}</p><p>Touche deux numéros pour former une paire. Citer sans justifier.</p>`,
+   items:[PA("DC1","Citer toutes les paires d'angles alternes-internes.",{rel:"alt",all:1,tmpl},alt),PA("DC2","Citer toutes les paires d'angles correspondants.",{rel:"cor",all:1,tmpl},cor),
+    PA("DC3","Citer toutes les paires d'angles opposés par le sommet.",{rel:"opp",all:1,tmpl},opp),
+    K("DC4",`L'angle ${ka} mesure ${val}°. Que mesure l'angle ${ac} ? Et l'angle ${sup} ?`,{kw:[{re:"(^|[^0-9])"+val+"([^0-9]|$)",miss:`L'angle ${ac} mesure ${val}° (opposé par le sommet).`},{re:"(^|[^0-9])"+(180-val)+"([^0-9]|$)",miss:`L'angle ${sup} mesure ${180-val}° (angle plat).`}]},`Angle ${ac} : ${val}° (opposés par le sommet). Angle ${sup} : 180° − ${val}° = ${180-val}°.`),
+    par?K("DC5",`L'angle ${ka} mesure ${val}°. Que mesure l'angle ${kc} ? Pourquoi ?`,{kw:[{re:"(^|[^0-9])"+val+"([^0-9]|$)",miss:`${val}°.`},{re:"correspondant",miss:"Ils sont correspondants…"},{re:"parall",miss:"…et les droites sont parallèles."}]},`${val}° : les angles ${ka} et ${kc} sont correspondants et les droites (d₁) et (d₂) sont parallèles.`)
+     :K("DC5",`L'angle ${ka} mesure ${val}°. Peut-on en déduire la mesure de l'angle ${kc} ?`,{kw:[{re:"parall",miss:"Les droites ne sont pas parallèles."}],yn:false},`Non : les angles ${ka} et ${kc} sont correspondants, mais les droites ne sont pas parallèles.`)],
+   cor:`<p>Alternes-internes : ${alt.map(p=>p.join(" et ")).join(" ; ")}.</p><p>Correspondants : ${cor.map(p=>p.join(" et ")).join(" ; ")}.</p><p>Opposés par le sommet : ${opp.map(p=>p.join(" et ")).join(" ; ")}.</p>`};}
+ /* ---------- Chaînes de propriétés ---------- */
+ const OPT=[2,4,6,10,11,15,16,17,18,19,20,0];
+ const ST=(q,v,f,model)=>({q,v,f:[].concat(f),model});
+ function chain(id,title,st,fig,steps,cor){return {id,part:"D",src:"Défi",n:"Chaîne",title,st,fig,variant:1,items:[{id:id+"-c",k:"chain",q:"Pour chaque étape : choisis la propriété (ou « on ne peut pas »), puis donne la mesure.",steps,opts:OPT,pts:steps.length,model:steps.map(s=>({f:s.f[0],v:s.v==null?0:s.v}))}],cor};}
+ function chains(seed){const r=seeded(seed),out=[];
+  {const a=rnd(r,40,58),b=rnd(r,50,68),c=180-a-b;out.push(chain("CH1","Chaîne 1 : le problème de synthèse","<p>(d₁) // (d₂) ; D, A, E sur (d₁) ; B, H, C sur (d₂) ; (AH) ⟂ (d₂). DAB = "+a+"° et EAC = "+b+"°.</p>",()=>F.e22().replace(/48°/g,a+"°").replace(/57°/g,b+"°"),
+   [ST("ABC",a,10,`ABC = DAB = ${a}° (alternes-internes, (d₁) // (d₂)).`),ST("ACB",b,10,`ACB = EAC = ${b}° (alternes-internes).`),ST("BAC",c,17,`BAC = 180 − ${a} − ${b} = ${c}° (somme des angles du triangle).`),ST("BAH",90-a,18,`Triangle ABH rectangle en H : BAH = 90 − ${a} = ${90-a}°.`)],
+   `<p>ABC = ${a}°, ACB = ${b}°, BAC = ${c}°, BAH = ${90-a}°.</p>`));}
+  {const b=rnd(r,55,75),c=rnd(r,35,55),a=180-b-c;out.push(chain("CH2","Chaîne 2 : triangle coupé par une parallèle","<p>M ∈ [AB], N ∈ [AC], (MN) // (BC). ABC = "+b+"° et ACB = "+c+"°.</p>",()=>F.e20().replace(/65°/g,b+"°").replace(/45°/g,c+"°"),
+   [ST("BAC",a,17,`BAC = 180 − ${b} − ${c} = ${a}°.`),ST("AMN",b,11,`AMN = ABC = ${b}° (correspondants, (MN) // (BC)).`),ST("ANM",c,11,`ANM = ACB = ${c}° (correspondants).`),ST("BMN",180-b,2,`BMN = 180 − ${b} = ${180-b}° (angle plat AMB, angles adjacents).`)],
+   `<p>BAC = ${a}°, AMN = ${b}°, ANM = ${c}°, BMN = ${180-b}°.</p>`));}
+  {const x=rnd(r,20,35);out.push(chain("CH3","Chaîne 3 : bissectrice et parallèles","<p>La bissectrice [OJ) de l'angle AOB coupe la droite (IA) en J. JOB = "+x+"° et IAO = "+(2*x)+"°.</p>",()=>F.b47?F.b47():"",
+   [ST("AOB",2*x,4,`AOB = 2 × ${x} = ${2*x}° (bissectrice).`),ST("Les droites (AI) et (OB) sont-elles parallèles ? (mets 1 pour oui, 0 pour non)",1,15,`Oui : IAO et AOB sont alternes-internes et mesurent ${2*x}°.`)],
+   `<p>AOB = ${2*x}°, et (AI) // (OB).</p>`));}
+  {const v=rnd(r,50,80);out.push(chain("CH4","Chaîne 4 : le piège des droites non parallèles","<p><b>(d₁) et (d₂) ne sont pas parallèles.</b> L'angle 3 mesure "+v+"°.</p>",()=>F.eight(v,false),
+   [ST("Angle 1",v,6,`Angle 1 = ${v}° (opposé par le sommet à 3).`),ST("Angle 2",180-v,2,`Angle 2 = 180 − ${v} = ${180-v}° (angle plat).`),ST("Angle 5 (mets 0 si on ne peut pas savoir)",null,0,"On ne peut pas savoir : les droites ne sont pas parallèles.")],
+   `<p>Angle 1 = ${v}°, angle 2 = ${180-v}°, angle 5 : on ne peut pas savoir.</p>`));}
+  return out;}
+ /* ---------- Évaluation blanche (55 min, sur 20, sujets A et B) ---------- */
+ const DEFS=[["adjacents",1,"Deux angles sont adjacents s'ils ont le même sommet, un côté commun, et s'ils sont situés de part et d'autre de ce côté commun."],["supplémentaires",13,"Deux angles sont supplémentaires si la somme de leurs mesures est égale à 180°."],["complémentaires",12,"Deux angles sont complémentaires si la somme de leurs mesures est égale à 90°."],["alternes-internes",8,"Deux droites coupées par une sécante forment des angles alternes-internes : ils ont pour sommets les deux points d'intersection ; ils sont situés entre les deux droites ; ils sont de part et d'autre de la sécante."],["correspondants",9,"Deux droites coupées par une sécante forment des angles correspondants : ils ont pour sommets les deux points d'intersection ; l'un est entre les deux droites, l'autre à l'extérieur ; ils sont du même côté de la sécante."],["opposés par le sommet",5,"Deux angles sont opposés par le sommet s'ils ont le même sommet et si leurs côtés sont dans le prolongement l'un de l'autre."]];
+ const PROPS=[[10,"Énoncer la propriété des angles alternes-internes formés par deux droites parallèles et une sécante.","Si deux droites parallèles sont coupées par une sécante, alors les angles alternes-internes qu'elles forment ont la même mesure."],[11,"Énoncer la propriété des angles correspondants formés par deux droites parallèles et une sécante.","Si deux droites parallèles sont coupées par une sécante, alors les angles correspondants qu'elles forment ont la même mesure."]];
+ const RECI=[[15,"Énoncer la propriété qui permet de démontrer que deux droites sont parallèles avec des angles alternes-internes.","Si deux droites coupées par une sécante forment deux angles alternes-internes de même mesure, alors ces deux droites sont parallèles."],[16,"Énoncer la propriété qui permet de démontrer que deux droites sont parallèles avec des angles correspondants.","Si deux droites coupées par une sécante forment deux angles correspondants de même mesure, alors ces deux droites sont parallèles."]];
+ const W=(it,p)=>Object.assign({},it,{pts:p});
+ const find=(id)=>[...EVD.EX,...EVB.EX].find(e=>e.id===id);
+ function subject(sub,seed){const r=seeded(seed*7+(sub==="A"?1:2)),S=[];
+  const d=shuffle(r,DEFS).slice(0,2),pr=pick(r,PROPS),rc=pick(r,RECI);
+  S.push({t:"Exercice 1 · Le cours (4 points)",st:"<p>Répondre sans regarder le cours.</p>",items:[FI("V1a",`a) Donner la définition de deux angles ${d[0][0]}.`,d[0][1],"D",d[0][2],1),FI("V1b",`b) Donner la définition de deux angles ${d[1][0]}.`,d[1][1],"D",d[1][2],1),FI("V1c","c) "+pr[1],pr[0],"P",pr[2],1),FI("V1d","d) "+rc[1],rc[0],"P",rc[2],1)]});
+  const ce=citeEx(Math.floor(r()*1e9));S.push({t:"Exercice 2 · Citer sans justifier (3 points)",st:ce.st,fig:ce.fig,items:[W(ce.items[0],1),W(ce.items[1],1),W(ce.items[2],1)]});
+  if(sub==="A"){const e=find("E10").gen(r);S.push({t:"Exercice 3 · Calculer en justifiant (4 points)",st:e.st,fig:e.fig,items:[W(e.items[0],2),W(e.items[1],2)]});}
+  else{const e=find("E11").gen(r);S.push({t:"Exercice 3 · Calculer en justifiant (4 points)",st:e.st,fig:e.fig,items:[W(e.items[0],1.5),W(e.items[1],1.5),W(e.items[2],1)]});}
+  if(sub==="A"){const e13=find("E13"),e14=find("E14").gen(r);S.push({t:"Exercice 4 · Parallèles ou pas ? (4 points)",st:"<p><b>a)</b> "+e13.st.replace(/<\/?p>/g," ")+"</p>",fig:e13.fig,items:[W(e13.items[0],2)]});S.push({t:"",st:"<p><b>b)</b> "+e14.st.replace(/<\/?p>/g," ")+"</p>",fig:e14.fig,items:[W(e14.items[0],2)]});}
+  else{const b51=find("B51"),e15=find("E15");S.push({t:"Exercice 4 · Parallèles ou pas ? (4 points)",st:"<p><b>a)</b> "+b51.st.replace(/<\/?p>/g," ")+"</p>",fig:b51.fig,items:[W(b51.items[0],2)]});S.push({t:"",st:"<p><b>b)</b> "+e15.st.replace(/<\/?p>/g," ")+"</p>",fig:e15.fig,items:[W(e15.items[0],2)]});}
+  {const e=find("E17").gen(r);const it=sub==="A"?[e.items[0],e.items[1],e.items[2],e.items[3]]:[e.items[0],e.items[2],e.items[3],e.items[6]];S.push({t:"Exercice 5 · Les triangles (3 points)",st:"<p>Faire une figure à main levée codée sur le brouillon. Justifier par une propriété.</p>",items:it.map(x=>W(x,0.75))});}
+  if(sub==="A"){const e=find("E20");S.push({t:"Exercice 6 · Problème (2 points)",st:e.st,fig:e.fig,items:[W(e.items[1],1),W(e.items[3],1)]});}
+  else{const e=find("B68");S.push({t:"Exercice 6 · Problème (2 points)",st:e.st,fig:e.fig,items:[W(e.items[0],1),W(e.items[1],1)]});}
+  return S;}
+ const appr=n=>n>=18?"Excellent travail : le cours est su et la rédaction est rigoureuse.":n>=15?"Très bien. Quelques détails de rédaction à soigner.":n>=12?"Bien. Revois les points perdus : souvent une propriété oubliée ou mal recopiée.":n>=8?"Des bases, mais le cours n'est pas encore su mot à mot. Refais les exercices 3, 4 et 10 de la batterie.":"Le cours n'est pas su. Reprends la fiche réflexe (exercice 4) et la rédaction modèle avant tout.";
+ return {ERR,citeEx,chains,subject,seeded,appr,OPT};
+})();
+
+/* ================= TOUR DES RÉVISIONS : correction d'un item, quel que soit son type ================= */
+function evGrade(it,ans){
+ const pts=it.pts||1,G=EVG;
+ if(it.k==="redac")return G.gradeRedac(ans,it.s,pts);
+ if(it.k==="kw")return G.gradeKw(ans,it.s,pts);
+ if(it.k==="num")return G.gradeNum(ans,it.s,pts);
+ if(it.k==="fiche")return G.gradeFiche(ans,it.f,pts,it.asked);
+ if(it.k==="self")return {got:ans?pts:0,max:pts,com:[]};
+ if(it.k==="multi"){ans=ans||{};const f=ans.f||[],com=[];let ok=0;
+  it.fields.forEach(([lab,v],i)=>{const x=parseFloat(String(f[i]==null?"":f[i]).replace(",","."));if(!isNaN(x)&&Math.abs(x-v)<0.01)ok++;else com.push(`${lab} : on attend ${G.fmt(v)}°.`);});
+  const wN=it.why?0.3:0;let got=pts*(1-wN)*ok/it.fields.length;
+  if(it.why){const r=G.gradeKw(ans.why||"",it.why,pts*wN);got+=r.got;if(r.got<pts*wN)com.push(...r.com.filter(c=>!/Pas de réponse/.test(c)).slice(0,2));if(!(ans.why||"").trim())com.push("Il manque les justifications (les propriétés utilisées).");}
+  return {got:Math.round(got*4)/4,max:pts,com:[...new Set(com)]};}
+ if(it.k==="sort"){ans=ans||{};let ok=0;const com=[];for(const c of it.cards){if(ans[c.id]===c.b)ok++;else com.push(`« ${c.t.slice(0,60)}${c.t.length>60?"…":""} » va dans ${(it.bins.find(b=>b.id===c.b)||{}).t}.`);}
+  return {got:Math.round(pts*ok/it.cards.length*4)/4,max:pts,com};}
+ if(it.k==="pairs"){const want=it.model.map(p=>p.slice().sort((a,b)=>a-b).join("-"));const got0=[...new Set((ans||[]).map(p=>p.slice().sort((a,b)=>a-b).join("-")))];
+  const good=got0.filter(p=>want.includes(p)),bad=got0.filter(p=>!want.includes(p));const com=[];
+  let sc;if(it.n){sc=good.length&&!bad.length?1:good.length?0.5:0;}else sc=Math.max(0,(good.length-bad.length*0.5)/want.length);
+  if(bad.length)com.push("Ces paires ne vont pas : "+bad.map(p=>p.replace("-"," et ")).join(" ; ")+".");
+  if(!it.n&&good.length<want.length)com.push("Il en manque. La liste complète : "+want.map(p=>p.replace("-"," et ")).join(" ; ")+".");
+  return {got:Math.round(pts*sc*4)/4,max:pts,com};}
+ if(it.k==="err"){ans=ans||{};const sel=(ans.sel||[]).map(Number),com=[];let g=0;
+  const okSel=sel.length&&sel.every(i=>it.bad.includes(i));if(okSel)g+=0.4;else com.push(sel.length?"Ce n'est pas la bonne ligne. L'erreur est à la ligne "+it.bad.map(i=>i+1).join(" ou ")+".":"Touche la ligne qui contient l'erreur.");
+  const r=G.gradeKw(ans.fix||"",it.s,1);g+=0.6*r.got;if(r.got<1)com.push(...r.com.filter(c=>!/Pas de réponse/.test(c)));if(!(ans.fix||"").trim())com.push("Écris la correction.");
+  return {got:Math.round(pts*g*4)/4,max:pts,com:[...new Set(com)]};}
+ if(it.k==="chain"){ans=ans||[];let g=0;const com=[];
+  it.steps.forEach((st,i)=>{const a=ans[i]||{};const x=parseFloat(String(a.v==null?"":a.v).replace(",","."));
+   const vOk=st.v==null?(x===0):(!isNaN(x)&&Math.abs(x-st.v)<0.01);const fOk=st.f.includes(+a.f);
+   g+=(vOk?0.5:0)+(fOk?0.5:0);if(!vOk||!fOk)com.push(`${st.q} : ${st.model}`);});
+  return {got:Math.round(pts*g/it.steps.length*4)/4,max:pts,com};}
+ return {got:0,max:pts,com:["?"]};}
+
+/* ================= TOUR DES RÉVISIONS : L'ÉCRAN ================= */
+const REV=(()=>{
+ const $$=id=>document.getElementById(id);
+ const E=s=>String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+ const fmt=v=>String(Math.round(v*100)/100).replace(".",",");
+ const ALL=()=>[...EVD.EX,...EVB.EX];
+ const PARTS=[["0","Avant tout"],["1","Partie 1 · Le cours au mot près"],["2","Partie 2 · Reconnaître les configurations"],["3","Partie 3 · Calculer en justifiant (droites parallèles)"],["4","Partie 4 · Démontrer que des droites sont (ou ne sont pas) parallèles"],["5","Partie 5 · Les triangles"],["6","Partie 6 · Bissectrice"],["7","Partie 7 · Problèmes « 20/20 »"],["L1","Livre p. 161 · J'applique le cours"],["L2","Livre p. 163 et 164 · Questions flash"],["L3","Livre · Mes automatismes"],["L4","Livre · Je m'entraîne"],["BONUS","Bonus livre · Symétrie centrale"],["8","Check-list de vendredi"]];
+ let S=null,cur=null,TA=null,VB=null,timerI=0;
+ function st(){if(!SAVE.rev)SAVE.rev={ex:{},evals:[],evalCur:null};return SAVE.rev;}
+ function rec(eid,iid,r,ans){const R=st();const x=R.ex[eid]=R.ex[eid]||{items:{},best:0,n:0};x.items[iid]={got:r.got,max:r.max,d:Date.now()};save();}
+ function exScore(e){const x=st().ex[e.id];if(!x)return null;let g=0,m=0;for(const it of e.items){m+=it.pts||1;if(x.items[it.id])g+=x.items[it.id].got;}return {g,m,done:e.items.every(it=>x.items[it.id])};}
+ /* ---------- l'écran ---------- */
+ function build(){
+  const sec=document.createElement("section");sec.id="revis";sec.className="screen";
+  sec.innerHTML=`<header><button class="brass hbtn" id="rvBack">⬅</button><div class="t" id="rvTitle">Tour des révisions<small>Interro du vendredi 20 novembre · angles et parallélisme</small></div><span class="rvtimer rvhide" id="rvTimer"></span><button class="brass hbtn memobtn" id="rvMemo" title="Mémo">📋 Mémo</button></header><div class="rvbody" id="rvBody"></div>`;
+  document.body.insertBefore(sec,document.getElementById("home").nextSibling);
+  $$("rvBack").onclick=back;$$("rvMemo").onclick=()=>{if(typeof openMemo==="function")openMemo();};
+  const hb=document.querySelector("#home .homebar");const b=document.createElement("button");b.className="brass";b.id="btnRevis";b.innerHTML="📚 Tour des révisions";b.style.cssText="font-size:18px;background:linear-gradient(180deg,#f2cf7c,#c48f33 50%,#93621d)";b.onclick=hub;hb.insertBefore(b,hb.firstChild);
+  const box=document.createElement("div");box.id="rvTAbox";box.innerHTML=`<textarea id="rvText" rows="4" autocomplete="off" autocorrect="off" autocapitalize="sentences" spellcheck="false" placeholder="Écris ta réponse ici (Je sais que… Or… Donc…)"></textarea>`;
+  document.body.appendChild(box);box.style.display="none";TA=$$("rvText");
+  try{VB=VOIX.attach("rev",{field:TA,fiche:()=>cur&&cur.it&&cur.it.k==="fiche"?cur.it.f:null,papaOK:()=>!!(cur&&cur.it&&cur.it.k==="fiche"&&cur.mode!=="eval"),canRedo:()=>false,retry:()=>{},
+   papa:(g)=>{if(!cur||!cur.it)return;const p=cur.it.pts||1;validate({got:g==="coeur"?p:g==="presque"?p/2:0,max:p,com:[g==="coeur"?"Papa a validé : par cœur !":g==="presque"?"Papa a écouté : presque.":"Papa a écouté : à revoir."]});}});}catch(e){}
+ }
+ function back(){if(cur&&cur.mode==="eval"&&!cur.done){if(!confirm("Quitter l'évaluation ? Ta copie est gardée, tu pourras la reprendre."))return;}
+  if(cur&&cur.mode!=="hub"){hub();return;}stopTimer();show("home");}
+ function title(t,s){$$("rvTitle").innerHTML=E(t)+(s?`<small>${E(s)}</small>`:"");}
+ function park(){const b=$$("rvTAbox");if(b&&b.parentElement!==document.body){document.body.appendChild(b);}if(b)b.style.display="none";}
+ /* ---------- le hub ---------- */
+ function hub(){park();stopTimer();cur={mode:"hub"};show("revis");title("Tour des révisions","Interro du vendredi 20 novembre · angles et parallélisme");$$("rvMemo").classList.remove("rvhide");$$("rvTimer").classList.add("rvhide");
+  const R=st(),ec=R.evalCur;let h=`<div class="rvintro">Toute la batterie de révision de papa, et les exercices du livre. Chaque réponse est gardée tout de suite. Les nombres changent quand tu rejoues un exercice marqué 🎲.</div>
+  <div class="rvmodes"><button class="brass big" id="rvEvA">📝 Évaluation blanche · sujet A (55 min)</button><button class="brass big" id="rvEvB">📝 Évaluation blanche · sujet B (55 min)</button>${ec&&!ec.done?`<button class="brass big" id="rvEvR">⏯ Reprendre ma copie (sujet ${ec.sub})</button>`:""}</div>
+  <div class="rvmodes"><button class="brass" id="rvErr">🔎 Trouve l'erreur</button><button class="brass" id="rvCite">🎯 Défi : cite sans justifier</button><button class="brass" id="rvChain">⛓️ Chaînes de propriétés</button><button class="brass" id="rvLibre">✍️ Rédaction libre</button><a class="brass" style="text-decoration:none;display:inline-flex;align-items:center;padding:10px 14px;border-radius:12px" href="imprimer/" target="_blank" rel="noopener">🖨️ Fiches à imprimer</a></div>`;
+  if(R.evals&&R.evals.length)h+=`<div class="rvintro">Mes évaluations blanches : ${R.evals.slice(-5).map(x=>`sujet ${x.sub} · <b>${fmt(x.note)}/20</b>`).join(" · ")}</div>`;
+  for(const [p,t] of PARTS){const list=ALL().filter(e=>String(e.part)===p);if(!list.length)continue;
+   h+=`<div class="rvpart"><h3>${E(t)}</h3><div class="rvgrid">`+list.map(e=>{const sc=exScore(e);const cls=sc&&sc.done?(sc.g>=sc.m*0.8?"done":"mid"):"";
+    return `<button class="rvcard ${cls}" data-ex="${e.id}"><b>${E(e.n)}${e.gen?" 🎲":""}</b>${E(e.title)}${sc&&sc.done?`<span class="rvsc">${fmt(sc.g)}/${fmt(sc.m)}</span>`:""}</button>`;}).join("")+`</div></div>`;}
+  $$("rvBody").innerHTML=h;$$("rvBody").scrollTop=0;
+  $$("rvBody").querySelectorAll("[data-ex]").forEach(b=>b.onclick=()=>{const e=ALL().find(x=>x.id===b.dataset.ex);const sc=exScore(e);openEx(e.gen&&sc&&sc.done?e.gen(Math.random):e);});
+  $$("rvEvA").onclick=()=>evalStart("A");$$("rvEvB").onclick=()=>evalStart("B");if($$("rvEvR"))$$("rvEvR").onclick=()=>evalOpen();
+  $$("rvErr").onclick=()=>openEx({id:"ERR",n:"Trouve l'erreur",title:"Trouve l'erreur dans la copie",src:"Les erreurs de l'interro flash et les pièges classiques",st:"<p>Chaque copie contient une erreur. Touche la ligne fausse, puis écris la correction.</p>",items:EVX.ERR});
+  $$("rvCite").onclick=()=>openEx(EVX.citeEx(Math.floor(Math.random()*1e9)));
+  $$("rvChain").onclick=()=>{const cs=EVX.chains(Math.floor(Math.random()*1e9));openEx(cs[Math.floor(Math.random()*cs.length)],{chains:cs});};
+  $$("rvLibre").onclick=libre;}
+ function libre(){const pool=[];for(const e0 of ALL()){const e=e0.gen?e0.gen(Math.random):e0;for(const it of e.items)if(it.k==="redac")pool.push([e,it]);}
+  const [e,it]=pool[Math.floor(Math.random()*pool.length)];openEx({id:"LIBRE",n:"Rédaction libre",title:e.title,src:"Rédaction libre · "+e.src,st:e.st,fig:e.fig,items:[it],cor:e.cor,libre:1});}
+ /* ---------- un exercice ---------- */
+ function openEx(e,extra){park();stopTimer();cur={mode:"ex",e,i:0,got:0,max:0,extra};show("revis");title(e.n+" · "+e.title,e.src);$$("rvMemo").classList.remove("rvhide");$$("rvTimer").classList.add("rvhide");
+  $$("rvBody").innerHTML=`<div class="rvwrap"><div><div class="rvst" id="rvSt"><div class="src">${E(e.src||"")}</div>${e.st||""}${e.note?`<p class="evnote">${E(e.note)}</p>`:""}${e.fig?`<div id="rvFig">${e.fig()}</div>`:""}</div></div><div><div class="rvq" id="rvQ"></div></div></div>`;
+  $$("rvBody").scrollTop=0;item();}
+ function item(){const e=cur.e,it=e.items[cur.i];cur.it=it;park();
+  const q=$$("rvQ");q.innerHTML=`<h4>Question ${cur.i+1} sur ${e.items.length} · ${fmt(it.pts||1)} point${(it.pts||1)>1?"s":""}</h4><div class="qt">${E(it.q)}</div>${it.fig?it.fig():""}<div id="rvIn"></div><div class="rvgo" id="rvGo"><button class="brass" id="rvOk">✔ Valider</button><button class="rvsec" id="rvDunno">Je ne sais pas</button></div><div class="rvfb" id="rvFb"></div>`;
+  cur.w=widget($$("rvIn"),it,{shared:true,figHost:it.fig?q:$$("rvSt")});
+  $$("rvOk").onclick=()=>validate();$$("rvDunno").onclick=()=>validate({got:0,max:it.pts||1,com:["Pas grave : lis la correction, puis refais-la de mémoire."]});
+  if(window.innerWidth<=900)q.scrollIntoView({block:"start"});}
+ function validate(res){const it=cur.it;if(!it||cur.locked)return;const a=cur.w.get();
+  const r=res||evGrade(it,a);cur.locked=true;cur.got+=r.got;cur.max+=r.max;if(cur.e.id!=="LIBRE")rec(cur.e.id,it.id,r,a);
+  cur.w.lock&&cur.w.lock();$$("rvGo").innerHTML="";
+  const cls=r.got>=r.max-1e-9?"":r.got>0?"mid":"bad";
+  let h=`<span class="rvscore ${cls}">${fmt(r.got)} / ${fmt(r.max)}</span>`;
+  if(r.com&&r.com.length)h+=`<ul class="rvcom">${r.com.map(c=>`<li>${E(c)}</li>`).join("")}</ul>`;else h+=` <b style="color:#239150">Parfait !</b>`;
+  if(r.lines&&r.lines.length&&it.k==="redac")h+=`<table class="rvlines">${r.lines.map(l=>`<tr><td class="${l.ok?"ok":"ko"}">${l.ok?"✔":"✘"}</td><td>${E(l.t)}${l.why?` <i>(${E(l.why)})</i>`:""}</td></tr>`).join("")}</table>`;
+  h+=`<div class="rvmodel"><b>Réponse modèle :</b> ${E(modelText(it))}</div>`;
+  for(const f of fichesOf(it))h+=ffull(f,"📜");
+  if(it.k==="self"&&cur.e.figCor)h+=cur.e.figCor();
+  h+=`<div class="rvgo"><button class="brass" id="rvNext">Continuer ➜</button>${r.got<r.max?`<button class="rvsec" id="rvAgain">↺ Réessayer</button>`:""}</div>`;
+  $$("rvFb").innerHTML=h;$$("rvNext").onclick=next;if($$("rvAgain"))$$("rvAgain").onclick=()=>{cur.got-=r.got;cur.max-=r.max;cur.locked=false;item();};
+  setTimeout(()=>{try{$$("rvFb").scrollIntoView({block:"start",behavior:"smooth"});}catch(_){}},50);}
+ function next(){cur.locked=false;cur.i++;if(cur.i<cur.e.items.length){item();return;}
+  park();const e=cur.e;const q=$$("rvQ");
+  q.innerHTML=`<h4>Exercice terminé</h4><div class="rvnote20" style="color:#8a5d1c">${fmt(cur.got)} / ${fmt(cur.max)}</div><div class="rvcor"><b>Correction complète</b>${e.cor||""}${e.figCor?e.figCor():""}</div>
+   <div class="rvgo">${e.gen||e.id==="DCITE"||e.id==="LIBRE"?`<button class="brass" id="rvNew">🎲 Nouveaux nombres</button>`:""}<button class="brass" id="rvRe">↺ Refaire</button>${cur.extra&&cur.extra.chains?`<button class="brass" id="rvNextCh">⛓️ Chaîne suivante</button>`:""}<button class="rvsec" id="rvHub">⬅ Retour au tour</button></div>`;
+  if($$("rvNew"))$$("rvNew").onclick=()=>{if(e.id==="DCITE")openEx(EVX.citeEx(Math.floor(Math.random()*1e9)));else if(e.id==="LIBRE")libre();else openEx(ALL().find(x=>x.id===e.id).gen(Math.random));};
+  $$("rvRe").onclick=()=>openEx(e,cur.extra);$$("rvHub").onclick=hub;
+  if($$("rvNextCh"))$$("rvNextCh").onclick=()=>{const cs=cur.extra.chains;const k=(cs.findIndex(c=>c.id===e.id)+1)%cs.length;openEx(cs[k],cur.extra);};
+  q.scrollIntoView({block:"start"});}
+ function modelText(it){const m=it.model;if(it.k==="multi")return it.fields.map(([l,v])=>`${l} = ${fmt(v)}${it.s&&it.s.unit===""?"":"°"}`).join(" ; ")+(m&&m.why?". "+m.why:"");
+  if(it.k==="sort")return it.cards.map(c=>`${c.t.split(" ")[0]} ${it.bins.find(b=>b.id===c.b).t.split(" ")[0]}`).join(" · ");
+  if(it.k==="pairs")return m.map(p=>p.join(" et ")).join(" ; ");
+  if(it.k==="err")return "Ligne "+it.bad.map(i=>i+1).join(" ou ")+" fausse. "+m.fix;
+  if(it.k==="chain")return it.steps.map(s=>s.model).join(" ");
+  if(it.k==="self")return "À faire sur ton cahier.";
+  if(it.k==="num")return m;return m;}
+ function fichesOf(it){if(it.k==="fiche")return [it.f];if(it.k==="redac"&&it.s.prop&&it.s.prop.length)return [it.s.prop[0]];if(it.k==="chain")return [...new Set(it.steps.flatMap(s=>s.f).filter(f=>f>0))];return [];}
+ /* ---------- les zones de réponse ---------- */
+ function widget(box,it,o){
+  const shared=o&&o.shared;
+  const txt=(ph,rows)=>{if(shared){const b=$$("rvTAbox");b.style.display="";box.appendChild(b);TA.value="";TA.placeholder=ph;TA.rows=rows||4;TA.readOnly=false;return TA;}
+   const t=document.createElement("textarea");t.rows=rows||4;t.placeholder=ph;t.autocomplete="off";t.spellcheck=false;box.appendChild(t);return t;};
+  if(it.k==="redac"||it.k==="kw"||it.k==="fiche"){const t=txt(it.k==="redac"?"Je sais que…\nOr…\nDonc…":it.k==="fiche"?"Écris la phrase du cours, mot à mot.":"Écris ta réponse.",it.k==="redac"?5:3);
+   return {get:()=>t.value,set:v=>{t.value=v||"";},lock:()=>{t.readOnly=true;},el:t};}
+  if(it.k==="num"){box.insertAdjacentHTML("beforeend",`<label class="rvfield"><input class="rvnum" inputmode="decimal" autocomplete="off"> ${it.s.unit===""?"":"°"}</label>`);const i=box.querySelector("input.rvnum:last-of-type");
+   return {get:()=>i.value,set:v=>{i.value=v||"";},lock:()=>{i.readOnly=true;}};}
+  if(it.k==="multi"){const ins=it.fields.map(([l])=>{const lab=document.createElement("label");lab.className="rvfield";lab.innerHTML=`${E(l)} = <input class="rvnum" inputmode="decimal" autocomplete="off"> °`;box.appendChild(lab);return lab.querySelector("input");});
+   let t=null;if(it.why)t=txt("Les propriétés utilisées (pourquoi ?)",3);
+   return {get:()=>({f:ins.map(i=>i.value),why:t?t.value:""}),set:v=>{v=v||{};ins.forEach((i,k)=>i.value=(v.f||[])[k]||"");if(t)t.value=v.why||"";},lock:()=>{ins.forEach(i=>i.readOnly=true);if(t)t.readOnly=true;}};}
+  if(it.k==="sort"){const a={};const d=document.createElement("div");d.className="rvsort";
+   d.innerHTML=it.cards.map(c=>`<div class="card">${E(c.t)}<div class="bins">${it.bins.map(b=>`<button type="button" data-c="${c.id}" data-b="${b.id}">${E(b.t)}</button>`).join("")}</div></div>`).join("");box.appendChild(d);
+   const paint=()=>d.querySelectorAll("button").forEach(x=>x.classList.toggle("on",a[x.dataset.c]===x.dataset.b));
+   d.querySelectorAll("button").forEach(x=>x.onclick=()=>{if(d.dataset.lock)return;a[x.dataset.c]=x.dataset.b;paint();o.onchange&&o.onchange();});
+   return {get:()=>Object.assign({},a),set:v=>{Object.assign(a,v||{});paint();},lock:()=>{d.dataset.lock=1;}};}
+  if(it.k==="pairs"){const pairs=[];let sel=null;const d=document.createElement("div");d.className="rvpairs";
+   d.innerHTML=`<div class="sel">Touche deux numéros sur la figure pour former une paire.</div><div class="chips"></div>`;box.appendChild(d);
+   const host=o.figHost||box;const nums=()=>host.querySelectorAll("g.evnum");
+   const paint=()=>{d.querySelector(".chips").innerHTML=pairs.map((p,k)=>`<button type="button" class="chip" data-k="${k}">${p[0]} et ${p[1]} ✕</button>`).join("");
+    d.querySelectorAll(".chip").forEach(c=>c.onclick=()=>{if(d.dataset.lock)return;pairs.splice(+c.dataset.k,1);paint();o.onchange&&o.onchange();});
+    nums().forEach(g=>g.classList.toggle("on",+g.dataset.n===sel));};
+   nums().forEach(g=>{g.onclick=()=>{if(d.dataset.lock)return;const n=+g.dataset.n;if(sel==null){sel=n;}else if(sel===n){sel=null;}else{const p=[sel,n].sort((x,y)=>x-y);if(!pairs.some(q=>q[0]===p[0]&&q[1]===p[1]))pairs.push(p);sel=null;o.onchange&&o.onchange();}paint();};});
+   paint();return {get:()=>pairs.map(p=>p.slice()),set:v=>{pairs.length=0;(v||[]).forEach(p=>pairs.push(p));paint();},lock:()=>{d.dataset.lock=1;sel=null;paint();}};}
+  if(it.k==="self"){const d=document.createElement("div");let done=false;d.innerHTML=`<button type="button" class="rvsec" style="font-size:17px;padding:10px 14px;border-radius:12px;border:2px solid #8a5d1c;background:#efe3c8">☐ C'est fait</button>`;box.appendChild(d);const b=d.querySelector("button");
+   b.onclick=()=>{done=!done;b.textContent=(done?"☑":"☐")+" C'est fait";};return {get:()=>done,set:v=>{done=!!v;b.textContent=(done?"☑":"☐")+" C'est fait";},lock:()=>{b.disabled=true;}};}
+  if(it.k==="err"){const on=new Set();const d=document.createElement("div");d.className="rverr";d.innerHTML=`<div class="sel" style="font:15px Trebuchet MS,sans-serif;color:#5c3c10">La copie : touche la ligne fausse.</div>`+it.lines.map((l,k)=>`<button type="button" class="ln" data-k="${k}">${k+1}. ${E(l)}</button>`).join("");box.appendChild(d);
+   d.querySelectorAll(".ln").forEach(b=>b.onclick=()=>{if(d.dataset.lock)return;const k=+b.dataset.k;on.has(k)?on.delete(k):on.add(k);b.classList.toggle("on",on.has(k));});
+   const t=txt("Écris la correction.",3);return {get:()=>({sel:[...on],fix:t.value}),set:v=>{v=v||{};(v.sel||[]).forEach(k=>on.add(k));d.querySelectorAll(".ln").forEach(b=>b.classList.toggle("on",on.has(+b.dataset.k)));t.value=v.fix||"";},lock:()=>{d.dataset.lock=1;t.readOnly=true;}};}
+  if(it.k==="chain"){const d=document.createElement("div");d.className="rvchain";const opt=f=>f===0?"On ne peut pas savoir":`Fiche ${f} · ${FICHES[f].title}`;
+   d.innerHTML=it.steps.map((s,k)=>`<div class="step"><div><b>${k+1}. ${E(s.q)}</b></div><select data-k="${k}"><option value="">Quelle propriété ?</option>${it.opts.map(f=>`<option value="${f}">${E(opt(f))}</option>`).join("")}</select> <label class="rvfield">= <input class="rvnum" data-k="${k}" inputmode="decimal" autocomplete="off"></label></div>`).join("");box.appendChild(d);
+   const sels=[...d.querySelectorAll("select")],ins=[...d.querySelectorAll("input")];
+   return {get:()=>it.steps.map((s,k)=>({f:sels[k].value,v:ins[k].value})),set:v=>{(v||[]).forEach((a,k)=>{if(sels[k])sels[k].value=a.f||"";if(ins[k])ins[k].value=a.v==null?"":a.v;});},lock:()=>{sels.forEach(s=>s.disabled=true);ins.forEach(i=>i.readOnly=true);}};}
+  return {get:()=>null,set:()=>{}};}
+ /* ---------- évaluation blanche ---------- */
+ function evalStart(sub){const R=st();if(R.evalCur&&!R.evalCur.done&&!confirm("Une copie est en cours. La remplacer par un nouveau sujet ?"))return;
+  R.evalCur={sub,seed:Math.floor(Math.random()*1e9),start:Date.now(),ans:{},done:false};save();evalOpen();}
+ function evalOpen(){park();const R=st(),ec=R.evalCur;if(!ec){hub();return;}const secs=EVX.subject(ec.sub,ec.seed);cur={mode:"eval",ec,secs,ws:{},done:ec.done};
+  show("revis");title("Évaluation blanche · sujet "+ec.sub,"55 minutes · sur 20 · sans aide (pas de mémo, pas d'indice)");$$("rvMemo").classList.add("rvhide");
+  let h=`<div class="rvev"><div class="rvintro">Comme le jour de l'interro : lis bien le <b>verbe</b> de chaque consigne. Tes réponses sont gardées au fur et à mesure. Quand tu as fini, appuie sur « Rendre ma copie ».</div>`;
+  secs.forEach((s,k)=>{h+=`<div class="sec">${s.t?`<h3>${E(s.t)}</h3>`:""}${s.st||""}${s.fig&&!s.items.every(i=>i.k==="pairs")?`<div class="figh" id="evF${k}">${s.fig()}</div>`:""}`+s.items.map((it,j)=>`<div class="itm" id="evI${k}_${j}"><div class="qt">${E(it.q)} <span class="src">(${fmt(it.pts)} pt${it.pts>1?"s":""})</span></div><div class="in"></div><div class="rvfb"></div></div>`).join("")+`</div>`;});
+  h+=`<div class="rvgo" style="justify-content:center"><button class="brass" id="evDone" style="font-size:20px">📤 Rendre ma copie</button></div><div id="evRes"></div></div>`;
+  $$("rvBody").innerHTML=h;$$("rvBody").scrollTop=0;
+  secs.forEach((s,k)=>s.items.forEach((it,j)=>{const key=it.id+"_"+k+"_"+j,box=document.querySelector(`#evI${k}_${j} .in`);
+   if(it.k==="pairs"&&s.fig)box.insertAdjacentHTML("beforeend",s.fig());const w=widget(box,it,{figHost:it.k==="pairs"?box:(document.getElementById("evF"+k)||box),onchange:()=>keep(key,w)});cur.ws[key]={w,it,k,j};w.set(ec.ans[key]);
+   box.addEventListener("input",()=>keep(key,w));box.addEventListener("change",()=>keep(key,w));box.addEventListener("click",()=>setTimeout(()=>keep(key,w),30));}));
+  $$("evDone").onclick=()=>{if(confirm("Rendre la copie ? Tu ne pourras plus la modifier."))evalGrade();};
+  if(ec.done)evalGrade(true);else startTimer();}
+ let keepT=0;function keep(key,w){const ec=st().evalCur;if(!ec||ec.done)return;ec.ans[key]=w.get();clearTimeout(keepT);keepT=setTimeout(save,250);}
+ function startTimer(){stopTimer();const t=$$("rvTimer");t.classList.remove("rvhide");const tick=()=>{const ec=st().evalCur;if(!ec||ec.done){stopTimer();return;}
+  const left=Math.max(0,ec.start+55*60000-Date.now()),m=Math.floor(left/60000),s=Math.floor(left%60000/1000);t.textContent=`⏱ ${m}:${String(s).padStart(2,"0")}`;t.classList.toggle("low",left<5*60000);
+  if(left<=0){stopTimer();alert("Le temps est écoulé ! On ramasse la copie.");evalGrade();}};tick();timerI=setInterval(tick,1000);}
+ function stopTimer(){clearInterval(timerI);timerI=0;const t=$$("rvTimer");if(t)t.classList.add("rvhide");}
+ function evalGrade(already){stopTimer();const R=st(),ec=R.evalCur;let tot=0;
+  for(const key in cur.ws){const {w,it,k,j}=cur.ws[key];ec.ans[key]=w.get();const r=evGrade(it,ec.ans[key]);tot+=r.got;w.lock&&w.lock();
+   const fb=document.querySelector(`#evI${k}_${j} .rvfb`),cls=r.got>=r.max-1e-9?"":r.got>0?"mid":"bad";
+   fb.innerHTML=`<span class="rvscore ${cls}">${fmt(r.got)} / ${fmt(r.max)}</span>`+(r.com&&r.com.length?`<ul class="rvcom">${r.com.map(c=>`<li>${E(c)}</li>`).join("")}</ul>`:"")+`<div class="rvmodel"><b>Correction :</b> ${E(modelText(it))}</div>`;}
+  const note=Math.round(tot*4)/4;cur.done=true;
+  if(!ec.done){ec.done=true;ec.note=note;R.evals=R.evals||[];R.evals.push({sub:ec.sub,note,d:Date.now(),min:Math.round((Date.now()-ec.start)/60000)});save();}
+  $$("evDone").remove();$$("evRes").innerHTML=`<div class="rvnote20">${fmt(ec.note!=null?ec.note:note)} / 20</div><div class="rvintro" style="text-align:center"><b>Appréciation :</b> ${E(EVX.appr(note))}</div><div class="rvgo" style="justify-content:center"><button class="brass" id="evAgain">📝 Nouveau sujet ${ec.sub==="A"?"B":"A"}</button><button class="rvsec" id="evHub">⬅ Retour au tour</button></div>`;
+  $$("evAgain").onclick=()=>evalStart(ec.sub==="A"?"B":"A");$$("evHub").onclick=hub;
+  if(!already)$$("evRes").scrollIntoView({block:"start"});}
+ if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",build);else build();
+ return {hub,openEx,evalStart,get cur(){return cur;},ALL,modelText,fichesOf};
+})();
+window.__rev=REV;
+
+</script><!--/EVAL--><!--CLAVIER--><style>/* CLAVIER iPad : mode « clavier ouvert » */
 html.kb-on,html.kb-on body{overflow:hidden!important;overscroll-behavior:none}
 html.kb-on .kb-panel{z-index:9990!important}
 html.kb-on .kb-panel .schslot{max-height:calc(var(--kbh) * .22)!important;overflow:hidden}
