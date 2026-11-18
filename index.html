@@ -42,7 +42,6 @@ header .t small{display:block;font-size:12px;font-weight:normal;opacity:.75}
 .lvl{padding:16px 14px 12px;min-height:128px;text-align:left;color:#f6e7c8;font-size:15px;display:flex;flex-direction:column;gap:6px}
 .lvl b{font-size:19px;color:#ffd77a}
 .lvl .src{font-size:12px;opacity:.7}
-.lvl.locked{filter:grayscale(1) brightness(.6)}
 .lvl .badge{position:absolute;right:12px;top:12px;font-size:12px;background:#24170d;border:1px solid #8a5d1c;padding:2px 7px;border-radius:9px}
 .homebar{display:flex;gap:12px;justify-content:center;padding:10px 10px 16px;flex-wrap:wrap}
 .homebar button{font-size:18px;padding:12px 20px}
@@ -1358,7 +1357,7 @@ function recordForge(f,firstTryOk){
  SAVE.log.push({d:today(),f,ok:firstTryOk});if(SAVE.log.length>400)SAVE.log.shift();
  save();
 }
-function unlocked(id){if(SAVE.all)return true;if(id===1)return true;return !!SAVE.stars[id-1];}
+function unlocked(id){return true;} // toutes les usines sont ouvertes dès le début
 
 /* ================= SONS (WebAudio) ================= */
 /* ===== Déblocage du son sur iPad (partagé entre les jeux) =====
@@ -1781,10 +1780,10 @@ function info(html,btns){
 /* ================= ACCUEIL, ATELIER ================= */
 function goHome(){
  const box=$("levels");box.innerHTML="";
- for(const l of LEVELS){const ok=unlocked(l.id),s=SAVE.stars[l.id]||0;const b=document.createElement("button");
-  b.className="panel lvl"+(ok?"":" locked");
-  b.innerHTML=`<span class="badge">${l.machines.length>1?l.machines.length+" machines":"1 machine"}</span><b>Usine ${l.id}</b><span>${esc(l.name)}</span><span class="src">${esc(l.src)}</span><span class="stars">${ok?starsHTML(s):"🔒"}</span>`;
-  b.onclick=()=>{if(ok)startLevel(l.id);else{SND.locked();info("<h2>🔒 Usine fermée</h2><p>Termine l'usine précédente pour ouvrir celle-ci.</p>",[["OK"]])}};box.appendChild(b);}
+ for(const l of LEVELS){const s=SAVE.stars[l.id]||0;const b=document.createElement("button");
+  b.className="panel lvl";
+  b.innerHTML=`<span class="badge">${l.machines.length>1?l.machines.length+" machines":"1 machine"}</span><b>Usine ${l.id}</b><span>${esc(l.name)}</span><span class="src">${esc(l.src)}</span><span class="stars">${starsHTML(s)}</span>`;
+  b.onclick=()=>startLevel(l.id);box.appendChild(b);}
  const n=dueList().length,nr=Object.keys(SAVE.reciteTodo).length;$("dueCount").textContent=[n?`${n} à refabriquer`:"",nr?`${nr} à réciter`:""].filter(Boolean).join(", ").replace(/^(.+)$/,"($1)");
  show("home");
 }
@@ -1814,7 +1813,7 @@ function parent(){
   ${mapTable()}
   ${hintTable()}
   <table style="width:100%;border-collapse:collapse;font-size:14px" border="1" cellpadding="4"><tr><th>Date</th><th>Fiches justes</th><th>Fiches à refaire</th></tr>${rows||"<tr><td colspan=3>Aucune forge pour l'instant.</td></tr>"}</table>`,
-  [["Ouvrir toutes les usines",()=>{SAVE.all=true;save()}],["Tout effacer",()=>{if(confirm("Effacer toute la progression ?")){localStorage.removeItem(SKEY);location.reload()}}],["Fermer"]]);
+  [["Tout effacer",()=>{if(confirm("Effacer toute la progression ?")){localStorage.removeItem(SKEY);location.reload()}}],["Fermer"]]);
 }
 function hintTable(){
  const st=["carte","entree","etiq","forge","donc"],sum=o=>st.reduce((a,k)=>a+((o||{})[k]||0),0);
@@ -2258,7 +2257,7 @@ function openCarte(){
   return `<div class="cbld ${a==="outils"?"tools":""}" style="--c:${A.col}"><div class="cbh">${A.n?`<span class="bnum">${A.n}</span>`:"🧰 "}${A.name}</div>
    <div class="cbb">${ICON[a]}<div class="csee">${A.see}</div></div>
    <div class="cfs">${got.map(f=>{const r=(SAVE.recite[f]||{}).last;return `<button class="fchip ${FICHES[f].t}" data-f="${f}"><span class="ft">${FICHES[f].t}${f}</span> ${esc(FICHES[f].title)}${r?` <span class="rb k-${r}">${RNAME[r]}</span>`:""}</button>`}).join("")}
-   ${miss?`<span class="cmiss">🔒 ${miss} fiche${miss>1?"s":""} à découvrir</span>`:""}</div></div>`};
+   ${miss?`<span class="cmiss">🔍 ${miss} fiche${miss>1?"s":""} à découvrir</span>`:""}</div></div>`};
  $("carteBody").innerHTML=`<h2>🗺️ La carte de l'usine</h2><p class="cq">Devant une figure : <b>quelle forme je vois ?</b></p>
   <p class="cmn"><b style="background:#e07b1a">Croix</b> · <b style="background:#2f7fc1">Ligne</b> · <b style="background:#2e9a52">Rails</b> · <b style="background:#8e4fc4">Triangle</b></p>
   <div class="cgrid">${AT4.map(card).join("")}</div>${card("outils")}
@@ -3870,7 +3869,7 @@ const MXD=(()=>{
   U(43,7,"Chaînes de propriétés","Défi : 3 ou 4 propriétés à la suite",["CH"]),
   U(44,7,"La check-list de vendredi","Batterie, check-list",["ECK"]),
   U(45,7,"Évaluation blanche","Le boss final : 55 min, sur 20, sujets A et B",[],null,{kind:"boss"}),
-  U(46,8,"Symétrie centrale","Livre, je m'entraîne, ex. 72 et 73",["B72","B73"],"trous",{req:7})];
+  U(46,8,"Symétrie centrale","Livre, je m'entraîne, ex. 72 et 73",["B72","B73"],"trous")];
  return {NC,OVR,ZONES,DEFS};
 })();
 
@@ -4090,7 +4089,7 @@ const MX=(()=>{
   const hs=SAVE.hints[U.id]=SAVE.hints[U.id]||{tot:{},last:{}};hs.last=Object.assign({},G.hc);hs.lastDay=today();save();
   const after=totalStars(),rk0=rankOf(before),rk1=rankOf(after),medal=!zb&&zoneDone(U.zone);
   const fiches=[...new Set(G.solvedCopy.map(x=>x.gear))];
-  const end=res=>{SND.level();const next=LEVELS.find(l=>l.id===U.id+1&&!l.req);const Z=MXD.ZONES.find(z=>z.z===U.zone);
+  const end=res=>{SND.level();const next=LEVELS.find(l=>l.id===U.id+1);const Z=MXD.ZONES.find(z=>z.z===U.zone);
    const rl=(res||[]).map(x=>`Fiche ${x.f} ${x.r?rbadge(x.r):'<span class="rb k-none">Plus tard</span>'}`).join(" · ");
    info(`<h2>🏭 Usine ${U.id} terminée !</h2>${rl?`<p class="endrec">👨 Note de papa : ${rl}</p>`:""}<div class="stars big" style="text-align:center;font-size:40px">${starsHTML(st)}</div>
     ${medal?`<p class="mxreward">🏅 Médaille gagnée : <b>${E(Z.ico+" "+Z.name)}</b> !</p>`:""}${rk1!==rk0?`<p class="mxreward">⬆️ Nouveau rang : <b>${rk1[1]}</b> !</p>`:""}
@@ -4133,7 +4132,7 @@ const MX=(()=>{
  /* ---------- les usines dans la liste du jeu ---------- */
  for(const d of MXD.DEFS)LEVELS.push(Object.assign({machines:[1],kind:d.kind||"mx",fig:()=>({pts:{},lab:{},lines:[],arcs:[]})},d));
  LEVELS.forEach(l=>{if(!l.zone)l.zone=1;});
- const _ul=unlocked;unlocked=function(id){const l=LEVELS.find(x=>x.id===id);if(l&&l.req)return !!(SAVE.all||SAVE.stars[l.req]);return _ul.apply(this,arguments);};
+ /* toutes les usines sont ouvertes dès le début : pas de verrou */
  const _sl=startLevel;startLevel=function(id){const l=LEVELS.find(x=>x.id===id);
   if(l&&l.kind==="mx"){start(l);return;}
   if(l&&l.kind==="boss"){boss();return;}
@@ -4147,11 +4146,11 @@ const MX=(()=>{
   box.insertAdjacentHTML("beforeend",`<div class="mxrank panel"><span class="rk">🎖️ Rang : <b>${rk[1]}</b></span><span>${tot} ★ sur ${LEVELS.length*3}</span>${nx?`<span class="sm">Prochain rang : ${nx[1]} à ${nx[0]} ★</span>`:""}<span class="medals">${MXD.ZONES.map(z=>`<span class="md ${zoneDone(z.z)?"on":""}" title="${E(z.name)}">${z.ico}</span>`).join("")}</span></div>`);
   for(const Z of MXD.ZONES){const ls=LEVELS.filter(l=>l.zone===Z.z);if(!ls.length)continue;const got=ls.filter(l=>SAVE.stars[l.id]).length;
    box.insertAdjacentHTML("beforeend",`<div class="zoneh" style="--c:${Z.col}"><span>${Z.ico} Zone ${Z.z} · ${E(Z.name)}</span><small>${got} / ${ls.length} usines${zoneDone(Z.z)?" · 🏅 médaille":""}</small></div>`);
-   for(const l of ls){const ok=unlocked(l.id),s=SAVE.stars[l.id]||0;const b=document.createElement("button");const sv=(SAVE.mx||{})[l.id];
-    b.className="panel lvl"+(ok?"":" locked")+(l.kind==="boss"?" boss":"");
+   for(const l of ls){const s=SAVE.stars[l.id]||0;const b=document.createElement("button");const sv=(SAVE.mx||{})[l.id];
+    b.className="panel lvl"+(l.kind==="boss"?" boss":"");
     const badge=l.kind==="boss"?"👑 boss":l.kind==="mx"?(l.ex.length>1||l.ex[0]==="CH"?"plusieurs plans":"1 plan"):(l.machines.length>1?l.machines.length+" machines":"1 machine");
-    b.innerHTML=`<span class="badge">${badge}</span><b>Usine ${l.id}</b><span>${E(l.name)}</span><span class="src">${E(l.src)}</span><span class="stars">${ok?starsHTML(s):"🔒"}${sv&&!sv.done&&(sv.pos||sv.si)?' <span class="mxres">⏸ en cours</span>':""}</span>`;
-    b.onclick=()=>{if(ok)startLevel(l.id);else{SND.locked();info(`<h2>🔒 Usine fermée</h2><p>${l.req?`Termine l'usine ${l.req} pour ouvrir ce bonus.`:"Termine l'usine précédente pour ouvrir celle-ci."}</p>`,[["OK"]])}};box.appendChild(b);}}
+    b.innerHTML=`<span class="badge">${badge}</span><b>Usine ${l.id}</b><span>${E(l.name)}</span><span class="src">${E(l.src)}</span><span class="stars">${starsHTML(s)}${sv&&!sv.done&&(sv.pos||sv.si)?' <span class="mxres">⏸ en cours</span>':""}</span>`;
+    b.onclick=()=>startLevel(l.id);box.appendChild(b);}}
   const n=dueList().length,nr=Object.keys(SAVE.reciteTodo).length;$("dueCount").textContent=[n?`${n} à refabriquer`:"",nr?`${nr} à réciter`:""].filter(Boolean).join(", ").replace(/^(.+)$/,"($1)");
   show("home");};
  $("btnBack").onclick=goHome;$("btnBack2").onclick=goHome;
