@@ -3711,6 +3711,9 @@ function evGrade(it,ans){
   const wN=it.why?0.3:0;let got=pts*(1-wN)*ok/it.fields.length;
   if(it.why){const r=G.gradeKw(ans.why||"",it.why,pts*wN);got+=r.got;if(r.got<pts*wN)com.push(...r.com.filter(c=>!/Pas de réponse/.test(c)).slice(0,2));if(!(ans.why||"").trim())com.push("Il manque les justifications (les propriétés utilisées).");}
   return {got:Math.round(got*4)/4,max:pts,com:[...new Set(com)]};}
+ if(it.k==="ord"){const A=Array.isArray(ans)?ans:[];if(!A.length)return {got:0,max:pts,com:["Pas de réponse."]};
+  let ok=0;it.model.forEach((v,i)=>{if(A[i]===v)ok++;});const full=ok===it.model.length&&A.length===it.model.length;
+  return {got:full?pts:Math.round(pts*0.5*ok/it.model.length*4)/4,max:pts,com:full?[]:["L'ordre croissant : "+it.model.join(" < ")+". Compare d'abord les signes. Entre deux négatifs, le plus petit est le plus loin de zéro. Avec la même partie entière, compare les dixièmes, puis les centièmes."]};}
  if(it.k==="sort"){ans=ans||{};let ok=0;const com=[];for(const c of it.cards){if(ans[c.id]===c.b)ok++;else com.push(`« ${c.t.slice(0,60)}${c.t.length>60?"…":""} » va dans ${(it.bins.find(b=>b.id===c.b)||{}).t}.`);}
   return {got:Math.round(pts*ok/it.cards.length*4)/4,max:pts,com};}
  if(it.k==="pairs"){const want=it.model.map(p=>p.slice().sort((a,b)=>a-b).join("-"));const got0=[...new Set((ans||[]).map(p=>p.slice().sort((a,b)=>a-b).join("-")))];
@@ -3806,6 +3809,8 @@ const REV=(()=>{
   if($$("rvNextCh"))$$("rvNextCh").onclick=()=>{const cs=cur.extra.chains;const k=(cs.findIndex(c=>c.id===e.id)+1)%cs.length;openEx(cs[k],cur.extra);};
   q.scrollIntoView({block:"start"});}
  function modelText(it){const m=it.model;if(it.k==="multi")return it.fields.map(([l,v])=>`${l} = ${fmt(v)}${it.s&&it.s.unit===""?"":"°"}`).join(" ; ")+(m&&m.why?". "+m.why:"");
+  if(it.k==="ord")return m.join(" < ");
+  if(it.k==="sort"&&it.full)return it.cards.map(c=>`${c.t} : ${it.bins.find(b=>b.id===c.b).t}`).join(" · ");
   if(it.k==="sort")return it.cards.map(c=>`${c.t.split(" ")[0]} ${it.bins.find(b=>b.id===c.b).t.split(" ")[0]}`).join(" · ");
   if(it.k==="pairs")return m.map(p=>p.join(" et ")).join(" ; ");
   if(it.k==="err")return "Ligne "+it.bad.map(i=>i+1).join(" ou ")+" fausse. "+m.fix;
@@ -3818,7 +3823,8 @@ const REV=(()=>{
  function widget(box,it,o){o=o||{};const ev=!!(cur&&cur.mode==="eval");
   if(typeof PP!=="undefined"){
    if(it.k==="redac")return PP.tileWidget(box,it,{eval:ev,onchange:o.onchange});
-   if(it.k==="kw"||it.k==="fiche")return PP.papaWidget(box,it,{eval:ev,onchange:o.onchange});}
+   if(it.k==="kw"||it.k==="fiche")return PP.papaWidget(box,it,{eval:ev,onchange:o.onchange});
+   if(it.k==="ord")return PP.ordWidget(box,it,{onchange:o.onchange});}
   const w=widget0(box,it,o);if(typeof PP==="undefined")return w;
   box.querySelectorAll("textarea").forEach(t=>t.style.display="none");const tb=$$("rvTAbox");if(tb&&box.contains(tb))tb.style.display="none";
   if(it.k==="multi"&&it.why||it.k==="err"){const key=it.k==="multi"?"why":"fix";const pw=PP.papaWidget(box,Object.assign({},it,{k:"kw",q:it.q,model:it.k==="err"?(it.model&&it.model.fix)||REV.modelText(it):REV.modelText(it)}),{eval:ev,onchange:o.onchange});
@@ -4216,7 +4222,148 @@ const MXD=(()=>{
      {rf:"aux",alors:AL(RIEN,"SET est un angle droit.","Les points S, E et T sont alignés."),traps:[{t:`Donc ${s}° + ${u}° + SET = 90°.`,k:"aux",msg:`Ce calcul n'a pas de passeport : aucune fiche ne dit que ${s} + ${u} + SET = 90. Passe par le rail (Δ) : deux paires d'angles alternes-internes, puis on additionne.`}]})],
    cor:`<p>On pose le rail (Δ), parallèle à (d₁) passant par E.</p><p>a) (d₁) // (Δ) : RSE et SEK sont alternes-internes, donc SEK = <b>${s}°</b>.</p><p>b) (Δ) // (d₂) : UTE et KET sont alternes-internes, donc KET = <b>${u}°</b>.</p><p>c) SEK et KET sont adjacents : SET = ${s}° + ${u}° = <b>${t}°</b>.</p><p>Chaque nombre a son passeport : ${s}° et ${u}° viennent des alternes-internes, ${t}° vient des angles adjacents.</p>`,
    gen:r=>{const a=rnd(r,14,40);let b=rnd(r,24,52);if(a+b>=86&&a+b<=94)b-=10;return boss(a,b,story);}};}
- Object.assign(MXD.NC,{PP1:p1(47),PP2:p2(42),PP3:p3(21),PP4:p4(36),PP5:p5(70),PP6:p6(35),PP7:p7(44,38),PP8:boss(18,41,1),PP9:p9(42),PP10:p10(40),PP11:boss(27,35,0)});
+ /* ================= BOSS : LE CONTRÔLE DU 20 NOVEMBRE (le vrai sujet B, 5e) =================
+    Même structure, mêmes figures, mêmes questions que la photo sources/sujet-20-11-B.jpg.
+    Les nombres changent à chaque partie et restent cohérents (la figure est recalculée). */
+ const fr=v=>String(v).replace(".",",").replace("-","−");
+ const sg=v=>(v>0?"+":"")+fr(v);
+ /* ---------- Exercice 1 (5 points) ---------- */
+ function c1(a,k){k=k||0;const b=90-a+k,v1=90+a,v2=180-b,par=k===0;
+  const fig=()=>{const f=mk("0 0 500 340"),E=[150,230],F=[330,230],G=[440,230];
+   f.L([25,230],[485,230]).L(P(E,270,55),P(E,90,190));
+   f.L(P(E,270+a,75),P(E,90+a,175)).L(P(F,-b,85),P(F,180-b,185));
+   const A=P(E,90,120),B=P(E,90+a,130),Cc=P(F,180-b,135),D=P(F,-b,62);
+   f.right(E,A,F,15).arc(E,A,B,46,C.INK,a+"°",{lr:16}).arc(F,D,G,40,C.INK,b+"°",{lr:18});
+   f.txt([485,210],"(d₁)",{it:1,s:17}).txt([P(E,90,190)[0]+2,P(E,90,190)[1]-14],"(d₂)",{it:1,s:17});
+   const t3=P(E,90+a,175),t4=P(F,180-b,185);f.txt([t3[0]-6,t3[1]-16],"(d₃)",{it:1,s:17}).txt([t4[0]+8,t4[1]-16],"(d₄)",{it:1,s:17});
+   return f.pt(A,"A",0,18).pt(B,"B",180,18).pt(Cc,"C",0,18).pt(D,"D",0,18).pt(G,"G",90,18).pt(E,"E",225,20).pt(F,"F",115,18).out();};
+  const q3=par?R("PPC1c","3. Les droites (d₃) et (d₄) de cette figure sont-elles parallèles ?",{hyp:[["correspondant","BEF et CFG sont correspondants."]],prop:[16],par:"oui"},
+     `Je sais que les droites (d₃) et (d₄) sont coupées par la sécante (d₁), que les angles BEF et CFG sont correspondants, et que BEF = ${v1}° (question 1) et CFG = ${v2}° (question 2) : ils ont la même mesure. ${OR(16)} Donc les droites (d₃) et (d₄) sont parallèles.`,
+     {k:["@ang:BEF","@ang:CFG"],p:[["BEF","CFG","cor"]],o:{t:"par",tg:"(d₃) // (d₄)"},f:[16]},{rf:"ordre",alors:AL("Rien de plus : c'est la réponse à la question.","Les droites (d₃) et (d₄) sont perpendiculaires.","Les droites (d₁) et (d₃) sont parallèles.")})
+   :R("PPC1c","3. Les droites (d₃) et (d₄) de cette figure sont-elles parallèles ?",{hyp:[["correspondant","BEF et CFG sont correspondants."],["≠|!=|differ|pas (la )?meme|pas egaux",`Compare : ${v1}° ≠ ${v2}°.`]],prop:[24],par:"non"},
+     `Je sais que les droites (d₃) et (d₄) sont coupées par la sécante (d₁), que les angles BEF et CFG sont correspondants, et que BEF = ${v1}° (question 1) et CFG = ${v2}° (question 2) : ${v1}° ≠ ${v2}°. ${OR(24)} Donc les droites (d₃) et (d₄) ne sont pas parallèles.`,
+     {k:["@ang:BEF","@ang:CFG"],p:[["BEF","CFG","cor"]],o:{t:"npar",tg:"(d₃) et (d₄) ne sont pas parallèles"},f:[24]},{rf:"ordre",alors:AL("Rien de plus : c'est la réponse à la question.","Les droites (d₃) et (d₄) sont perpendiculaires.","Les droites (d₁) et (d₃) sont parallèles.")});
+  return {id:"PPC1",part:"PP",n:"Exercice 1",title:"Exercice 1 (5 points)",src:"Contrôle du 20/11, sujet B, exercice 1",fig,variant:1,
+   st:`<p><b>Exercice 1 (5 points)</b></p><p>On donne la figure ci-contre, dans laquelle les droites (d₁) et (d₂) sont perpendiculaires.</p><p>Les points E, F et G sont alignés, de même que les points D, F, C.</p><p>Codage de la figure : AEB = ${a}° et DFG = ${b}°.</p>`,
+   items:[R("PPC1a","1. Calculer la mesure de l'angle BEF.",{hyp:[["perpendic|⊥|droit|90","(d₁) et (d₂) sont perpendiculaires : AEF = 90°."],["adjacent","BEA et AEF sont adjacents."]],prop:[2],res:[["BEF",v1]],calc:1},
+     `Je sais que les droites (d₁) et (d₂) sont perpendiculaires en E, donc AEF est un angle droit : AEF = 90°. De plus, AEB = ${a}° et les angles BEA et AEF sont adjacents. ${OR2} Donc BEF = BEA + AEF = ${a}° + 90° = ${v1}°.`,
+     {k:["(d₁) ⊥ (d₂) en E : AEF = 90° (angle droit)",`AEB = ${a}°`],p:[["BEA","AEF","adj"]],o:{t:"num",n:"BEF",v:v1,calc:`${a}° + 90°`},f:[2]},{rf:"rect",alors:AL(RIEN,"BEF est un angle droit.","Les points B, E et F sont alignés.")}),
+    R("PPC1b","2. Calculer la mesure de l'angle CFG.",{hyp:[["align|plat","D, F, C sont alignés : CFD = 180°."],["adjacent","CFG et GFD sont adjacents."]],prop:[2],res:[["CFG",v2]],calc:1},
+     `Je sais que les points D, F et C sont alignés, donc CFD est un angle plat : CFD = 180°. De plus, DFG = ${b}° et les angles CFG et GFD sont adjacents. ${OR2} Donc CFG = 180° − ${b}° = ${v2}°.`,
+     {k:["D, F, C alignés : CFD = 180° (angle plat)",`DFG = ${b}°`],p:[["CFG","GFD","adj"]],o:{t:"num",n:"CFG",v:v2,calc:`180° − ${b}°`},f:[2]},{rf:"plat",alors:AL(par?"BEF et CFG ont la même mesure : on va pouvoir répondre à la question 3.":"BEF et CFG n'ont pas la même mesure : on va pouvoir répondre à la question 3.",RIEN,"CFG est un angle droit.","Les points C, F et G sont alignés.")}),
+    q3],
+   cor:`<p>1. (d₁) ⊥ (d₂) : AEF = 90°. BEA et AEF sont adjacents. ${OR2} Donc BEF = ${a}° + 90° = <b>${v1}°</b>.</p><p>2. D, F, C alignés : CFD = 180° (angle plat). ${OR2} Donc CFG = 180° − ${b}° = <b>${v2}°</b>.</p><p>3. BEF et CFG sont correspondants (sécante (d₁)). ${par?`Ils ont la même mesure. ${OR(16)} Donc <b>(d₃) // (d₄)</b>.`:`${v1}° ≠ ${v2}°. ${OR(24)} Donc <b>(d₃) et (d₄) ne sont pas parallèles</b>.`}</p>`,
+   gen:r=>{const a=rnd(r,26,56);let k=0;if(r()<0.25){k=rnd(r,4,9)*(r()<0.5?-1:1);}return c1(a,k);}};}
+ /* ---------- Exercice 2 (6 points) ---------- */
+ function c2(x){const t=2*x,y=90-x,o=2*x;
+  const fig=()=>{const f=mk("0 0 500 340"),D=[45,300],Cc=[455,300],dc=410,A=P(D,t,dc*Math.cos(t*Math.PI/180)),B=[455,300-dc*Math.tan(x*Math.PI/180)];
+   const O=EVF.inter?EVF.inter(A,Cc,D,B):null;
+   const den=(A[0]-Cc[0])*(D[1]-B[1])-(A[1]-Cc[1])*(D[0]-B[0]),tt=((A[0]-D[0])*(D[1]-B[1])-(A[1]-D[1])*(D[0]-B[0]))/den,Oo=O||[A[0]+tt*(Cc[0]-A[0]),A[1]+tt*(Cc[1]-A[1])];
+   f.L(D,A).L(A,B).L(B,Cc).L(Cc,D).L(A,Cc).L(D,B);
+   f.right(A,D,Cc,13).right(Cc,D,B,13).arc(D,A,B,92,C.INK,x+"°",{lr:22}).arc(D,B,Cc,70,C.INK,"");
+   return f.pt(D,"D",225,18).pt(Cc,"C",315,18).pt(A,"A",95,18).pt(B,"B",20,18).pt(Oo,"O",95,18).out();};
+  return {id:"PPC2",part:"PP",n:"Exercice 2",title:"Exercice 2 (6 points)",src:"Contrôle du 20/11, sujet B, exercice 2",fig,variant:1,
+   st:`<p><b>Exercice 2 (6 points)</b></p><p>Sur la figure ci-contre, ABCD est un quadrilatère quelconque.</p><p>Les points A, O, C sont alignés, ainsi que les points D, O, B.</p><p>Les triangles ADC et DCB sont rectangles respectivement en A et en C.</p><p>La demi-droite [DB) est la bissectrice de l'angle ADC, et on donne ADO = ${x}°.</p>`,
+   items:[R("PPC2a","1. Calculer la mesure de l'angle AOD.",{hyp:[["rectangle","ADC est rectangle en A : DAO = 90°."]],prop:[17],res:[["AOD",y]],calc:1},
+     `Je sais que le triangle ADC est rectangle en A et que O est sur [AC], donc DAO = 90°. De plus, ADO = ${x}°. ${OR(17)} Donc, dans le triangle AOD, AOD = 180° − 90° − ${x}° = ${y}°.`,
+     {k:["ADC rectangle en A, O sur [AC] : DAO = 90°",`ADO = ${x}°`],p:[],o:{t:"num",n:"AOD",v:y,calc:`180° − 90° − ${x}°`},f:[17,18]},{rf:"rect",alors:AL("Les angles ADO et AOD sont complémentaires.",RIEN,"Le triangle AOD est isocèle en A.","AOD est un angle droit.")}),
+    R("PPC2b","1. (suite) En déduire la mesure de l'angle BOC.",{hyp:[["oppos","AOD et BOC sont opposés par le sommet."]],prop:[6],res:[["BOC",y]]},
+     `Je sais que les points A, O, C sont alignés, ainsi que les points D, O, B : les angles AOD et BOC sont opposés par le sommet, et AOD = ${y}° (question 1). ${OR(6)} Donc BOC = ${y}°.`,
+     {k:["@ang:AOD"],p:[["AOD","BOC","opp"]],o:{t:"num",n:"BOC",v:y},f:[6]},{alors:AL(RIEN,"Le triangle OBC est isocèle en O.","BOC est un angle droit.")}),
+    R("PPC2c","2. Calculer la mesure de l'angle DBC.",{hyp:[["bissectrice","[DB) est la bissectrice de ADC : BDC = ADO."],["rectangle","DCB est rectangle en C : DCB = 90°."]],prop:[17],res:[["DBC",y]],calc:1},
+     `Je sais que [DB) est la bissectrice de l'angle ADC, donc BDC = ADO = ${x}°. Je sais aussi que le triangle DCB est rectangle en C, donc DCB = 90°. ${OR(17)} Donc, dans le triangle DBC, DBC = 180° − 90° − ${x}° = ${y}°.`,
+     {k:[`[DB) bissectrice de ADC : BDC = ADO = ${x}°`,"DCB rectangle en C : DCB = 90°"],p:[],o:{t:"num",n:"DBC",v:y,calc:`180° − 90° − ${x}°`},f:[17,4,18]},{rf:"biss",alors:AL("DBC et BOC ont la même mesure : regarde le triangle OBC.",RIEN,"DBC est un angle droit.")}),
+    R("PPC2d","2. (suite) Puis celle de l'angle OCB.",{hyp:[["triangle|obc","Dans le triangle OBC."]],prop:[17],res:[["OCB",o]],calc:1},
+     `Je sais que BOC = ${y}° (question 1) et que OBC = DBC = ${y}° (question 2, car O est sur [DB]). ${OR(17)} Donc, dans le triangle OBC, OCB = 180° − ${y}° − ${y}° = ${o}°.`,
+     {k:["@ang:BOC","@ang:DBC","O est sur [DB] : OBC = DBC"],p:[],o:{t:"num",n:"OCB",v:o,calc:`180° − ${y}° − ${y}°`},f:[17]},{alors:AL("Deux angles ont la même mesure : le triangle OBC est isocèle en C.",RIEN,"Le triangle OBC est quelconque.","Le triangle OBC est isocèle en O.")}),
+    R("PPC2e","2. (suite) En déduire la nature du triangle OBC.",{hyp:[[String(y),`OBC = BOC = ${y}°.`]],prop:[25],iso:["OBC","C"]},
+     `Je sais que dans le triangle OBC, OBC = ${y}° et BOC = ${y}° : deux angles ont la même mesure. ${OR(25)} Donc le triangle OBC est isocèle en C.`,
+     {k:["@ang:BOC","@ang:DBC"],p:[],o:{t:"iso",tg:"Le triangle OBC est isocèle en C",ask:"OBC est un triangle… ?",v:"C",tri:"OBC"},f:[25]},{rf:"iso"})],
+   cor:`<p>1. ADC rectangle en A et O sur [AC] : DAO = 90°. ${OR(17)} Donc AOD = 180° − 90° − ${x}° = <b>${y}°</b>. AOD et BOC sont opposés par le sommet. ${OR(6)} Donc BOC = <b>${y}°</b>.</p><p>2. [DB) bissectrice de ADC : BDC = ADO = ${x}°. DCB rectangle en C : DCB = 90°. Donc DBC = 180° − 90° − ${x}° = <b>${y}°</b>. Dans OBC : OCB = 180° − ${y}° − ${y}° = <b>${o}°</b>. OBC = BOC = ${y}° : deux angles de même mesure. ${OR(25)} Donc OBC est <b>isocèle en C</b>.</p>`,
+   gen:r=>{let v=rnd(r,13,27);if(v===30)v=24;return c2(v);},
+   /* deux plans (même figure, mêmes nombres) : la question 1, puis la question 2 avec BOC venu de la question 1 */
+   split(){const e=this,its=e.items;const sub=(id,list,extra)=>Object.assign({},e,{id,items:list,split:null,st:e.st+(extra||""),src:e.src+(id.endsWith("q2")?", question 2":", question 1")});
+    const q2=its.slice(2).map(it=>Object.assign({},it,{ov:Object.assign({},it.ov,{k:it.ov.k.map(c=>c==="@ang:BOC"?`BOC = ${y}°`:c)})}));
+    return [sub("PPC2q1",its.slice(0,2)),sub("PPC2q2",q2,`<p>Question 1 : BOC = ${y}°.</p>`)];}};}
+ /* ---------- Exercice 3 (5 points) ---------- */
+ function c3(b){const a=2*b,t=4*b,th=-65;
+  const geo=()=>{const O=[175,95],Q=P(O,th,255);return {O,Q,M:P(O,th+t,240),A:P(O,th+a,240),N:P(Q,th+180+a,285),B:P(Q,th+180+b,215)};};
+  const base=(coded)=>{const f=mk("0 0 500 360"),{O,Q,M,A,N,B}=geo();
+   f.L(O,P(O,th+t,275)).L(O,P(O,th+a,285)).L(O,Q).L(Q,P(Q,th+180+a,315)).L(Q,P(Q,th+180+b,245));
+   if(coded){f.arc(O,M,A,40,C.BLUE,"",{ticks:1}).arc(O,A,Q,40,C.BLUE,"",{ticks:1}).arc(O,M,Q,70,C.BLUE,t+"°",{lr:18})
+    .arc(Q,O,B,56,C.GREEN,"",{ticks:2}).arc(Q,B,N,56,C.GREEN,b+"°",{ticks:2,lr:22});}
+   return f.pt(O,"O",180,18).pt(Q,"O'",270,20).pt(M,"M",th+t+90,16).pt(A,"A",th+a-90,16).pt(N,"N",th+180+a-90,18).pt(B,"B",th+180+b+90,16).out();};
+  const fig=()=>base(false),figCor=()=>`<p><b>La figure codée :</b></p>${base(true)}`;
+  const cards=[["c1","Un même codage (un trait) sur les angles MOA et AOO'","y"],["c2","Un même codage (deux traits) sur les angles OO'B et BO'N","y"],["c3",`${t}° sur l'angle MOO'`,"y"],["c4",`${b}° sur l'angle BO'N`,"y"],
+   ["c5",`${a}° sur l'angle AOO'`,"n"],["c6","Un même codage sur les angles AOO' et OO'N","n"],["c7","Un angle droit en O","n"]];
+  return {id:"PPC3",part:"PP",n:"Exercice 3",title:"Exercice 3 (5 points)",src:"Contrôle du 20/11, sujet B, exercice 3",fig,figCor,variant:1,
+   st:`<p><b>Exercice 3 (5 points)</b></p><p>Sur la figure ci-contre :</p><p>• la demi-droite [OA) est la bissectrice de l'angle MOO' ;</p><p>• la demi-droite [O'B) est la bissectrice de l'angle OO'N ;</p><p>• on donne MOO' = ${t}° et BO'N = ${b}°.</p>`,
+   items:[{id:"PPC3a",k:"sort",q:"1. Coder les informations fournies sur la figure ci-contre. Pour chaque codage : je le mets sur la figure, ou pas ?",fig,figCor,
+     bins:[{id:"y",t:"✅ Je le code"},{id:"n",t:"❌ Pas donné : je ne le code pas"}],cards:cards.map(([id,t,b])=>({id,t,b})),model:Object.fromEntries(cards.map(c=>[c[0],c[2]])),pts:1,full:1},
+    R("PPC3b","2. Montrer que les droites (OA) et (O'N) sont parallèles. Étape 1 : calculer AOO'.",{hyp:[["bissectrice","[OA) est la bissectrice de MOO'."]],prop:[4],res:[["AOO'",a]],calc:1},
+     `Je sais que [OA) est la bissectrice de l'angle MOO' et que MOO' = ${t}°. ${OR(4)} Donc AOO' = ${t}° ÷ 2 = ${a}°.`,
+     {k:["[OA) est la bissectrice de MOO'",`MOO' = ${t}°`],p:[],o:{t:"num",n:"AOO'",v:a,calc:`${t}° ÷ 2`},f:[4]},{rf:"biss",alors:AL("Rien de plus pour l'instant : il faut encore OO'N.","Les droites (OA) et (O'N) sont parallèles.","Le triangle OAO' est isocèle.")}),
+    R("PPC3c","2. Étape 2 : calculer OO'N.",{hyp:[["bissectrice","[O'B) est la bissectrice de OO'N."]],prop:[4],res:[["OO'N",a]],calc:1},
+     `Je sais que [O'B) est la bissectrice de l'angle OO'N et que BO'N = ${b}°. ${OR(4)} Donc OO'N = 2 × ${b}° = ${a}°.`,
+     {k:["[O'B) est la bissectrice de OO'N",`BO'N = ${b}°`],p:[],o:{t:"num",n:"OO'N",v:a,calc:`2 × ${b}°`},f:[4]},{rf:"biss",alors:AL("AOO' et OO'N ont la même mesure : on va pouvoir prouver un parallélisme.",RIEN,"OO'N est un angle droit.","Le triangle OO'N est isocèle.")}),
+    R("PPC3d","2. Étape 3 : montrer que (OA) // (O'N).",{hyp:[["alternes","AOO' et OO'N sont alternes-internes."],[String(a),`AOO' = OO'N = ${a}°.`]],prop:[15],par:"oui"},
+     `Je sais que les droites (OA) et (O'N) sont coupées par la sécante (OO'), que les angles AOO' et OO'N sont alternes-internes, avec AOO' = ${a}° (étape 1) et OO'N = ${a}° (étape 2). ${OR(15)} Donc (OA) // (O'N).`,
+     {k:["@ang:AOO'","@ang:OO'N"],p:[["AOO'","OO'N","alt"]],o:{t:"par",tg:"(OA) // (O'N)"},f:[15]},{rf:"ordre",alors:AL("Rien de plus : c'est ce qu'il fallait montrer.","Les droites (OA) et (O'N) sont perpendiculaires.","Le triangle OAO' est isocèle.")})],
+   cor:`<p>1. On code : un même codage sur MOA et AOO', un autre sur OO'B et BO'N, ${t}° sur MOO', ${b}° sur BO'N. On ne code pas ${a}° : il faut le calculer.</p><p>2. [OA) bissectrice : AOO' = ${t}° ÷ 2 = <b>${a}°</b>. [O'B) bissectrice : OO'N = 2 × ${b}° = <b>${a}°</b>. AOO' et OO'N sont alternes-internes et de même mesure. ${OR(15)} Donc <b>(OA) // (O'N)</b>.</p>`,
+   gen:r=>c3(rnd(r,12,26))};}
+ /* ---------- Exercice 4 (4 points) : nombres relatifs ---------- */
+ function gline(vmin,vmax,step,labs,pts,f0,y0){const f=f0||mk("0 0 500 120"),x=v=>30+(v-vmin)/(vmax-vmin)*430,y=(y0||0)+70,yt=(y0||0)+30,yb=(y0||0)+100;
+  for(let v=vmin;v<=vmax+1e-9;v+=step){const X=x(v);f.L([X,yt],[X,yb],{c:"#d9d2c0",w:1});}
+  f.L([18,y],[488,y],{w:2.2}).raw(`<path d="M488 ${y} l-10 -6 l0 12 z" fill="#222"/>`);
+  for(let v=vmin;v<=vmax+1e-9;v+=step)f.L([x(v),y-6],[x(v),y+6],{w:1.8});
+  labs.forEach(v=>f.txt([x(v),y+23],fr(Math.round(v*10)/10),{s:19,nb:1}));
+  pts.forEach(([n,v])=>{f.L([x(v),y-9],[x(v),y+9],{w:2.6,c:C.BLUE});f.txt([x(v),y-25],n,{s:21,it:1});});
+  return f0?f:f.out();}
+ function c4(d,l1,l2){const [p,q,r2,s,t,u]=d;
+  const nums=[`+${p},${q}`,`−${r2},${s}`,`−0,${t}${u}`,`+${p},0${q}`,`−${r2},1${s}`];
+  const order=[`−${r2},${s}`,`−${r2},1${s}`,`−0,${t}${u}`,`+${p},0${q}`,`+${p},${q}`];
+  const show=x=>"("+x+")";
+  const fig1=()=>gline(-6,4,1,[-3,1],[["B",l1[0]],["C",l1[1]],["A",l1[2]]]);
+  const fig2=()=>gline(-1.4,1.6,0.2,[0,1],[["F",l2[0]],["D",l2[1]],["E",l2[2]]]);
+  const bins=(vals,ex)=>{const S=new Set(vals.map(v=>Math.round(v*10)/10));const extra=[];for(const v of vals)for(const w of ex(v)){const z=Math.round(w*10)/10;if(!S.has(z)&&!extra.includes(z))extra.push(z);}
+   const all=vals.map(v=>Math.round(v*10)/10).concat(extra.slice(0,3)).sort((a,b)=>a-b);return all.map(v=>({id:"v"+String(v).replace("-","m").replace(".","_"),t:fr(v>0?"+"+v:v)}));};
+  const id=v=>"v"+String(Math.round(v*10)/10).replace("-","m").replace(".","_");
+  const b1=bins(l1,v=>[-v,v+1,v-1]),b2=bins(l2,v=>[-v,v+0.1,v-0.1]);
+  return {id:"PPC4",part:"PP",n:"Exercice 4",title:"Exercice 4 (4 points)",src:"Contrôle du 20/11, sujet B, exercice 4",fig:()=>{const f=mk("0 0 500 250");gline(-6,4,1,[-3,1],[["B",l1[0]],["C",l1[1]],["A",l1[2]]],f,0);gline(-1.4,1.6,0.2,[0,1],[["F",l2[0]],["D",l2[1]],["E",l2[2]]],f,125);f.txt([20,20],"2.",{s:15}).txt([20,145],"3.",{s:15});return f.out();},variant:1,
+   st:`<p><b>Exercice 4 (4 points)</b></p><p>1. Ranger dans l'ordre croissant les nombres suivants : ${nums.map(show).join(" ; ")}.</p><p>2. Sur la droite graduée ci-contre, donner les abscisses des points A, B, C.</p><p>3. Sur la droite graduée ci-contre, donner les abscisses des points D, E, F.</p>`,
+   items:[{id:"PPC4a",k:"ord",q:`1. Ranger dans l'ordre croissant les nombres suivants : ${nums.map(show).join(" ; ")}.`,cards:nums.map(show),model:order.map(show),pts:2},
+    {id:"PPC4b",k:"sort",q:"2. Sur la droite graduée ci-contre, donner les abscisses des points A, B, C. Pour chaque point, touche son abscisse.",fig:fig1,bins:b1,
+     cards:[["A",l1[2]],["B",l1[0]],["C",l1[1]]].map(([n,v])=>({id:n,t:"Le point "+n,b:id(v)})),model:{A:id(l1[2]),B:id(l1[0]),C:id(l1[1])},pts:1,full:1},
+    {id:"PPC4c",k:"sort",q:"3. Sur la droite graduée ci-contre, donner les abscisses des points D, E, F. Attention : une graduation vaut 0,2.",fig:fig2,bins:b2,
+     cards:[["D",l2[1]],["E",l2[2]],["F",l2[0]]].map(([n,v])=>({id:n,t:"Le point "+n,b:id(v)})),model:{D:id(l2[1]),E:id(l2[2]),F:id(l2[0])},pts:1,full:1}],
+   cor:`<p>1. ${order.map(show).join(" &lt; ")}.</p><p>2. A(${sg(l1[2])}) ; B(${sg(l1[0])}) ; C(${sg(l1[1])}).</p><p>3. D(${sg(l2[1])}) ; E(${sg(l2[2])}) ; F(${sg(l2[0])}). Une graduation vaut 0,2 : il y a 5 graduations entre 0 et 1.</p>`,
+   gen:r=>{const pick=(arr,n)=>{const a=arr.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(r()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a.slice(0,n).sort((x,y)=>x-y);};
+    const i1=[];for(let v=-6;v<=4;v++)if(v!==-3&&v!==1)i1.push(v);
+    const i2=[];for(let k=-7;k<=8;k++)if(k!==0&&k!==5)i2.push(Math.round(k*2)/10);
+    return c4([rnd(r,9,19),rnd(r,1,9),rnd(r,2,9),rnd(r,2,9),rnd(r,1,9),rnd(r,1,9)],pick(i1,3),pick(i2,3));}};}
+ /* ---------- Exercice bonus (+2 points) : les sprinteurs ---------- */
+ const RAILC="Rail : je trace (Δ), la parallèle à (d) passant par E";
+ function c5(s,u){const t=s+u;
+  const fig=()=>{const f=mk("0 0 500 360"),y1=70,y2=310,E=[400,170],S=[400-100/Math.tan(s*Math.PI/180),y1],T=[400-140/Math.tan(u*Math.PI/180),y2],R=[420,y1],U=[420,y2],K=[60,170];
+   f.L([20,y1],[480,y1]).L([20,y2],[480,y2]).L(S,E,{dash:"7 5"}).L(T,E,{dash:"7 5"}).arc(S,R,E,58,C.INK,s+"°",{lr:18}).arc(T,U,E,50,C.INK,u+"°",{lr:18}).arc(E,S,T,30,C.ORANGE,"?");
+   f.raw(`<g class="ppaux"><line x1="20" y1="170" x2="485" y2="170" stroke="${C.GREEN}" stroke-width="2.6" stroke-dasharray="9 6"/><text x="470" y="152" font-family="Georgia,serif" font-size="18" font-style="italic" font-weight="bold" fill="${C.GREEN}" text-anchor="middle">(Δ)</text><circle cx="${K[0]}" cy="170" r="3.4" fill="#222"/><text x="${K[0]}" y="152" font-family="Georgia,serif" font-size="19" font-weight="bold" fill="#222" text-anchor="middle">K</text></g>`);
+   f.txt([480,y1-16],"(d)",{it:1,s:18}).txt([480,y2-16],"(d')",{it:1,s:18});
+   return f.pt(S,"S",110,18).pt(T,"T",250,18).pt(E,"E",0,18).pt(R,"R",90,16).pt(U,"U",270,16).out();};
+  return {id:"PPC5",part:"PP",n:"Exercice bonus",title:"Exercice bonus (+2 points)",src:"Contrôle du 20/11, sujet B, exercice bonus",fig,variant:1,zig:1,
+   st:`<p><b>Exercice bonus (+2 points)</b></p><p>Un entraîneur placé en E observe deux sprinters S et T qui courent sur deux couloirs parallèles représentés par les droites (d) et (d').</p><p>Déterminer la mesure de l'angle SET sous lequel l'entraîneur voit ses sprinters.</p><p>Codage : RSE = ${s}° et UTE = ${u}° (R et U nomment un point de chaque couloir). On peut tracer la droite (Δ) passant par E, parallèle à (d) ; le point K est sur (Δ), du côté de S et T.</p>`,
+   items:[R("PPC5a","Étape 1 : calculer SEK.",{hyp:[["//|parall","(d) // (Δ)."],["alternes","RSE et SEK sont alternes-internes."]],prop:[10],res:[["SEK",s]]},
+     `Je sais que (d) // (Δ), que RSE = ${s}°, que (SE) est sécante et que les angles RSE et SEK sont alternes-internes. ${OR(10)} Donc SEK = ${s}°.`,
+     {k:[RAILC,`RSE = ${s}°`],p:[["RSE","SEK","alt"]],o:{t:"num",n:"SEK",v:s},f:[10]},{rf:"aux",alors:AL("Rien de plus pour l'instant : il faut encore l'angle KET.","SET est un angle droit.","Les points S, E et T sont alignés.")}),
+    R("PPC5b","Étape 2 : calculer KET.",{hyp:[["//|parall","(Δ) // (d')."],["alternes","UTE et KET sont alternes-internes."]],prop:[10],res:[["KET",u]]},
+     `Je sais que (Δ) // (d'), car (Δ) // (d) et (d) // (d'). De plus, UTE = ${u}°, (TE) est sécante et les angles UTE et KET sont alternes-internes. ${OR(10)} Donc KET = ${u}°.`,
+     {k:["(Δ) // (d')",`UTE = ${u}°`],p:[["UTE","KET","alt"]],o:{t:"num",n:"KET",v:u},f:[10]},{rf:"aux",alors:AL(RIEN,"SET est un angle droit.","Le triangle SET est isocèle.")}),
+    R("PPC5c","Étape 3 : calculer SET.",{hyp:[["adjacent","SEK et KET sont adjacents."]],prop:[2],res:[["SET",t]],calc:1},
+     `Je sais que SEK = ${s}° (étape 1), que KET = ${u}° (étape 2), et que les angles SEK et KET sont adjacents. ${OR2} Donc SET = SEK + KET = ${s}° + ${u}° = ${t}°.`,
+     {k:["@ang:SEK","@ang:KET"],p:[["SEK","KET","adj"]],o:{t:"num",n:"SET",v:t,calc:`${s}° + ${u}°`},f:[2]},
+     {rf:"aux",alors:AL(RIEN,"SET est un angle droit.","Les points S, E et T sont alignés."),traps:[{t:`Donc ${s}° + ${u}° + SET = 90°.`,k:"aux",msg:`Ce calcul n'a pas de passeport : aucune fiche ne dit que ${s} + ${u} + SET = 90. Passe par le rail (Δ) : deux paires d'angles alternes-internes, puis on additionne.`}]})],
+   cor:`<p>On trace (Δ), parallèle à (d) passant par E. (d) // (Δ) : RSE et SEK sont alternes-internes, donc SEK = <b>${s}°</b>. (Δ) // (d') : UTE et KET sont alternes-internes, donc KET = <b>${u}°</b>. SEK et KET sont adjacents : SET = ${s}° + ${u}° = <b>${t}°</b>.</p>`,
+   gen:r=>{const s=rnd(r,16,28);let u=rnd(r,32,56);if(s+u>=86&&s+u<=94)u-=8;return c5(s,u);}};}
+ Object.assign(MXD.NC,{PP1:p1(47),PP2:p2(42),PP3:p3(21),PP4:p4(36),PP5:p5(70),PP6:p6(35),PP7:p7(44,38),PP8:boss(18,41,1),PP9:p9(42),PP10:p10(40),PP11:boss(27,35,0),PPC1:c1(38,0),PPC2:c2(20),PPC3:c3(21),PPC4:c4([14,6,6,8,3,7],[-5,-2,3],[-0.8,-0.2,1.2]),PPC5:c5(18,41)});
  MXD.ZONES.push({z:9,name:"Les points perdus",ico:"🔎",col:"#c2571a",img:"z9"},{z:10,name:"Atelier Zigzag",ico:"⚡",col:"#a8326a",img:"ic_boss"});
  const U=(id,z,name,src,ex,write,o)=>Object.assign({id,zone:z,name,src,ex,write},o||{});
  MXD.DEFS.push(
@@ -4227,7 +4374,7 @@ const MXD=(()=>{
   U(51,9,"Isocèle en …","Deux angles égaux, pas quelconque",["PP5"],"trous",{rf:"iso",ic:"ic_iso"}),
   U(52,9,"Le calcul va dans Donc","Après « Or » : la propriété",["PP7"],"trous",{rf:"orcalc",ic:"ic_passeport"}),
   U(53,9,"Chaînes de production","2 ou 3 machines à la suite : la pièce fabriquée entre dans la machine suivante",["PP10","PP9","PP6"],"trous",{rf:"ordre",ic:"ic_chaine"}),
-  U(54,9,"Boss : le contrôle du 20 novembre","Ton contrôle, avec de nouveaux nombres à chaque partie, en rédaction complète",["PP7","PP1","PP10","PP6","PP5","PP9","PP8"],"libre",{ic:"ic_reflexe",alwaysNew:1,bossz:1}),
+  U(54,9,"Boss : le contrôle du 20 novembre","Le vrai sujet B, avec de nouveaux nombres à chaque partie, en rédaction complète",["PPC1","PPC2","PPC3","PPC4","PPC5"],"libre",{ic:"ic_reflexe",alwaysNew:1,bossz:1,v:2}),
   U(55,10,"Le zigzag","Poser le rail (Δ), puis deux paires d'alternes-internes",["PP11"],"trous",{rf:"aux",ic:"ic_boss",zig:1}),
   U(56,10,"Boss : les sprinteurs","La parallèle auxiliaire en Z",["PP8"],"libre",{rf:"aux",ic:"ic_boss",zig:1,bossz:1}));
 })();
@@ -4262,7 +4409,7 @@ const MX=(()=>{
   if(code==="CH")return EVX.chains(seed);
   if(code==="ERR")return [{id:"ERR",n:"Trouve l'erreur",title:"Trouve l'erreur dans la copie",src:"Les erreurs de l'interro flash et les pièges classiques",st:"<p>Chaque copie contient une erreur. Touche la ligne fausse, puis écris la correction.</p>",items:EVX.ERR}];
   let e=MXD.NC[code]||ALLX().find(x=>x.id===code);if(!e)return [];
-  if(replay&&e.gen)e=e.gen(r);return [e];}
+  if(replay&&e.gen)e=e.gen(r);return e.split?e.split():[e];}
  /* ---------- une question rédigée devient une machine ---------- */
  const CFGW=[["alt",/alternes?.?internes?/i],["cor",/correspondants?/i],["opp",/oppos[ée]s? par le sommet/i],["adj",/adjacents?/i]];
  const ANG=/(?:^|[^A-Za-z'])([A-Za-z][A-Z]'?[A-Za-z]'?)(?=$|[^A-Za-z'])/g;
@@ -4335,9 +4482,11 @@ const MX=(()=>{
  const S=()=>{SAVE.mx=SAVE.mx||{};return SAVE.mx;};
  let U=null,ST=null,RUN=null,inSetup=false;
  function curU(){return U;}
- function persist(){if(!U||!RUN)return;const s=S();s[U.id]=Object.assign(s[U.id]||{},{seed:RUN.seed,replay:RUN.replay,si:RUN.si,pos:RUN.pos,err:G.errors,h3:G.h3,ctl:RUN.ctl,copies:RUN.copies,done:false,d:today()});save();}
+ function persist(){if(!U||!RUN)return;const s=S();s[U.id]=Object.assign(s[U.id]||{},{v:U.v||1,seed:RUN.seed,replay:RUN.replay,si:RUN.si,pos:RUN.pos,err:G.errors,h3:G.h3,ctl:RUN.ctl,copies:RUN.copies,done:false,d:today()});save();}
  /* ---------- démarrer une usine ---------- */
  function start(Ux,opt){opt=opt||{};U=Ux;const sv=S()[U.id];
+  /* une usine refaite (nouvelle version du plan) : l'ancienne partie en cours ne peut pas reprendre, les étoiles restent */
+  if(sv&&!sv.done&&(sv.v||1)!==(U.v||1)){sv.done=true;save();}
   if(!opt.fresh&&sv&&!sv.done&&(sv.pos>0||sv.si>0)){
    info(`<h2>🏭 Usine ${U.id} : ${E(U.name)}</h2><p>Tu t'étais arrêté au plan ${sv.si+1}, question ${sv.pos+1}. Ta progression est gardée.</p>`,
     [["▶ Reprendre",()=>run(sv)],["🔁 Recommencer",()=>start(Ux,{fresh:true})]]);return;}
@@ -4435,7 +4584,7 @@ const MX=(()=>{
   const cls=ok?"":r.got>0?"mid":"bad";
   out.innerHTML=`<span class="rvscore ${cls}">${fmt(r.got)} / ${fmt(r.max)}</span>`+(r.com&&r.com.length?`<ul class="rvcom">${r.com.map(c=>`<li>${E(c)}</li>`).join("")}</ul>`:` <b style="color:#239150">Parfait !</b>`)
    +(it.k==="fiche"?"":`<div class="rvmodel"><b>Réponse modèle :</b> ${E(REV.modelText(it))}</div>`)+REV.fichesOf(it).map(f=>ffull(f,"📜")).join("")
-   +(it.k==="self"&&L.ex.figCor?L.ex.figCor():"")+`<div class="row"><button class="brass" id="ctNext">Continuer ➡</button></div>`;
+   +(it.k==="self"&&L.ex.figCor?L.ex.figCor():"")+(it.k!=="self"&&it.figCor?it.figCor():"")+`<div class="row"><button class="brass" id="ctNext">Continuer ➡</button></div>`;
   $$("mCtl").classList.add("on");
   $$("ctNext").onclick=()=>{$$("mCtl").classList.remove("on");CT=null;afterItem();};
   setTimeout(()=>{try{out.scrollIntoView({block:"start",behavior:"smooth"});}catch(_){}},40);}
@@ -4511,7 +4660,7 @@ const MX=(()=>{
    for(const l of ls){const s=SAVE.stars[l.id]||0;const b=document.createElement("button");const sv=(SAVE.mx||{})[l.id];
     b.className="panel lvl"+(l.kind==="boss"?" boss":"");
     const badge=l.kind==="boss"?"👑 boss":l.kind==="mx"?(l.ex.length>1||l.ex[0]==="CH"?"plusieurs plans":"1 plan"):(l.machines.length>1?l.machines.length+" machines":"1 machine");
-    b.innerHTML=`<span class="badge">${badge}</span><b>Usine ${l.id}</b><span>${E(l.name)}</span><span class="src">${E(l.src)}</span><span class="stars">${starsHTML(s)}${sv&&!sv.done&&(sv.pos||sv.si)?' <span class="mxres">⏸ en cours</span>':""}</span>`;
+    b.innerHTML=`<span class="badge">${badge}</span><b>Usine ${l.id}</b><span>${E(l.name)}</span><span class="src">${E(l.src)}</span><span class="stars">${starsHTML(s)}${sv&&!sv.done&&(sv.v||1)===(l.v||1)&&(sv.pos||sv.si)?' <span class="mxres">⏸ en cours</span>':""}</span>`;
     b.onclick=()=>startLevel(l.id);box.appendChild(b);}}
   const n=dueList().length,nr=Object.keys(SAVE.reciteTodo).length;$("dueCount").textContent=[n?`${n} à refabriquer`:"",nr?`${nr} à réciter`:""].filter(Boolean).join(", ").replace(/^(.+)$/,"($1)");
   show("home");};
@@ -4692,6 +4841,17 @@ const PP=(()=>{
  /* la copie dans le Tour des révisions et l'éval */
  function tileWidget(box,it,o){const d=document.createElement("div");box.appendChild(d);
   return tile(d,{model:it.model,s:it.s,fiches:(it.s&&it.s.prop)||[],it,mode:o.eval?"eval":"trous",onchange:o.onchange});}
+ /* ranger dans l'ordre : on touche (ou glisse) les cartes-nombres de la plus petite à la plus grande */
+ function ordWidget(box,it,o){o=o||{};const d=document.createElement("div");d.className="tc ppord";box.appendChild(d);let placed=[];
+  const cards=it.cards.slice();
+  const paint=()=>{d.innerHTML=`<div class="tcrows ppordrow">${cards.map((_,i)=>`<div class="tcslot ${placed[i]!=null?"full":""} ${i===placed.length?"next":""}"><span class="tcn">${i+1}</span><span class="${placed[i]!=null?"tct":"tcl"}">${placed[i]!=null?E(cards[placed[i]]):(i===0?"le plus petit":i===cards.length-1?"le plus grand":"…")}</span></div>`).join("")}</div>
+   <div class="tchint">Touche les nombres du plus petit au plus grand.</div><div class="tcpool">${cards.map((c,j)=>placed.includes(j)?"":`<button type="button" class="tcard" data-j="${j}">${E(c)}</button>`).join("")}</div><div class="tcbar"><button type="button" class="brass tcback">↩ Retirer le dernier</button></div>`;
+   d.querySelectorAll(".tcard").forEach(b=>b.onclick=()=>{if(d.dataset.lock)return;placed.push(+b.dataset.j);SND.drop&&SND.drop();paint();o.onchange&&o.onchange();});
+   d.querySelector(".tcback").onclick=()=>{if(d.dataset.lock)return;placed.pop();paint();o.onchange&&o.onchange();};
+   if(d.dataset.lock)d.querySelectorAll(".tcbar,.tcpool,.tchint").forEach(x=>x.style.display="none");};
+  paint();
+  return {get:()=>placed.map(j=>cards[j]),set:v=>{placed=[];(Array.isArray(v)?v:[]).forEach(t=>{const j=cards.findIndex((c,k)=>c===t&&!placed.includes(k));if(j>=0)placed.push(j);});paint();},
+   lock:()=>{d.dataset.lock=1;paint();}};}
  /* la copie après une machine (usines 8 et plus) */
  function mxRedac(box,ta,go,m,it,gear,U){ta.style.display="none";go.style.display="none";const vx=$$("vx-mxr");if(vx)vx.style.display="none";
   let host=box.querySelector(".rdtiles");if(!host){host=document.createElement("div");host.className="rdtiles";ta.parentNode.insertBefore(host,ta);}
@@ -4795,6 +4955,8 @@ const PP=(()=>{
   Lx.machines.forEach(mm=>{mm.needs.forEach(id=>{const F=Lx.facts[id];if(F&&/^rail/i.test(F.chip||"")){F.rail=1;F.hint="Il manque un rail : la parallèle à (d₁) passant par le sommet E. Sans elle, le zigzag ne tourne pas.";}});
    if(mm.type==="iso"&&Lx.hints&&Lx.hints[mm.q]){const h=Lx.hints[mm.q].donc;if(h)h.t[2]="Deux angles égaux : quel triangle ? En quel sommet ?";}});}
  function stage(L2){addTraps(L2,L2.frags);
+  /* la conclusion « isocèle en … » ne s'affiche pas parmi les indices : c'est la réponse */
+  L2.machines.forEach(mm=>{if(mm.type==="iso"&&L2.frags){const j=L2.frags.indexOf(mm.sought);if(j>=0)L2.frags.splice(j,1);}});
   // les pièces fabriquées par une machine précédente sont des pièces de la suivante
   L2.machines.forEach((mm,i)=>mm.needs.forEach(id=>{if(id.startsWith("ang:")){const j=L2.machines.findIndex(x=>x.sought===id);if(j>=0&&j<i)mm.chain=1;}}));}
  function provOf(id){const F=L.facts[id];if(F&&F.pp)return "fab";if(F&&F.codage)return "codage";
@@ -4893,7 +5055,7 @@ const PP=(()=>{
   const fm=document.querySelector("#foreman .av");if(fm&&typeof ART!=="undefined"&&!fm.querySelector("img"))fm.innerHTML=IMG("ic_chef","ppav");}
  wire();
  try{if($$("home").classList.contains("on"))goHome();}catch(e){}
- return {tile,tileWidget,papaWidget,untypeNums,gate,papaPanel,mxRedac,coreCopy,stage,rowsOf,trapsFor,doorTiles,fakeOr,RS,rf,miss,ok,due,RFN,RFU,NEED,LAB,playRf,get CUR(){return CUR;},get LASTP(){return LASTP;},PROV,MSG,etAlors};
+ return {tile,tileWidget,ordWidget,papaWidget,untypeNums,gate,papaPanel,mxRedac,coreCopy,stage,rowsOf,trapsFor,doorTiles,fakeOr,RS,rf,miss,ok,due,RFN,RFU,NEED,LAB,playRf,get CUR(){return CUR;},get LASTP(){return LASTP;},PROV,MSG,etAlors};
 })();
 window.__pp=PP;
 
