@@ -1,0 +1,76 @@
+<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Le douanier des chiffres · fiche mémo</title>
+<style>
+@page{size:A4;margin:9mm}
+*{box-sizing:border-box}
+body{margin:0;background:#fbf6ea;color:#1f1408;font:14.4px/1.46 Georgia,serif}
+.page{width:192mm;min-height:277mm;margin:0 auto;background:#fff;padding:7mm 8mm;position:relative}
+@media screen{body{padding:14px 0}.page{box-shadow:0 4px 18px rgba(0,0,0,.18);border-radius:6px}}
+@media screen and (max-width:760px){.page{width:auto;min-height:0;margin:0 8px;padding:12px}.top{flex-direction:column}.top img{width:100%!important}.rules{grid-template-columns:1fr!important}}
+h1{font:bold 27px "Trebuchet MS",sans-serif;margin:0;color:#6b3f0c}
+.sub{margin:2px 0 6px;color:#5a4630;font-size:14px}
+.top{display:flex;gap:10px;align-items:center}
+.top img{width:80mm;border-radius:8px;border:2px solid #c99a45}
+.big{font:bold 15.5px "Trebuchet MS",sans-serif;margin:4px 0}
+h2{font:bold 18px "Trebuchet MS",sans-serif;color:#6b3f0c;margin:11px 0 5px;border-bottom:2px solid #c99a45;padding-bottom:2px}
+.rules{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.r{border-radius:10px;padding:7px 10px;border:2px solid}
+.r.v{background:#effbf1;border-color:#2e9b4a}.r.k{background:#fff2ef;border-color:#c0392b}
+.r h3{margin:0 0 3px;font:bold 15px "Trebuchet MS",sans-serif}
+.r.v h3{color:#1f7a37}.r.k h3{color:#a12a1e}
+.r p{margin:2px 0}
+.ex{font-style:italic;color:#3a2a14}
+table{border-collapse:collapse;width:100%;font-size:13.8px}
+th,td{border:1.5px solid #b89a66;padding:4px 6px;vertical-align:top;text-align:left}
+th{background:#f4e6c6;font:bold 13px "Trebuchet MS",sans-serif}
+td.kw{font:bold 14px "Trebuchet MS",sans-serif;white-space:nowrap}
+td.th{white-space:nowrap;font-weight:bold;color:#7a3d00}
+ul.ck{list-style:none;padding:0;margin:3px 0}
+ul.ck li{margin:4px 0;padding-left:26px;position:relative}
+ul.ck li::before{content:"";position:absolute;left:2px;top:2px;width:15px;height:15px;border:2px solid #6b3f0c;border-radius:3px}
+.tw{display:flex;gap:6px;flex-wrap:wrap;margin:3px 0 0}
+.tw span{border:1.5px solid #b89a66;border-radius:8px;padding:2px 8px;background:#fffaf0}
+.foot{margin-top:6px;font-size:11.5px;color:#6a5a44;text-align:center}
+.back{text-align:center;margin:10px 0 0;font:15px "Trebuchet MS",sans-serif}@media print{.back{display:none}body{background:#fff}.page{box-shadow:none;padding:0;width:auto;min-height:0}}
+</style></head><body>
+<div class="page">
+ <div class="top">
+  <img src="img/douanier-stop.jpg" alt="Le douanier des chiffres, devant sa guérite, feu rouge allumé">
+  <div>
+   <h1>🛂 Le douanier des chiffres</h1>
+   <p class="sub">Fiche mémo de Lucas · à relire avant chaque contrôle</p>
+   <p class="big">Dans « Je sais que », chaque nombre passe la douane.</p>
+   <p>Le douanier ne laisse entrer un nombre que s'il a un <b>passeport</b> : l'énoncé, ou une raison du cours.<br>Au contrôle du 20/11, tous les points perdus étaient des nombres <b>sans passeport</b>.</p>
+  </div>
+ </div>
+ <h2>1. La règle du feu</h2>
+ <div class="rules">
+  <div class="r v"><h3>🟢 Feu vert : le nombre est écrit dans l'énoncé</h3>
+   <p>(ou codé sur la figure). Il passe tout seul.</p>
+   <p class="ex">« On donne AEB = 38°. » : 38° passe.<br>« Je sais que AEB = 38°. »</p>
+   <p>Une donnée de l'énoncé n'a pas besoin d'autre raison.</p></div>
+  <div class="r k"><h3>🔴 Feu rouge : le nombre n'est pas dans l'énoncé</h3>
+   <p>« Montre-moi d'où il vient. » J'écris sa <b>raison</b>, et si c'est un calcul, <b>l'opération posée</b>.</p>
+   <p class="ex">« D, F, C sont alignés, donc CFD = 180° (angle plat). »<br>« CFG = 180° − 52° = 128°. »</p></div>
+ </div>
+ <h2>2. Les 4 mots-clés qui déclenchent un réflexe</h2>
+ <table>
+  <tr><th>Je lis…</th><th>Je pense…</th><th>J'écris (phrase réflexe)</th></tr>
+  <tr><td class="kw">« alignés »</td><td class="th">angle plat = 180°</td><td>« Les points D, F, C sont alignés, donc CFD est un angle plat : CFD = 180°. »</td></tr>
+  <tr><td class="kw">« perpendiculaires »<br>« rectangle en … »</td><td class="th">angle droit = 90°</td><td>« (d₁) ⊥ (d₂) en E, donc AEF = 90°. »<br>« Le triangle DCB est rectangle en C, donc DCB = 90°. »</td></tr>
+  <tr><td class="kw">« bissectrice »</td><td class="th">÷ 2 ou × 2</td><td>« [OA) est la bissectrice de MOO', donc AOO' = MOO' ÷ 2 = 84° ÷ 2 = 42°. »<br>« [O'B) est la bissectrice de OO'N, donc OO'N = 2 × BO'N = 2 × 21° = 42°. »</td></tr>
+  <tr><td class="kw">« nature du triangle »<br>deux angles égaux</td><td class="th">test des jumeaux</td><td>« OBC = BOC = 70° : deux angles ont la même mesure. Or, si un triangle a deux angles de même mesure, alors il est isocèle. Donc OBC est isocèle en C. »</td></tr>
+ </table>
+ <p style="margin:4px 0 0">Et pour <b>tout calcul</b> : jamais « dans ma tête ». J'écris l'opération en entier, dans <b>Donc</b> : « Donc CFG = 180° − 52° = 128°. »</p>
+ <h2>3. Ma relecture en 30 secondes</h2>
+ <ul class="ck">
+  <li><b>Le test du Pourquoi ?</b> Je pointe chaque nombre de ma copie et je demande « Pourquoi ? ». Réponse : « écrit dans l'énoncé », ou sa raison est écrite juste à côté (alignés, perpendiculaires, rectangle en …, bissectrice, question précédente).</li>
+  <li><b>Le calcul posé.</b> Chaque nombre calculé a son opération : 180° − 52° = 128°, 84° ÷ 2 = 42°.</li>
+  <li><b>Ce que je cherche</b> n'est jamais dans « Je sais que ».</li>
+  <li><b>Après « Or »</b> : une propriété du cours (« si… alors… »), pas un calcul.</li>
+  <li><b>Le test des jumeaux.</b> Pour la nature d'un triangle, je compare ses 3 angles avant de conclure :
+   <div class="tw"><span>2 égaux : <b>isocèle</b> en … (le sommet sans jumeau)</span><span>3 égaux : <b>équilatéral</b></span><span>un angle de 90° : <b>rectangle</b> en …</span><span>aucun égal : <b>quelconque</b></span></div></li>
+ </ul>
+ <p class="foot">L'Atelier des angles · le douanier des chiffres · fiche à garder dans la trousse</p>
+</div>
+<p class="back"><a href="../index.html">⬅ Retour au jeu</a> · <a href="douanier-memo.pdf">Version PDF</a></p>
+</body></html>
