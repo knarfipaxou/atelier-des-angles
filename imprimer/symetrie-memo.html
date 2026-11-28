@@ -1,0 +1,57 @@
+<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Les symétries · fiche mémo</title>
+<style>
+@page{size:A4;margin:9mm}
+*{box-sizing:border-box}
+body{margin:0;background:#fbf6ea;color:#1f1408;font:13.6px/1.4 Georgia,serif}
+.page{width:192mm;min-height:277mm;margin:0 auto 8mm;background:#fff;padding:7mm 8mm;position:relative}
+@media screen{body{padding:14px 0}.page{box-shadow:0 4px 18px rgba(0,0,0,.18);border-radius:6px}}
+@media screen and (max-width:760px){.page{width:auto;min-height:0;margin:0 8px 12px;padding:12px}}
+h1{font:bold 24px "Trebuchet MS",sans-serif;margin:0;color:#1f4f66}
+.sub{margin:2px 0 8px;color:#5a4630;font-size:13.5px}
+h2{font:bold 16px "Trebuchet MS",sans-serif;margin:10px 0 5px;padding-bottom:2px;border-bottom:2px solid}
+h2.ax{color:#1f6f8f;border-color:#1f6f8f}h2.ce{color:#c2571a;border-color:#c2571a}h2.axc{color:#5a3fa0;border-color:#5a3fa0}h2.rd{color:#6b3f0c;border-color:#c99a45}
+.f{border:1.5px solid #b89a66;border-radius:8px;padding:5px 8px;margin:5px 0}
+.f .h{font:bold 13px "Trebuchet MS",sans-serif;margin:0 0 2px}
+.f.D{background:#eef5fb;border-color:#2a6d8f}.f.D .h{color:#1f4f66}
+.f.P{background:#fff4e8;border-color:#c2571a}.f.P .h{color:#8a3a12}
+.f p{margin:0}
+.tag{display:inline-block;font:bold 11px "Trebuchet MS",sans-serif;border-radius:8px;padding:0 6px;margin-right:4px;color:#fff}
+.D .tag{background:#2a6d8f}.P .tag{background:#c2571a}
+.ex{background:#f7f0e0;border-radius:8px;padding:6px 8px;margin:6px 0}
+.foot{margin-top:8px;font-size:11px;color:#6a5a44;text-align:center}
+.back{text-align:center;margin:10px 0 0;font:15px "Trebuchet MS",sans-serif}
+@media print{.back{display:none}body{background:#fff}.page{box-shadow:none;padding:0;width:auto;min-height:auto;margin:0;page-break-after:always}.page:last-of-type{page-break-after:auto}}
+</style></head><body>
+<div class="page">
+ <h1>Les symétries dans le plan</h1>
+ <p class="sub">Fiche mémo de Lucas · L'Atelier des angles et de la symétrie · à garder dans le cahier</p>
+ <h2 class="ax">1.1 Symétrie axiale</h2>
+ <div class="f D"><div class="h"><span class="tag">D 26</span> Médiatrice</div><p>La médiatrice, c'est la droite qui coupe un segment perpendiculairement en passant par son milieu. On note (d) cette droite.</p></div>
+ <div class="f D"><div class="h"><span class="tag">D 27</span> Image d'un point par symétrie axiale</div><p>L'image d'un point A par symétrie axiale d'axe (d) est le point A' tel que (d) soit la médiatrice de [AA'].</p></div>
+ <div class="f P"><div class="h"><span class="tag">P 28</span> Point invariant par symétrie axiale</div><p>Un point situé sur la droite (d) a pour image lui-même. On dit qu'il est invariant par symétrie d'axe (d).</p></div>
+ <div class="ex"><b>Pour construire A' :</b> 1. Tracer la perpendiculaire à (d) passant par A : elle coupe (d) en H. 2. Mesurer AH. 3. Placer A' de l'autre côté, avec HA' = HA (règle ou compas).<br>
+ <b>Pour vérifier :</b> il faut les deux conditions, AH = HA' <b>et</b> [AA'] ⊥ (d). Un seul codage ne suffit pas.</div>
+ <h2 class="ce">1.2 Symétrie centrale</h2>
+ <div class="f D"><div class="h"><span class="tag">D 29</span> Symétrie centrale</div><p>La symétrie centrale de centre O est une transformation qui correspond à un demi-tour autour de O. L'image d'un point A est le point A' tel que O est le milieu de [AA'].</p></div>
+ <div class="f P"><div class="h"><span class="tag">P 30</span> Point invariant par symétrie centrale</div><p>Dans une symétrie centrale de centre O, il n'existe qu'un seul point invariant : c'est le centre O lui-même.</p></div>
+ <div class="ex"><b>Pour construire A' :</b> 1. Tracer (AO). 2. Mesurer AO. 3. Placer A' de l'autre côté de O, avec OA = OA'.<br>
+ <b>Vrai ou faux :</b> « OA = OA' donc A' est forcément le symétrique » est <b>faux</b> (il faut aussi l'alignement). Le miroir, c'est la symétrie axiale, pas la centrale.</div>
+</div>
+<div class="page">
+ <h2 class="ce">1.3 Propriétés de la symétrie centrale</h2>
+ <div class="f P"><div class="h"><span class="tag">P 31</span> Propriétés conservées par la symétrie centrale</div><p>La symétrie centrale conserve : la mesure des angles, les mesures des longueurs, l'alignement des points, les aires, les périmètres, le parallélisme.</p></div>
+ <div class="f P"><div class="h"><span class="tag">P 32</span> Image d'une droite par symétrie centrale</div><p>Par symétrie centrale, l'image d'une droite (d) est une droite (d') parallèle à (d).</p></div>
+ <div class="f P"><div class="h"><span class="tag">P 33</span> Droite passant par le centre de symétrie</div><p>Si le centre de symétrie est sur la droite (d), alors l'image de (d) par symétrie de centre O est une droite (d') confondue avec (d).</p></div>
+ <h2 class="rd">Rédiger : Je sais que / Or / Donc</h2>
+ <div class="ex">Je sais que [A'B'] est l'image de [AB] par la symétrie centrale de centre O, et que AB = 6 cm.<br>
+ Or la symétrie centrale conserve les mesures des longueurs.<br>
+ Donc A'B' = AB = 6 cm.</div>
+ <p>Même phrase pour les angles, l'alignement, le parallélisme. Pour une droite image : « Or par symétrie centrale, l'image d'une droite (d) est une droite (d') parallèle à (d). Donc (A'B') // (d). »</p>
+ <h2 class="axc">1.4 Centre et axe de symétrie d'une figure</h2>
+ <div class="f D"><div class="h"><span class="tag">D 34</span> Axe de symétrie d'une figure</div><p>Une droite (d) est un axe de symétrie d'une figure si l'image de cette figure par symétrie d'axe (d) est la figure elle-même.</p></div>
+ <div class="f D"><div class="h"><span class="tag">D 35</span> Centre de symétrie d'une figure</div><p>Un point O est le centre de symétrie d'une figure si l'image de cette figure par symétrie de centre O est la figure elle-même.</p></div>
+ <div class="ex"><b>Exemples (formes génériques) :</b> un pique a 1 axe et pas de centre ; un losange a 2 axes et 1 centre ; un double losange (ou un parallélogramme qui n'est pas un losange) a 0 axe et 1 centre.</div>
+ <p class="foot">L'Atelier des angles et de la symétrie · fiches 26 à 35 · bleu = définition, orange = propriété</p>
+</div>
+<p class="back"><a href="../index.html">⬅ Retour au jeu</a> · <a href="symetrie-memo.pdf">Version PDF</a> · <a href="index.html">Toutes les fiches à imprimer</a></p>
+</body></html>
